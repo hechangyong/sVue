@@ -7,7 +7,10 @@ export default {
   data () {
     return {
       addressDetail: '',
-      userDetail: ''
+      userDetail: {
+        nickName :'何长勇',
+        headImgUrl : 'http://thirdwx.qlogo.cn/mmopen/XpSgr1oanco9VL0FcYgHIkGv6Acu7Lco8jwQmRNScCRrCGRysM1f7ZJ9Z5QZ7a7qgvg90ZDRtRh28dI6OgdEv45QTEE6nkFq/132'
+      }
     }
   },
   methods: {

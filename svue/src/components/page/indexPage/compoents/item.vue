@@ -14,15 +14,22 @@
         <div class='value active over-text' v-else-if='type=="mobile"'>
             {{value|hidePhone}}
         </div>
-        <div class='value active over-text noauth' :class='{auth:value=="已认证"}' v-else-if='type=="name"'>
-            {{value}}
-        </div>
         <div class='value active over-text' v-else>
             {{value}}
         </div>
     </div>
 </template>
-
+<script>
+export default {
+  name: 'item',
+  data: function () {
+    return {}
+  },
+  props: ['value', 'label', 'placeholder', 'type'],
+  mounted: function () {},
+  methods: {}
+}
+</script>
 <style scoped>
 .item {
     line-height: 0.64rem;
