@@ -14,6 +14,9 @@ export default {
     }
   },
   methods: {
+    jumpPath (data) {
+      console.log('---------------'+data+'-----------------')
+    },
     switchTo (path, obj) {
       var data = {
         'userid': this.userDetail.id

@@ -12,14 +12,15 @@
             <img src="../../../assets/image/query_icon.png" alt="">
             <p>购物清单</p>
           </div>
-          <div class='link-item' @click="switchTo('cardList')">
+          <div class='link-item' @click="jumpPath('cardList')">
             <img src="../../../assets/image/card_icon.png" alt="">
             <p>卡 券</p>
           </div>
         </div>
       </div>
       <div class="content">
-        <item label="绑定手机" type='mobile' placeholder="未绑定" :value='userDetail.bindMobile==1?userDetail.mobile:""' @click.native="switchTo('changephone', {mobile: userDetail.mobile,bindMobile:userDetail.bindMobile})"></item>
+        <item label="绑定手机" type='mobile' placeholder="未绑定" :value='userDetail.bindMobile==1?userDetail.mobile:""'
+          @click.native="switchTo('changephone', {mobile: userDetail.mobile,bindMobile:userDetail.bindMobile})"></item>
       </div>
       <div class="content">
         <item label="我的地址" type='address' placeholder="常住地址" :value='userDetail&&addressDetail'
