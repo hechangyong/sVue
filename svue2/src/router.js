@@ -28,6 +28,13 @@ const routes = [
     meta: {
       title: '商品详情'
     }
+  },
+  {
+    name: 'products',
+    component: () => import('./view/products'),
+    meta: {
+      title: '商品首页'
+    }
   }
 ];
 

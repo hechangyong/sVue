@@ -1,6 +1,8 @@
 <template>
   <div>
-    <img class="user-poster" src="https://img.yzcdn.cn/public_files/2017/10/23/8690bb321356070e0b8c4404d087f8fd.png">
+     <img class="user-poster" src="https://img.yzcdn.cn/public_files/2017/10/23/8690bb321356070e0b8c4404d087f8fd.png">
+    <!--<img class="user-poster" src="../../images/user/home_bg.png">-->
+
     <van-row class="user-links">
       <van-col span="6">
         <van-icon name="pending-payment" />
@@ -29,7 +31,7 @@
       <van-cell icon="gold-coin-o" title="我的优惠券" is-link />
     </van-cell-group>
 
-     <van-cell-group class="user-group">
+     <van-cell-group class="user-top-group">
       <van-cell icon="home-o" title="我的地址" is-link />
      </van-cell-group>
   </div>
@@ -59,6 +61,9 @@ export default {
 
   &-group {
     margin-bottom: 15px;
+  }
+  &-top-group {
+    margin-top: 15px;
   }
 
   &-links {
