@@ -4,35 +4,26 @@
     <!--<img class="user-poster" src="../../images/user/home_bg.png">-->
 
     <van-row class="user-links">
-      <van-col span="6">
+       <van-col span="8">
         <van-icon name="pending-payment" />
-        待付款
-      </van-col>
-      <van-col span="6">
+        购物清单
+      </van-col>  
+       <van-col span="8">
         <van-icon name="records" />
-        待接单
+        卡 券
       </van-col>
-      <van-col span="6">
+      <van-col span="8">
         <van-icon name="tosend" />
-        待发货
-      </van-col>
-      <van-col span="6">
-        <van-icon name="logistics" />
-        已发货
+        我的积分
       </van-col>
     </van-row>
 
     <van-cell-group class="user-group">
-      <van-cell icon="records" title="全部订单" is-link />
+      <van-cell icon="phone-o" title="我的手机" to="/changeMobile" :value="mobile" is-link />
     </van-cell-group>
-
-    <van-cell-group>
-      <van-cell icon="points" title="我的积分" is-link />
-      <van-cell icon="gold-coin-o" title="我的优惠券" is-link />
-    </van-cell-group>
-
+    
      <van-cell-group class="user-top-group">
-      <van-cell icon="home-o" title="我的地址" is-link />
+      <van-cell icon="home-o" title="我的地址" :value = "address" is-link />
      </van-cell-group>
   </div>
 </template>
@@ -41,6 +32,17 @@
 import { Row, Col, Icon, Cell, CellGroup } from 'vant';
 
 export default {
+  data() {
+     return {
+        mobile: 17681102630,
+        address:"安徽省合肥市文一名都"
+      }
+  },
+  filters: {
+    cutOutAddress: function(addressValue) {
+      return addressValue.substring(0,3)+"..."
+    }   
+  },
   components: {
     [Row.name]: Row,
     [Col.name]: Col,
@@ -61,6 +63,7 @@ export default {
 
   &-group {
     margin-bottom: 15px;
+    font-size: 18px;
   }
   &-top-group {
     margin-top: 15px;

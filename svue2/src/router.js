@@ -16,6 +16,13 @@ const routes = [
     }
   },
   {
+    name: 'changeMobile',
+    component: () => import('./view/user/changePhone'),
+    meta: {
+      title: '修改手机号码'
+    }
+  },
+  {
     name: 'cart',
     component: () => import('./view/cart'),
     meta: {
