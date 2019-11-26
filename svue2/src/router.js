@@ -42,14 +42,7 @@ const routes = [
     meta: {
       title: '商品首页'
     }
-  },
-  {
-    name: 'demo',
-    component: () => import('./view/user/demo'),
-    meta: {
-      title: '手机号吗'
-    }
-  }
+  } 
 ];
 
 // add route path

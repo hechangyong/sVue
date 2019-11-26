@@ -12,6 +12,8 @@
   "dependencies": {
     "async-validate": "^1.0.1",
     "async-validator": "^3.2.2",
+    "axios": "^0.19.0",
+    "element-ui": "^2.13.0",
     "vant": "^2.2.0",
     "vue": "^2.6.10",
     "vue-router": "^3.0.5"
