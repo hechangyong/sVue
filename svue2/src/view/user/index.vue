@@ -19,7 +19,7 @@
     </van-row>
 
     <van-cell-group class="user-group">
-      <van-cell icon="phone-o" title="我的手机" to="/changeMobile" :value="mobile" is-link />
+      <van-cell icon="phone-o" title="我的手机" to="/demo" :value="mobile" is-link />
     </van-cell-group>
     
      <van-cell-group class="user-top-group">
