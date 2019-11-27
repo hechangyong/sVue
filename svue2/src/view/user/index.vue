@@ -48,9 +48,12 @@ export default {
        }
       }
   },
+  mounted() {
+    this.getUserBaseInfo()
+  },
   methods:{
     getUserBaseInfo() {
-      axios.post(`http://babyroom.hecy.top/back/auth/getImgCaptcha`)
+      axios.post(`http://babyroom.hecy.top/baby/u/getUserInfo`)
                 .then(res => {
                     console.log(res)
                     if (res.data.code === "0000") {
