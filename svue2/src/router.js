@@ -21,6 +21,19 @@ const routes = [
     meta: {
       title: '修改手机号码'
     }
+  },{
+    name: 'editAddress',
+    component: () => import('./view/user/editAddress'),
+    meta: {
+      title: '地址列表'
+    }
+  },
+  {
+    name: 'addressList',
+    component: () => import('./view/user/addressList'),
+    meta: {
+      title: '编辑地址'
+    }
   },
   {
     name: 'cart',

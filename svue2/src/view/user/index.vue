@@ -29,7 +29,7 @@
     </van-cell-group>
     
      <van-cell-group class="user-top-group">
-      <van-cell icon="home-o" title="我的地址" :value="userDetail.address" is-link />
+      <van-cell icon="home-o" title="我的地址" to="/addressList" :value="userDetail.address" is-link />
      </van-cell-group>
   </div>
 </template>
@@ -55,7 +55,7 @@ export default {
     getUserBaseInfo() {
       axios.post(`http://babyroom.hecy.top/baby/u/getUserInfo`)
                 .then(res => {
-                    console.log(res)
+                    alert("res");
                     if (res.data.code === "0000") {
                         this.captchaImg =
                             "data:image/jpeg;base64," + res.data.attachment;
