@@ -10,8 +10,8 @@
     <!--<img class="user-poster" src="../../images/user/home_bg.png">-->
 
     <van-row class="user-links">
-       <van-col span="8">
-        <van-icon name="pending-payment" />
+       <van-col @click="toOrderList" span="8">
+        <van-icon  name="pending-payment" />
         购物清单
       </van-col>  
        <van-col span="8">
@@ -45,7 +45,8 @@ export default {
           headImgUrl: "",
           nickName:"何长勇",
           mobile: 17681102630,
-          address:"安徽省合肥市文一名都"
+          address:"安徽省合肥市文一名都",
+          id:0
        }
       }
   },
@@ -53,6 +54,14 @@ export default {
     this.getUserBaseInfo()
   },
   methods:{
+    toOrderList(){
+     this.$router.push({
+        name: "orderList",
+        params: {
+          id: this.userDetail.id
+        }
+      });
+    },
     getUserBaseInfo() {
       axios.post(`http://babyroom.hecy.top/baby/u/getUserInfo`)
                 .then(res => {

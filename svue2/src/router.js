@@ -16,6 +16,13 @@ const routes = [
     }
   },
   {
+    name: 'orderList',
+    component: () => import('./view/user/orderlist'),
+    meta: {
+      title: '订单列表'
+    }
+  },
+  {
     name: 'changeMobile',
     component: () => import('./view/user/changePhone'),
     meta: {
