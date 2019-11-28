@@ -1,60 +1,96 @@
 <template>
-  <div >
-     <van-address-list
-        v-model="chosenAddressId"
-        :list="list"
-        @add="onAdd"
-        @edit="onEdit"
-        />
+  <div>
+      <div v-if='nobind==1'>
+      </div>
+      <div  v-else-if='nobind==2'>
+        <van-address-list v-model="chosenAddressId" :list="addressList" @add="onAdd" @edit="onEdit" />
+      </div>
+      
+    
   </div>
 </template>
 <script>
-import { AddressList ,Toast} from 'vant'
+import { AddressList, Toast } from "vant";
 export default {
-    data() {
-        return {
-        chosenAddressId: '1',
-        list: [
-            {
-            id: '1',
-            name: '张三',
-            tel: '13000000000',
-            address: '浙江省杭州市西湖区文三路 138 号东方通信大厦 7 楼 501 室'
-            },
-            {
-            id: '2',
-            name: '李四',
-            tel: '1310000000',
-            address: '浙江省杭州市拱墅区莫干山路 50 号'
-            }
-        ],
-        disabledList: [
-            {
-            id: '3',
-            name: '王五',
-            tel: '1320000000',
-            address: '浙江省杭州市滨江区江南大道 15 号'
-            }
-        ]
-        }
-    },
-
-    methods: {
-        onAdd() {
-            Toast('新增地址');
-        },
-
-        onEdit(item, index) {
-            console.log("item: " + item.address)
-            Toast('编辑地址:' + index);
-            this.$router.push({name: 'editAddress',params:{ id: index}});
-        }
-    },
-    components: {
-        [AddressList.name]: AddressList,
-        [Toast.name]:Toast  
-    }
-
-
+  data() {
+    return {
+      nobind:1,
+      chosenAddressId: "1",
+      addressList: [{
+            id:"",
+            name:"",
+            tel	:"",
+            address:"",
+            areacode:""
+      }]
     };
+  },
+  mounted() {
+    Toast.loading({
+        message: '加载中...',
+        forbidClick: true,
+        loadingType: 'spinner'
+    });
+    this.initAddress();
+  },
+  methods: {
+    initAddress() {
+      this.$axios
+        .post(`/baby/u/getUserAddress`)
+        .then(res => {
+          console.log("res.data.code: " + res.data.code);
+          if (res.data.code === "0000") {
+            var useraddress = res.data.attachment;
+            var addressList = [];
+            for (var i = 0; i < useraddress.length; i++) {
+              var obj = {};
+              obj.id = useraddress[i].id;
+              obj.name = useraddress[i].name;
+              obj.tel = useraddress[i].mobile;
+              obj.address = useraddress[i].addressdetail;
+              obj.areacode = useraddress[i].areacode;
+              console.log("obj: " + JSON.stringify(obj));
+              addressList.push(obj);
+            }
+            this.addressList = addressList;
+            Toast.clear();
+            this.nobind = 2
+          } else {
+            console.log("获取用户地址信息失败：" + res.data.code);
+          }
+        })
+        .catch(err => {
+          console.log("获取用户地址信息失败");
+        });
+    },
+    onAdd() {
+      this.$router.push({
+        name: "editAddress",
+        params: {
+          name: "",
+          tel: "",
+          addressDetail: ""
+        }
+      });
+    },
+
+    onEdit(item, index) {
+      console.log("areaCode: " + JSON.stringify(item));
+      this.$router.push({
+        name: "editAddress",
+        params: {
+          id: item.id,
+          name: item.name,
+          tel: item.tel,
+          addressDetail: item.address,
+          areacode:item.areacode
+        }
+      });
+    }
+  },
+  components: {
+    [AddressList.name]: AddressList,
+    [Toast.name]: Toast
+  }
+};
 </script>

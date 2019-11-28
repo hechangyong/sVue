@@ -41,7 +41,8 @@ export default {
   data() {
      return {
        userDetail:{
-          headImgUrl: "http://thirdwx.qlogo.cn/mmopen/ibr665eoEwbspA6IELnEDR1h7jldgjDpT2VibhJs0aqcMPc5AM5iaOsKu3pfpqOkHxvd0WG1QSjx2CGCOeORZ5e6ccF5DzBsXrL/132",
+          // headImgUrl: "http://thirdwx.qlogo.cn/mmopen/ibr665eoEwbspA6IELnEDR1h7jldgjDpT2VibhJs0aqcMPc5AM5iaOsKu3pfpqOkHxvd0WG1QSjx2CGCOeORZ5e6ccF5DzBsXrL/132",
+          headImgUrl: "",
           nickName:"何长勇",
           mobile: 17681102630,
           address:"安徽省合肥市文一名都"
@@ -55,16 +56,20 @@ export default {
     getUserBaseInfo() {
       axios.post(`http://babyroom.hecy.top/baby/u/getUserInfo`)
                 .then(res => {
-                    alert("res");
+                    console.log("res: " + res.data.code)
                     if (res.data.code === "0000") {
-                        this.captchaImg =
-                            "data:image/jpeg;base64," + res.data.attachment;
+                      var user = res.data.attachment;
+                         this.userDetail.nickName = user.nickName;
+                         this.userDetail.headImgUrl = user.headimgurl;
+                         this.userDetail.mobile = user.phone;
+                         this.userDetail.address = user.addressdetail; 
+
                     } else {
-                        console.log("获取验证码失败-----");
+                        console.log("获取用户信息失败："+res.data.code);
                     }
                 })
                 .catch(err => {
-                    console.log("获取验证码失败");
+                    console.log("获取用户信息失败");
                 });
     }
   },
