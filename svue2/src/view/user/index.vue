@@ -14,7 +14,7 @@
         <van-icon  name="pending-payment" />
         购物清单
       </van-col>  
-       <van-col span="8">
+       <van-col  @click="toCardList" span="8">
         <van-icon name="records" />
         卡 券
       </van-col>
@@ -57,6 +57,14 @@ export default {
     toOrderList(){
      this.$router.push({
         name: "orderList",
+        params: {
+          id: this.userDetail.id
+        }
+      });
+    },
+    toCardList(){
+     this.$router.push({
+        name: "cardlist",
         params: {
           id: this.userDetail.id
         }

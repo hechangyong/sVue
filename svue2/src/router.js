@@ -16,6 +16,13 @@ const routes = [
     }
   },
   {
+    name: 'cardlist',
+    component: () => import('./view/user/cardlist'),
+    meta: {
+      title: '卡卷列表'
+    }
+  },
+  {
     name: 'orderList',
     component: () => import('./view/user/orderlist'),
     meta: {
