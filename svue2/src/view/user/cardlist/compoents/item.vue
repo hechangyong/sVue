@@ -108,28 +108,28 @@ body {
   background: -ms-linear-gradient(left, #fa3232, #ec795c);
   /*IE 10*/
   background: -moz-linear-gradient(left, #fa3232, #ec795c);
-  /*火狐*/
+  /*火狐 #fe806d, #e47272)*/ 
   background: -webkit-gradient(
     linear,
     0% 0%,
     100% 0%,
-    from(#616161),
-    to(#616161)
+    from(#fe806d),
+    to(#e47272)
   );
   /*谷歌*/
   background: -webkit-gradient(
     linear,
     0% 0%,
     100% 0%,
-    from(#616161),
-    to(#616161)
+    from(#fe806d),
+    to(#e47272)
   );
   /*Safari 4-5, Chrome 1-9*/
-  background: -webkit-linear-gradient(left, #616161, #616161);
+  background: -webkit-linear-gradient(left, #fe806d, #e47272);
   /*Safari 5.1 Chrome 10+*/
-  background: -o-linear-gradient(left, #616161, #616161);
+  background: -o-linear-gradient(left, #fe806d, #e47272);
   /*Opera 11.10+*/
-  filter: progid:DXImageTransform.Microsoft.Gradient(gradientType=1, startColorStr=#616161, endColorStr=#616161);
+  filter: progid:DXImageTransform.Microsoft.Gradient(gradientType=1, startColorStr=#fe806d, endColorStr=#e47272);
   /*IE 6 7 8*/
 }
 
