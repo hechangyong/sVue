@@ -7,30 +7,32 @@
       title="商品标题"
       thumb="https://img.yzcdn.cn/vant/t-thirt.jpg"
     >
-      <div slot="tags">
+      <!-- <div slot="tags">
         <van-tag plain type="danger">标签</van-tag>
-      </div>
+      </div> -->
       <div slot="footer">
-        <van-button size="max">按钮</van-button>
-        <van-button size="mini">按钮</van-button>
+         <van-button size="mini">按钮</van-button>
       </div>
       <div slot="bottom">
-        <van-button size="mini">订单时间：{{date}}</van-button>
+        <div></div>
+        <van-button disabled  size="mini">订单时间：{{date}}</van-button>
        </div>
     </van-card>
   </div>
 </template>
 
 <script>
-import { Card } from 'vant';
+import { Card,Tag,Button   } from 'vant';
 export default {
     data(){
         return {
-            date: (new Date()).format("yyyy-MM-dd HH:mm:ss") 
+            date: '2019-11-29'
         }
     },
     components:{
-        [Card.name]:Card
+        [Card.name]:Card,
+        [Tag.name]:Tag,
+        [Button.name]:Button 
     }
 }
 </script>

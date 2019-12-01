@@ -18,6 +18,7 @@ import "@vant/touch-emulator";
 export default {
   data() {
     return {
+      frompage: "",
       areaList,
       addressInfo: {
         id: "1",
@@ -36,11 +37,11 @@ export default {
     this.init();
   },
   methods: {
-    changeDefult(value){
-      if(value) {
-        this.isdefault = 1
+    changeDefult(value) {
+      if (value) {
+        this.isdefault = 1;
       } else {
-         this.isdefault = 0
+        this.isdefault = 0;
       }
     },
     init() {
@@ -51,11 +52,12 @@ export default {
         this.addressInfo.tel = obj.tel;
         this.addressInfo.addressDetail = obj.addressDetail;
         this.addressInfo.areaCode = obj.areacode;
+        this.areaList.frompage = this.frompage;
       }
     },
     onSave(content) {
       Toast("save" + content.name);
-      var data = {} 
+      var data = {};
       data.addressdetail = content.addressDetail;
       data.areacode = content.areaCode;
       data.mobile = content.tel;
@@ -67,22 +69,37 @@ export default {
       data.province = content.province;
 
       this.$axios
-        .post(`/baby/u/addOrUpdateUserAddress`,data)
+        .post(`/baby/u/addOrUpdateUserAddress`, data)
         .then(res => {
           console.log("res.data.code: " + res.data.code);
           if (res.data.code === "0000") {
-             this.$router.push({
-              name: "addressList",
-              params: {}
-            });
+            if (this.frompage != undefined && this.frompage == "shoppingcart") {
+              this.$router.push({
+                name: "cart",
+                params: {}
+              });
+            } else {
+              this.$router.push({
+                name: "addressList",
+                params: {}
+              });
+            }
           } else {
+            this.$router.push({
+                name: "cart",
+                params: {}
+              });
             console.log("获取用户地址信息失败：" + res.data.code);
           }
         })
         .catch(err => {
+          this.$router.push({
+                name: "cart",
+                params: {}
+              });
           console.log("获取用户地址信息失败");
         });
-    }, 
+    },
     changeArea(values) {
       if (values[2].name != "肥东县") {
         Toast("你所填写地区只能给您邮寄过去哦！包邮哦！");

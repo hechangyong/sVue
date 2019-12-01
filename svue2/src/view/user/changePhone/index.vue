@@ -67,6 +67,8 @@
     /* width: -webkit-fill-available; */
     border-radius : 700px;
     font-size: 14px;
+    background-color:rgb(250, 85, 85);
+    border: 1px solid #fb3636;
 }
 .buttonclass-next {
     /* border: solid 1px #e0eefc;
@@ -76,6 +78,8 @@
     margin-left: 20px;
     border-radius : 700px;
     font-size: 14px;
+    background-color:rgb(250, 85, 85);
+    border: 1px solid #fb3636;
 }
 .van-cell-reload {
     line-height:34px;

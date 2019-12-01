@@ -6,7 +6,7 @@ Vue.use(Router);
 const routes = [
   {
     path: '*',
-    redirect: '/goods'
+    redirect: '/products'
   },
   {
     name: 'user',
@@ -19,7 +19,7 @@ const routes = [
     name: 'cardlist',
     component: () => import('./view/user/cardlist'),
     meta: {
-      title: '卡卷列表'
+      title: '卡券列表'
     }
   },
   {
@@ -51,7 +51,7 @@ const routes = [
   },
   {
     name: 'cart',
-    component: () => import('./view/cart'),
+    component: () => import('./view/products/shopping-cart'),
     meta: {
       title: '购物车'
     }

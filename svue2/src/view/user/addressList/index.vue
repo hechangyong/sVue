@@ -2,7 +2,7 @@
   <div>
       <div v-if='nobind==1'>
       </div>
-      <div  v-else-if='nobind==2'>
+      <div v-else-if='nobind==2'>
         <van-address-list v-model="chosenAddressId" :list="addressList" @add="onAdd" @edit="onEdit" />
       </div>
       
