@@ -10,12 +10,7 @@
       <van-cell>
         <div class="goods-title-1">{{ goods.title }}</div>
       </van-cell>
-    </van-cell-group>
-    <!-- 
-     v-for="value in 8"
-        :key="value"
-        icon="photo-o"
-    text="文字"-->
+    </van-cell-group> 
     <van-grid :gutter="10" :border="false" style="background-color: #ffffff;">
       <van-grid-item
         v-for="item in goods.btnList"
@@ -25,6 +20,8 @@
         :to="item.to"
       />
     </van-grid>
+
+    
     <van-cell-group>
       <van-cell>
         <div class="goods-title-1">{{ goods.title2 }}</div>
@@ -121,7 +118,7 @@ export default {
           {
             text: "奶粉",
             icon: "http://m.msjk95596.com/static/img/introduce-03.7ece814.png",
-            to: "/page1"
+            to: "/category"
           },
           {
             text: "宝妈用品",
@@ -200,15 +197,17 @@ export default {
   }
 
   &-title-1 {
-    font-size: 12px;
-    color: #7caee1;
-    line-height: 12px;
+    font-size: 14px;
+    color: #2792ff;
+    line-height: 14px;
+    font-weight: bold;
   }
 
   &-title {
-    font-size: 12px;
-    color: #7caee1;
-    line-height: 12px;
+    font-size: 14px;
+    color: #2792ff;
+    line-height: 14px;
+    font-weight: bold;
   }
 
   &-price {

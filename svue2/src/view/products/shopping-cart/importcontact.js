@@ -186,7 +186,7 @@ export default {
             console.log("onSelect: " + JSON.stringify(item));
 
             this.currentAddress = {
-                name: item.name,
+                name: item.name+"  " + item.tel,
                 tel: item.tel,
                 addressDetail: item.address
             };

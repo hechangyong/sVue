@@ -4,11 +4,13 @@
       <van-icon slot="icon" name="add-square" class="user-defined-icon" />
     </van-cell>
 
+		<!-- <van-cell icon="dingwei" isLink title="张三  13512124547" label="浙江省 杭州市 西湖区 创新创业园dasdasdasdasdasdas" /> -->
+
     <van-cell
       :title="currentAddress.name"
       v-if="hasAddress"
       icon="location-o"
-      :value="currentAddress.tel"
+      
       size="large"
       @click="showList = true"
       is-link

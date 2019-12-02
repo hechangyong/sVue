@@ -35,7 +35,7 @@ const routes = [
     meta: {
       title: '修改手机号码'
     }
-  },{
+  }, {
     name: 'editAddress',
     component: () => import('./view/user/editAddress'),
     meta: {
@@ -69,7 +69,14 @@ const routes = [
     meta: {
       title: '商品首页'
     }
-  } 
+  },
+  {
+    name: 'category',
+    component: () => import('./view/products/category'),
+    meta: {
+      title: '商品分类'
+    }
+  }
 ];
 
 // add route path
