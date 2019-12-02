@@ -83,15 +83,12 @@ export default {
         ]
       },
       desc:
-        '<img alt="" src="http://pic2.moresing.com/kindeditor/php/../attached/image/20170220/20170220135343_63212.jpg">' +
-        '<img alt="" src="http://pic1.moresing.com/kindeditor/php/../attached/image/20170220/20170220135343_37527.jpg">' +
-        '<img alt="" src="http://pic1.moresing.com/kindeditor/php/../attached/image/20170220/20170220135343_83387.jpg">' +
-        '<img alt="" src="http://pic2.moresing.com/kindeditor/php/../attached/image/20170220/20170220135344_95490.jpg">' +
-        '<img alt="" src="http://pic2.moresing.com/kindeditor/php/../attached/image/20170220/20170220135344_78328.jpg">' +
-        '<img alt="" src="http://pic1.moresing.com/kindeditor/php/../attached/image/20170220/20170220135344_74260.jpg">' +
-        '<img alt="" src="http://pic2.moresing.com/kindeditor/php/../attached/image/20170220/20170220135344_65105.jpg">' +
-        '<img alt="" src="http://pic2.moresing.com/kindeditor/php/../attached/image/20170220/20170220135344_16353.jpg">' +
-        '<img alt="" src="http://pic1.moresing.com/kindeditor/php/../attached/image/20170220/20170220135344_65133.jpg">',
+        '<img alt="" src="./../../assets/images/products/1.jpg">' +
+        '<img alt="" src="https://img.yzcdn.cn/vant/apple-1.jpg">' +
+        '<img alt="" src="https://img.yzcdn.cn/vant/apple-2.jpg">' +
+        '<img alt="" src="https://img.yzcdn.cn/public_files/2017/10/24/1791ba14088f9c2be8c610d0a6cc0f93.jpeg">' +
+        '<img alt="" src="https://img.yzcdn.cn/public_files/2017/10/24/1791ba14088f9c2be8c610d0a6cc0f93.jpeg">' +
+        '<img alt="" src="http://babyroom.hecy.top/img/2.jpg">' ,
 
       imageList: [
         "https://img.yzcdn.cn/vant/apple-1.jpg",
@@ -114,7 +111,7 @@ export default {
     },
     toChat() {
       Dialog.alert({
-        message: "老板手机号：17681102630"
+        message: "老板手机号：17681102630\n 欢迎骚扰"
       });
     }
   }

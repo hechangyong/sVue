@@ -37,7 +37,7 @@
     </div>
     <div class="card-fullshow" v-if="showbig==1">
       <div class="Shade-Mask"></div>
-      <img class="card-big" @click="smallimg" alt src="../../../../images/user/qcode.png" />
+      <img class="card-big" @click="smallimg" alt src="../../../../assets/images/user/qcode.png" />
     </div>
   </div>
 </template>
