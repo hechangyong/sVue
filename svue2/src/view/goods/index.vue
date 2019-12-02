@@ -111,7 +111,7 @@ export default {
     },
     toChat() {
       Dialog.alert({
-        message: "老板手机号：17681102630\n 欢迎骚扰"
+        message: "老板手机号：17681102630 \n 欢迎骚扰"
       });
     }
   }
