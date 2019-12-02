@@ -61,7 +61,7 @@
       :safe-area-inset-bottom="safeareabottom"
       :disabled="!checkedGoods.length"
       button-text="提交订单"
-      tip="你的收货地址不支持同城送, 我们已为你推荐快递"
+      :tip="tipdes"
       tip-icon="info-o"
       @submit="onSubmit"
     >

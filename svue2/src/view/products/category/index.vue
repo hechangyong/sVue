@@ -9,9 +9,57 @@
       num="2"
       price="2.00"
       desc="大叔大婶大所大所大所大所大所多"
+      title="飞鹤奶粉"
+      origin-price="10.00"
+      thumb="http://babyroom.hecy.top/img/2.jpg"
+    >
+      <div slot="footer">
+        <van-button round icon="cart-circle-o" type="primary" @click="addCard" size="mini"></van-button>
+      </div>
+    </van-card>
+    <van-card
+      num="2"
+      price="2.00"
+      desc="大叔大婶大所大所大所大所大所多"
+      title="诗优乐奶粉"
+      origin-price="10.00"
+      thumb="http://babyroom.hecy.top/img/1.jpg"
+    >
+      <div slot="footer">
+        <van-button round icon="cart-circle-o" type="primary" @click="addCard" size="mini"></van-button>
+      </div>
+    </van-card>
+    <van-card
+      num="2"
+      price="2.00"
+      desc="大叔大婶大所大所大所大所大所多"
       title="商品标题"
       origin-price="10.00"
-      thumb="https://img.yzcdn.cn/vant/t-thirt.jpg"
+      thumb="http://babyroom.hecy.top/img/1.jpg"
+    >
+      <div slot="footer">
+        <van-button round icon="cart-circle-o" type="primary" @click="addCard" size="mini"></van-button>
+      </div>
+    </van-card>
+    <van-card
+      num="2"
+      price="2.00"
+      desc="大叔大婶大所大所大所大所大所多"
+      title="商品标题"
+      origin-price="10.00"
+      thumb="http://babyroom.hecy.top/img/2.jpg"
+    >
+      <div slot="footer">
+        <van-button round icon="cart-circle-o" type="primary" @click="addCard" size="mini"></van-button>
+      </div>
+    </van-card>
+    <van-card
+      num="2"
+      price="2.00"
+      desc="大叔大婶大所大所大所大所大所多"
+      title="商品标题"
+      origin-price="10.00"
+      thumb="http://babyroom.hecy.top/img/3.jpg"
     >
       <div slot="footer">
         <van-button round icon="cart-circle-o" type="primary" @click="addCard" size="mini"></van-button>
@@ -48,14 +96,14 @@ export default {
               {
                 id: "30349", // skuValueId：规格值 id
                 name: "红色", // skuValueName：规格值名称
-                imgUrl: "https://img.yzcdn.cn/vant/t-thirt.jpg", // 规格类目图片，只有第一个规格类目可以定义图片
-                previewImgUrl: "https://img.yzcdn.cn/vant/t-thirt.jpg" // 用于预览显示的规格类目图片
+                imgUrl: "http://babyroom.hecy.top/img/2.jpg", // 规格类目图片，只有第一个规格类目可以定义图片
+                previewImgUrl: "http://babyroom.hecy.top/img/2.jpg" // 用于预览显示的规格类目图片
               },
               {
                 id: "1215",
                 name: "蓝色",
-                imgUrl: "https://img.yzcdn.cn/vant/t-thirt.jpg",
-                previewImgUrl: "https://img.yzcdn.cn/vant/t-thirt.jpg"
+                imgUrl: "http://babyroom.hecy.top/img/2.jpg",
+                previewImgUrl: "http://babyroom.hecy.top/img/2.jpg"
               }
             ],
             k_s: "s1" // skuKeyStr：sku 组合列表（下方 list）中当前类目对应的 key 值，value 值会是从属于当前类目的一个规格值 id
@@ -93,7 +141,7 @@ export default {
         // 商品标题
         title: "测试商品",
         // 默认商品 sku 缩略图
-        picture: "https://img.yzcdn.cn/vant/t-thirt.jpg"
+        picture: "http://babyroom.hecy.top/img/2.jpg"
       },
       messageConfig: {
         // 图片上传回调，需要返回一个promise，promise正确执行的结果需要是一个图片url

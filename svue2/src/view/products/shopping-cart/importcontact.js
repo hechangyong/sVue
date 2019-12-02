@@ -40,6 +40,9 @@ export default {
     },
     data() {
         return {
+            // tipdes:"你的收货地址不支持同城送, 我们已为你推荐快递",
+            tipdes:"下单后我们会尽快与您联系，为您送货，请保持预留手机畅通哦。",
+
             editAddress: true,
             hasAddress: false,
 
