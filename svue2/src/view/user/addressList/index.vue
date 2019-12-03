@@ -1,35 +1,40 @@
 <template>
   <div>
-      <div v-if='nobind==1'>
-      </div>
-      <div v-else-if='nobind==2'>
-        <van-address-list v-model="chosenAddressId" :list="addressList" @add="onAdd" @edit="onEdit" />
-      </div>
-      
-    
+    <div v-if="nobind==1"></div>
+    <div v-else-if="nobind==2">
+      <van-address-list v-model="chosenAddressId" :list="addressList" @add="onAdd" @edit="onEdit" />
+    </div>
+
+    <is-empty v-if="isEmpty" altdes="hahahahahah">
+      <span>您好没有添加地址哦！快去添加吧</span>
+      </is-empty>
   </div>
 </template>
 <script>
 import { AddressList, Toast } from "vant";
+import IsEmpty from "@/view/is-empty/";
 export default {
   data() {
     return {
-      nobind:1,
+      nobind: 1,
+      isEmpty: false,
       chosenAddressId: "1",
-      addressList: [{
-            id:"",
-            name:"",
-            tel	:"",
-            address:"",
-            areacode:""
-      }]
+      addressList: [
+        {
+          id: "",
+          name: "",
+          tel: "",
+          address: "",
+          areacode: ""
+        }
+      ]
     };
   },
   mounted() {
     Toast.loading({
-        message: '加载中...',
-        forbidClick: true,
-        loadingType: 'spinner'
+      message: "加载中...",
+      forbidClick: true,
+      loadingType: "spinner"
     });
     this.initAddress();
   },
@@ -54,12 +59,14 @@ export default {
             }
             this.addressList = addressList;
             Toast.clear();
-            this.nobind = 2
+            this.nobind = 2;
           } else {
+            this.isEmpty = true;
             console.log("获取用户地址信息失败：" + res.data.code);
           }
         })
         .catch(err => {
+          this.isEmpty = true;
           console.log("获取用户地址信息失败");
         });
     },
@@ -83,14 +90,15 @@ export default {
           name: item.name,
           tel: item.tel,
           addressDetail: item.address,
-          areacode:item.areacode
+          areacode: item.areacode
         }
       });
     }
   },
   components: {
     [AddressList.name]: AddressList,
-    [Toast.name]: Toast
+    [Toast.name]: Toast,
+    [IsEmpty.name]: IsEmpty
   }
 };
 </script>

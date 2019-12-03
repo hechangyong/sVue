@@ -14,6 +14,12 @@ const routes = [
     meta: {
       title: '会员中心'
     }
+  },{
+    name: 'swimming',
+    component: () => import('./view/user/swimming'),
+    meta: {
+      title: '会员中心'
+    }
   },
   {
     name: 'cardlist',
