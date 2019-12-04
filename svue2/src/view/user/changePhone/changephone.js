@@ -97,7 +97,7 @@ export default {
                     }
                 })
                 .catch(err => {
-                    Toast("短信发送失败！请稍后在试！")
+                    Toast("修改用户手机号码失败！请稍后在试！")
                     // lock = false;
                     // this.$emit("input", false);
                     // this.$message.toast("网络异常");
