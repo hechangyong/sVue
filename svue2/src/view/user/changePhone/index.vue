@@ -18,6 +18,7 @@
         <van-field
           class="van-cell-reload"
           label="新手机号"
+          :value="newPhone"
           @focus="new_phone_focus"
           :error-message="error_phone_message"
           @blur="on_newphone_blur"
@@ -28,6 +29,7 @@
         <van-field
           center
           label="图形验证码"
+          :value="captchImgCode"
           @input="input_img_captcha"
           left-icon="photo-o"
           placeholder="图形验证码"
@@ -38,18 +40,18 @@
         </van-field>
         <van-field
           center
-          :value="aaaa"
-          @input="onInput"
+          :value="captchaCode"
+          @input="onsmsInput"
           label="短信验证码"
           left-icon="comment-circle-o"
           placeholder="短信验证码"
         >
-          <van-button @click="getSmsCode" slot="button" size="small" color="#1989fa" plain>发送验证码</van-button>
+          <van-button @click="getSmsCode"   slot="button" size="small" color="#1989fa" plain>{{smsTxt}}</van-button>
         </van-field>
       </van-cell-group>
       <van-button
         class="buttonclass-next"
-        @click="sendSmsCode_new"
+        @click="changeUserPhone"
         round
         type="info"
       >{{changePhoneText}}</van-button>

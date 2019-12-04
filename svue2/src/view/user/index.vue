@@ -78,7 +78,7 @@ export default {
       this.$router.push({
         name: "changeMobile",
         params: {
-          phone:this.userDetail.mobile,
+          phone: this.userDetail.mobile,
           id: this.userDetail.id
         }
       });
@@ -115,10 +115,12 @@ export default {
   },
   filters: {
     cutOutAddress: function(addressValue) {
-      var len = addressValue.length;
-      console.log("len:" + len);
-      if (len > 7) {
-        return addressValue.substring(0, 7) + "...";
+      if (addressValue != undefined) {
+        var len = addressValue.length;
+        console.log("len:" + len);
+        if (len > 7) {
+          return addressValue.substring(0, 7) + "...";
+        }
       }
     }
   },

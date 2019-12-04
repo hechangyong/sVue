@@ -12,6 +12,9 @@ export default {
             aaaa: "",
             newPhone: "",
             captchaCode: "",
+            smsTxt: "发送验证码",
+            b_disabled: false,
+            lock: false,
             error_phone_message: "",
             captchImgCode: "",
             captchaImg: "",
@@ -41,7 +44,6 @@ export default {
         },
         new_phone_focus() {
             this.error_phone_message = '';
-            this.newPhone = ""
         },
         on_newphone_blur() {
             var isphone = this.isPhoneNo(this.newPhone);
@@ -56,9 +58,9 @@ export default {
         input_img_captcha(value) {
             this.captchImgCode = value;
         },
-        onInput(value) {
+        onsmsInput(value) {
             console.log("onInput: " + value)
-            this.aaaa = value;
+            this.captchaCode = value;
         },
         changeBind: function (bindId) {
             console.log("bindId: " + bindId)
@@ -70,6 +72,36 @@ export default {
         clickVerification() {
             var num = Math.random();
             this.imgUrls(num)
+        },
+        changeUserPhone() {
+            console.log("this.captchImgCode: " + this.captchImgCode)
+            var isphone = this.isPhoneNo(this.newPhone);
+            if (!isphone) {
+                this.error_phone_message = '请输入正确的手机号码！';
+            }
+            if (this.captchImgCode == '' || this.captchImgCode == undefined) {
+                Toast("请输入图形验证码 " + this.captchImgCode);
+                return;
+            }
+            console.log("修改用户手机号码")
+            this.$axios
+                .post(`/babyroom/auth/changeUserPhone/${this.newPhone}/${this.captchaCode}`)
+                .then(res => {
+                    if (res.data.code == "0000") {
+                        this.imgUrls(0.111);
+                         
+                    } else {
+                        console.log(res);
+                        // Toast("用户手机号码修改失败！")
+                        this.imgUrls(0.111);
+                    }
+                })
+                .catch(err => {
+                    Toast("短信发送失败！请稍后在试！")
+                    // lock = false;
+                    // this.$emit("input", false);
+                    // this.$message.toast("网络异常");
+                });
         },
         imgUrls(num) {
             console.log("获取图形验证码")
@@ -89,37 +121,64 @@ export default {
 
         },
         getSmsCode() {
+            if (this.lock) return;
+            this.b_disabled = true;
             console.log("this.captchImgCode: " + this.captchImgCode)
-             var isphone = this.isPhoneNo(this.newPhone);
+            var isphone = this.isPhoneNo(this.newPhone);
             if (!isphone) {
                 this.error_phone_message = '请输入正确的手机号码！';
             }
             if (this.captchImgCode == '' || this.captchImgCode == undefined) {
-                Toast("请输入图形验证码 "+ this.captchImgCode);
+                Toast("请输入图形验证码 " + this.captchImgCode);
                 return;
             }
+            this.countDown();
             this.$axios
-            .get( `/babyroom/auth/sendCaptcha/${this.newPhone}/${this.captchImgCode}`)
-            .then(res => {
-                if (res.data.code == "0000") {
-                    this.imgUrls(0.111);
-                    Toast("短信发送成功！请注意查收！")
-                } else {
-                    console.log(res);
-                    this.$message.toast(res.data.errorMsg);
-                    this.captchImgCode = "";
-                    this.imgUrls(0.111);
-                }
-            })
-            .catch(err => {
-                // lock = false;
-                this.$emit("input", false);
-                this.$message.toast("网络异常");
-            });
+                .get(`/babyroom/auth/sendCaptcha/${this.newPhone}/${this.captchImgCode}`)
+                .then(res => {
+                    if (res.data.code == "0000") {
+                        this.imgUrls(0.111);
+                        Toast("短信发送成功！请注意查收！")
+
+                    } else {
+                        console.log(res);
+
+                        Toast("短信发送失败！请稍后在试！")
+                        this.imgUrls(0.111);
+
+                    }
+                })
+                .catch(err => {
+                    Toast("短信发送失败！请稍后在试！")
+                    // lock = false;
+                    // this.$emit("input", false);
+                    // this.$message.toast("网络异常");
+                });
         },
-        sendSmsCode_new(event) {
-            
-            
+        countDown: function (_callback) {
+
+            var t = 60,
+                _this = this;
+            var run = function () {
+                _this.currentValue = _this.value;
+                _this.smsTxt = `重新获取${t}s`;
+
+                if (t >= 0) {
+                    _this.b_disabled = true;
+                    t--;
+                    setTimeout(() => {
+                        run();
+                    }, 1000);
+                } else {
+                    _this.lock = false;
+                    _this.b_disabled = false;
+                    _callback && _callback();
+                    _this.smsTxt = "发送验证码";
+                }
+            };
+
+            _this.lock = true;
+            run();
         },
         isPhoneNo(tel) {
             var pattern = /^1[23456789]\d{9}$/;

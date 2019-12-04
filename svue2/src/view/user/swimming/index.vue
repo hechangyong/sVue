@@ -4,7 +4,7 @@
       <div class="card am-text-sm">
         <div class="card-shopname" id="shopname"></div>
         <div class="card-userinfo">
-          <img @click="showBigImage" class="card-qr" alt src="../../../images/user/qcode.png" />
+          <img @click="showBigImage" class="card-qr" alt :src="qcCodeImg" />
           <div class="card-info">
             <div class="div-member-id">
               <span id="memberID"></span>
@@ -25,10 +25,10 @@
             <span id="expirationDate"></span>
           </div>
           <div class="div-expiration-date">
-            <span>总次数: 100次</span>
-            <span id="leftTimes" class="am-margin-right-sm">剩余次数: 10次</span>
+            <span>总金额: 100元</span>
+            <span id="leftTimes" class="am-margin-right-sm">剩余金额: 10元</span>
           </div>
-           
+
           <div class="div-prompt-msg" style="display: none;">
             <span>提示信息：</span>
             <span id="promptMsg"></span>
@@ -36,7 +36,13 @@
         </div>
       </div>
     </div>
-    <van-row gutter="20" class="rows">
+    <van-cell-group>
+      <van-cell :title="swingOrShowTitle" title-class="classtitle" center value="洗澡游泳选择器">
+        <van-switch :value="checked" @click="onClick" @change="onChange" />
+      </van-cell>
+    </van-cell-group>
+
+    <van-row class="rows">
       <van-col span="8"></van-col>
       <van-col span="8">宝宝游泳记录</van-col>
       <van-col span="8"></van-col>
@@ -47,55 +53,12 @@
         <p>2016-07-12 12:40</p>
       </van-step>
       <van-step>
-        <h3>【记录】距今天【5】天</h3>
+        <h3>【游泳】距今天【5】天</h3>
         <p>2016-07-11 10:00</p>
       </van-step>
+
       <van-step>
-        <h3>【记录】距今天【10】天</h3>
-        <p>2016-07-11 10:00</p>
-      </van-step>
-      <van-step>
-        <h3>【记录】距今天【15】天</h3>
-        <p>2016-07-11 10:00</p>
-      </van-step>
-      <van-step>
-        <h3>【记录】距今天【20】天</h3>
-        <p>2016-07-11 10:00</p>
-      </van-step>
-      <van-step>
-        <h3>【记录】距今天【60】天</h3>
-        <p>2016-07-11 10:00</p>
-      </van-step>
-      <van-step>
-        <h3>【记录】距今天【70】天</h3>
-        <p>2016-07-11 10:00</p>
-      </van-step>
-      <van-step>
-        <h3>【记录】距今天【140】天</h3>
-        <p>2016-07-11 10:00</p>
-      </van-step>
-      <van-step>
-        <h3>【记录】距今天【150】天</h3>
-        <p>2016-07-11 10:00</p>
-      </van-step>
-      <van-step>
-        <h3>【记录】距今天【160】天</h3>
-        <p>2016-07-11 10:00</p>
-      </van-step>
-      <van-step>
-        <h3>【记录】距今天【170】天</h3>
-        <p>2016-07-11 10:00</p>
-      </van-step>
-      <van-step>
-        <h3>【记录】距今天【180】天</h3>
-        <p>2016-07-11 10:00</p>
-      </van-step>
-      <van-step>
-        <h3>【记录】距今天【200】天</h3>
-        <p>2016-07-11 10:00</p>
-      </van-step>
-      <van-step>
-        <h3>【记录】第一次洗澡哦</h3>
+        <h3>【洗澡】消费10元</h3>
         <p>2016-07-10 09:30</p>
       </van-step>
     </van-steps>
@@ -108,36 +71,82 @@
 </template>
 
 <script>
-import { Step, Steps, Row, Col } from "vant";
+import { Step, Steps, Row, Col, Switch, Dialog } from "vant";
 
 export default {
   name: "item",
   data() {
     return {
+      qcCodeImg: "../../../assets/images/user/qcode.png",
+      swingOrShowTitle: "游泳",
+      checked: false,
       showbig: 2
     };
   },
+  created() {
+    this.initUserQcCode();
+  },
   methods: {
+    initUserQcCode() {
+      this.$axios
+        .get(
+          `http://babyroom.hecy.top//wechat/qrcode/babyroom/create-qrcode?sceneStr=hhhhh&expireSeconds=10000`
+        )
+        .then(res => {
+          console.log(JSON.stringify(res));
+          if (res.data.returnCode == "200") {
+            console.log(res);
+            this.qcCodeImg = res.data.value;
+            console.log("this.qcCodeImg:" + this.qcCodeImg);
+          } else {
+            console.log(res);
+          }
+        })
+        .catch(err => {});
+    },
     showBigImage() {
       console.log("this.showbig: " + this.showbig);
       this.showbig = 1;
     },
     smallimg() {
       this.showbig = 2;
+    },
+    onChange(checked) {
+      if (checked) {
+        this.swingOrShowTitle = "洗澡";
+        this.initUserQcCode();
+      } else {
+        this.swingOrShowTitle = "游泳";
+        this.initUserQcCode();
+      }
+    },
+    onClick() {
+      if (this.checked) {
+        this.checked = false;
+      } else {
+        this.checked = true;
+      }
     }
   },
   components: {
     [Step.name]: Step,
+    [Dialog.name]: Dialog,
     [Row.name]: Row,
     [Col.name]: Col,
+    [Switch.name]: Switch,
     [Steps.name]: Steps
   }
 };
 </script>
 
 <style scoped>
-.am-margin-right-sm{
-    margin-left: 15px;
+.classtitle {
+  font-size: 16px;
+  color: #e47272;
+  font-weight: 600;
+}
+.am-margin-right-sm {
+  margin-left: 15px;
 }
 .rows {
   font-size: 14px;
