@@ -4,7 +4,9 @@ import ElementUI from 'element-ui';
 import rem from 'amfe-flexible';
 import { router } from './router';
 import axios from 'axios';
+import tools from './tools'
 Vue.prototype.$axios = axios;
+Vue.prototype.$tools = tools;
 import { Lazyload, Icon, Cell, CellGroup, loading, Button, Popup,Toast,Field } from 'vant';
 Vue.use(Icon);
 Vue.use(Cell);
