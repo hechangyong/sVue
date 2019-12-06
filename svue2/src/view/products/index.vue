@@ -1,6 +1,6 @@
 <template>
   <div class="goods">
-    <van-swipe class="goods-swipe" :autoplay="3000">
+    <van-swipe class="goods-swipe" :autoplay="4000">
       <van-swipe-item v-for="thumb in goods.thumb" :key="thumb">
         <img class="feature_img_big" :src="thumb" />
       </van-swipe-item>
@@ -10,7 +10,7 @@
       <van-cell>
         <div class="goods-title-1">{{ goods.title }}</div>
       </van-cell>
-    </van-cell-group> 
+    </van-cell-group>
     <van-grid :gutter="10" :border="false" style="background-color: #ffffff;">
       <van-grid-item
         v-for="item in goods.btnList"
@@ -21,7 +21,6 @@
       />
     </van-grid>
 
-    
     <van-cell-group>
       <van-cell>
         <div class="goods-title-1">{{ goods.title2 }}</div>
@@ -43,21 +42,17 @@
     </van-grid>
 
     <van-tabbar :safe-area-inset-bottom="safeareabottom" v-model="active">
-      <van-tabbar-item  icon="home-o"> </van-tabbar-item>
-      <van-tabbar-item info="4" to="/cart" icon="shopping-cart-o">购物车</van-tabbar-item>
+      <van-tabbar-item icon="home-o">商品首页</van-tabbar-item>
+      <van-tabbar-item to="/cart" icon="shopping-cart-o">购物车</van-tabbar-item>
       <van-tabbar-item icon="user-o" to="/user">我的</van-tabbar-item>
-    </van-tabbar> 
+    </van-tabbar>
   </div>
 </template>
 
 <script>
 import {
   Col,
-  Icon,
-  Cell,
-  CellGroup,
   Swipe,
-  Toast,
   SwipeItem,
   Grid,
   GridItem,
@@ -69,9 +64,6 @@ import {
 export default {
   components: {
     [Col.name]: Col,
-    [Icon.name]: Icon,
-    [Cell.name]: Cell,
-    [CellGroup.name]: CellGroup,
     [Swipe.name]: Swipe,
     [SwipeItem.name]: SwipeItem,
     [Grid.name]: Grid,
@@ -83,12 +75,12 @@ export default {
 
   data() {
     return {
-      safeareabottom:true,
+      safeareabottom: true,
       border: false,
       active: 0,
       icon: {
-        active: 'https://img.yzcdn.cn/vant/user-active.png',
-        inactive: 'https://img.yzcdn.cn/vant/user-inactive.png'
+        active: "https://img.yzcdn.cn/vant/user-active.png",
+        inactive: "https://img.yzcdn.cn/vant/user-inactive.png"
       },
       goods: {
         title: "金摇篮产品导航",
@@ -170,15 +162,17 @@ export default {
 </script>
 
 <style lang="less">
+.goods-swipe {
+  height: 5.5rem;
+}
 .feature_img {
   height: 164px;
   width: 164px;
 }
 .feature_img_big {
-  height: 350px;
+  height: 5.5rem;
   width: 100%;
 }
-
 
 .van-grid-item__text {
   color: #a1a6b0;
