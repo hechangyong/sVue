@@ -42,7 +42,7 @@
     </van-cell-group>
 
     <van-cell-group class="user-top-group">
-      <van-cell icon="home-o" title="我的游泳卡" to="/swimming" is-link />
+      <van-cell icon="home-o" title="我的游泳卡"  @click="toSwimming"  is-link />
     </van-cell-group>
   </div>
 </template>
@@ -86,6 +86,14 @@ export default {
     toCardList() {
       this.$router.push({
         name: "cardlist",
+        params: {
+          id: this.userDetail.id
+        }
+      });
+    },
+    toSwimming() {
+      this.$router.push({
+        name: "swimming",
         params: {
           id: this.userDetail.id
         }

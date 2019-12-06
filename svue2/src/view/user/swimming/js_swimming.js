@@ -1,4 +1,4 @@
-import { Step, Steps, Row, Col, Switch, Dialog } from "vant";
+import { Step, Steps, Row, Col, Switch, Dialog, Toast } from "vant";
 import IsEmpty from "@/view/is-empty/";
 let tools_
 export default {
@@ -14,10 +14,10 @@ export default {
             text_residue: "",
             html_record_step: "",
             record_list: [],
-            shower_qc_image:"",
-            swimming_qc_image:"",
+            shower_qc_image: "",
+            swimming_qc_image: "",
             cardInfo: {
-                userid: 1,
+                userid: 0,
                 username: "",
                 cardno: "",
                 cardname: "",
@@ -35,12 +35,17 @@ export default {
     },
     created() {
         tools_ = this.$tools;
+        this.cardInfo.userid = this.$route.params.id;
         this.initUserQcCode();
         this.initUserCardInfo();
         this.initBabySwimmingRecord();
     },
     mounted() {
-        console.log(this.$tools.formatDate('2019-12-05T03:14:34.000+0000'));
+        Toast.loading({
+            message: "加载中...",
+            forbidClick: true,
+            loadingType: "spinner"
+        });
     },
     methods: {
         initBabySwimmingRecord() {
@@ -50,25 +55,25 @@ export default {
                 )
                 .then(res => {
                     if (res.data.code == "0000") {
+                        Toast.clear();
                         var recordList = res.data.attachment;
                         if (recordList != null && recordList.length > 0) {
                             this.hasSwimmingData = true;
-                            
+
                             for (var j = 0; j < recordList.length; j++) {
                                 var obj = {};
                                 var type = recordList[j].type;
                                 var typeText = "";
-                                if(type == 1) {
-                                    typeText = "【洗澡】 此次消费 "+ recordList[j].spend +"元";
+                                if (type == 1) {
+                                    typeText = "【洗澡】 此次消费 " + recordList[j].spend + "元";
                                 } else {
-                                    typeText = "【游泳】 此次消费 "+ recordList[j].spend +"元";
+                                    typeText = "【游泳】 此次消费 " + recordList[j].spend + "元";
                                 }
-                                obj.typeText =  typeText;
+                                obj.typeText = typeText;
                                 obj.time = tools_.formatDate(recordList[j].itime);
                                 this.record_list.push(obj);
                             }
                             console.log("this.record_list  : " + this.record_list);
-                            html_record_step = " <van-steps direction='vertical' :active='0'> <van-step>" + "<h3>【1111111】</h3>" + "<p>2016-07-12 12:40</p>" + "</van-step> </van-steps>";
                         }
                         console.log("初始化用户卡信息 : " + JSON.stringify(this.cardInfo));
 
@@ -112,17 +117,22 @@ export default {
         },
         initUserQcCode() {
             console.log("获取用户二维码");
-            var sceneStr = "";
-            
+            var sceneStr = this.cardInfo.userid + "_"
+            if (this.checked) {
+                sceneStr = sceneStr + "_1"
+            } else {
+                sceneStr = sceneStr + "_2"
+            }
+
             this.$axios
                 .get(
-                    `http://babyroom.hecy.top/wechat/qrcode/babyroom/create-qrcode?sceneStr=hhhhh&expireSeconds=10000`
+                    `http://babyroom.hecy.top/wechat/qrcode/babyroom/create-qrcode?sceneStr=` + sceneStr + `&expireSeconds=10000`
                 )
                 .then(res => {
                     console.log(JSON.stringify(res));
                     if (res.data.returnCode == "200") {
                         this.qcCodeImg = res.data.value;
-                        
+
                     } else {
                     }
                 })
@@ -176,6 +186,7 @@ export default {
         [Col.name]: Col,
         [Switch.name]: Switch,
         [IsEmpty.name]: IsEmpty,
+        [Toast.name]: Toast,
         [Steps.name]: Steps
     }
 };

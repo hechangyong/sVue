@@ -6,7 +6,7 @@
     </div>
 
     <is-empty v-if="isEmpty" altdes="hahahahahah">
-      <span>您好没有添加地址哦！快去添加吧</span>
+      <span>您还没有添加地址哦！快去添加吧</span>
       </is-empty>
   </div>
 </template>
