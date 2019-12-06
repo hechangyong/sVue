@@ -6,6 +6,8 @@
       :address-info="addressInfo"
       :area-columns-placeholder="['请选择', '请选择', '请选择']"
       @save="onSave"
+      @delete="ondelete"
+      :show-delete="true"
       @change-default="changeDefult"
       @change-area="changeArea"
     />
@@ -55,23 +57,13 @@ export default {
         this.areaList.frompage = this.frompage;
       }
     },
-    onSave(content) {
-      Toast("save" + content.name);
+    ondelete(content) {
       var data = {};
-      data.addressdetail = content.addressDetail;
-      data.areacode = content.areaCode;
-      data.mobile = content.tel;
-      data.city = content.city;
-      data.county = content.county;
       data.id = content.id;
-      data.name = content.name;
-      data.isdefault = this.isdefault;
-      data.province = content.province;
-
       this.$axios
-        .post(`/baby/u/addOrUpdateUserAddress`, data)
+        .post(`/baby/u/deleteUserAddress`, data)
         .then(res => {
-          console.log("res.data.code: " + res.data.code);
+          console.log("this.frompage : " + this.frompage);
           if (res.data.code === "0000") {
             if (this.frompage != undefined && this.frompage == "shoppingcart") {
               this.$router.push({
@@ -86,17 +78,62 @@ export default {
             }
           } else {
             this.$router.push({
-                name: "cart",
-                params: {}
-              });
+              name: "cart",
+              params: {}
+            });
             console.log("获取用户地址信息失败：" + res.data.code);
           }
         })
         .catch(err => {
           this.$router.push({
+            name: "cart",
+            params: {}
+          });
+          console.log("获取用户地址信息失败");
+        });
+    },
+    onSave(content) {
+      var data = {};
+      data.addressdetail = content.addressDetail;
+      data.areacode = content.areaCode;
+      data.mobile = content.tel;
+      data.city = content.city;
+      data.county = content.county;
+      data.id = content.id;
+      data.name = content.name;
+      data.isdefault = this.isdefault;
+      data.province = content.province;
+      console.log("this.frompage : " + this.frompage);
+
+      this.$axios
+        .post(`/baby/u/addOrUpdateUserAddress`, data)
+        .then(res => {
+          console.log("this.frompage : " + this.frompage);
+          if (res.data.code === "0000") {
+            if (this.frompage != undefined && this.frompage == "shoppingcart") {
+              this.$router.push({
                 name: "cart",
                 params: {}
               });
+            } else {
+              this.$router.push({
+                name: "addressList",
+                params: {}
+              });
+            }
+          } else {
+            this.$router.push({
+              name: "cart",
+              params: {}
+            });
+            console.log("获取用户地址信息失败：" + res.data.code);
+          }
+        })
+        .catch(err => {
+          this.$router.push({
+            name: "cart",
+            params: {}
+          });
           console.log("获取用户地址信息失败");
         });
     },

@@ -13,11 +13,11 @@
       <van-col @click="toOrderList" span="8">
         <van-icon name="pending-payment" />购物清单
       </van-col>
-      <van-col @click="toCardList" span="8">
-        <van-icon name="records" />卡 券
+      <van-col @click="toSwimming" span="8">
+        <van-icon name="records" />我的游泳卡
       </van-col>
       <van-col span="8">
-        <van-icon name="tosend" />我的积分
+        <van-icon name="tosend" @click="toshopIntegral" />我的积分
       </van-col>
     </van-row>
 
@@ -42,13 +42,13 @@
     </van-cell-group>
 
     <van-cell-group class="user-top-group">
-      <van-cell icon="home-o" title="我的游泳卡"  @click="toSwimming"  is-link />
+      <van-cell icon="home-o" title="我的卡劵" @click="toCardList" is-link />
     </van-cell-group>
   </div>
 </template>
 
 <script>
-import { Row, Col, Icon, Cell, CellGroup } from "vant";
+import { Row, Col, Icon, Cell, CellGroup, Toast } from "vant";
 import axios from "axios";
 export default {
   data() {
@@ -82,6 +82,9 @@ export default {
           id: this.userDetail.id
         }
       });
+    },
+    toshopIntegral() {
+      Toast("功能暂未开放！");
     },
     toCardList() {
       this.$router.push({
@@ -137,6 +140,7 @@ export default {
     [Col.name]: Col,
     [Icon.name]: Icon,
     [Cell.name]: Cell,
+    [Toast.name]: Toast,
     [CellGroup.name]: CellGroup
   }
 };
