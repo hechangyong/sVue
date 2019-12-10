@@ -1,0 +1,57 @@
+.vantCell_reload {
+    position: relative;
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: flex;
+    box-sizing: border-box;
+    width: 100%;
+    padding: 1px 1px;
+    overflow: hidden;
+    color: #323233;
+    font-size: 14px;
+    line-height: 24px;
+    background-color: #fff;
+  }
+  .rightCellClass {
+    margin-right: 0.5rem;
+    text-decoration: line-through;
+    font-size: 10px;
+    text-align: inherit;
+  }
+  .goods-swipe {
+    height: 5.5rem;
+  }
+  .feature_img {
+    height: 164px;
+    width: 164px;
+  }
+  .feature_img_big {
+    height: 5.5rem;
+    width: 100%;
+  }
+  .van-grid-item__icon {
+    font-size: inherit;
+    font-size: 45px;
+  }
+  .van-grid-item__content {
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -webkit-flex-direction: column;
+    flex-direction: column;
+    box-sizing: border-box;
+    height: 100%;
+    padding: 8px 8px;
+    background-color: #fff;
+  }
+  .van-grid-item__text {
+    color: #a1a6b0;
+    font-size: 12px;
+    word-wrap: break-word;
+  }
+  .cell_left_title_red{
+    color: red;
+    font-weight:700;
+  }

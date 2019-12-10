@@ -31,24 +31,13 @@
         <van-cell-group>
           <van-image class="feature_img" src="http://babyroom.hecy.top/img/1.jpg" />
           <van-cell class="vantCell_reload" value="婴幼儿奶粉 3段 适合0-1岁宝宝食用" />
-          <van-cell class="vantCell_reload" title="￥99" value="￥111" value-class="rightCellClass">
-            <!-- 使用 right-icon 插槽来自定义右侧图标 -->
-            <van-icon
-              slot="right-icon"
-              name="cart-circle"
-              color="#ff0000"
-              style="line-height: inherit;"
-            />
-          </van-cell>
-          <!-- <span style="text-decoration:line-through;">删除线效果</span> -->
-          <!-- <del>￥59</del> -->
-        </van-cell-group>
-      </van-grid-item>
-       <van-grid-item to="/goods">
-        <van-cell-group>
-          <van-image class="feature_img" src="http://babyroom.hecy.top/img/2.jpg" />
-          <van-cell class="vantCell_reload" value="婴幼儿奶粉 3段 适合0-1岁宝宝食用" />
-          <van-cell class="vantCell_reload" title="￥99" value="￥111" value-class="rightCellClass">
+          <van-cell
+            class="vantCell_reload"
+            title-class="cell_left_title_red"
+            title="￥99"
+            value="￥111"
+            value-class="rightCellClass"
+          >
             <!-- 使用 right-icon 插槽来自定义右侧图标 -->
             <van-icon
               slot="right-icon"
@@ -63,9 +52,36 @@
       </van-grid-item>
       <van-grid-item to="/goods">
         <van-cell-group>
+          <van-image class="feature_img" src="http://babyroom.hecy.top/img/2.jpg" />
+          <van-cell class="vantCell_reload" value="婴幼儿奶粉 3段 适合0-1岁宝宝食用" />
+          <van-cell
+            class="vantCell_reload"
+            title-class="cell_left_title_red"
+            title="￥99"
+            value="￥111"
+            value-class="rightCellClass"
+          >
+            <!-- 使用 right-icon 插槽来自定义右侧图标 -->
+            <van-icon
+              slot="right-icon"
+              name="cart-circle"
+              color="#ff0000"
+              style="line-height: inherit;"
+            />
+          </van-cell>
+        </van-cell-group>
+      </van-grid-item>
+      <van-grid-item to="/goods">
+        <van-cell-group>
           <van-image class="feature_img" src="http://babyroom.hecy.top/img/3.jpg" />
           <van-cell class="vantCell_reload" value="婴幼儿奶粉 3段 适合0-1岁宝宝食用" />
-          <van-cell class="vantCell_reload" title="￥99" value="￥111" value-class="rightCellClass">
+          <van-cell
+            class="vantCell_reload"
+            title-class="cell_left_title_red"
+            title="￥9119"
+            value="￥111"
+            value-class="rightCellClass"
+          >
             <!-- 使用 right-icon 插槽来自定义右侧图标 -->
             <van-icon
               slot="right-icon"
@@ -82,7 +98,13 @@
         <van-cell-group>
           <van-image class="feature_img" src="http://babyroom.hecy.top/img/4.jpg" />
           <van-cell class="vantCell_reload" value="婴幼儿奶粉 3段 适合0-1岁宝宝食用" />
-          <van-cell class="vantCell_reload" title="￥99" value="￥111" value-class="rightCellClass">
+          <van-cell
+            class="vantCell_reload"
+            title-class="cell_left_title_red"
+            title="￥999/罐"
+            value="￥111"
+            value-class="rightCellClass"
+          >
             <!-- 使用 right-icon 插槽来自定义右侧图标 -->
             <van-icon
               slot="right-icon"
@@ -235,58 +257,11 @@ export default {
 };
 </script>
 
+<style scoped src="./products_css_style.css"/>
+
+
+
 <style lang="less">
-.vantCell_reload {
-  position: relative;
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: flex;
-  box-sizing: border-box;
-  width: 100%;
-  padding: 1px 1px;
-  overflow: hidden;
-  color: #323233;
-  font-size: 14px;
-  line-height: 24px;
-  background-color: #fff;
-}
-.rightCellClass {
-  margin-right: 1.94rem;
-  text-decoration: line-through;
-}
-.goods-swipe {
-  height: 5.5rem;
-}
-.feature_img {
-  height: 164px;
-  width: 164px;
-}
-.feature_img_big {
-  height: 5.5rem;
-  width: 100%;
-}
-.van-grid-item__icon {
-  font-size: inherit;
-  font-size: 45px;
-}
-.van-grid-item__content {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: flex;
-  -webkit-box-orient: vertical;
-  -webkit-box-direction: normal;
-  -webkit-flex-direction: column;
-  flex-direction: column;
-  box-sizing: border-box;
-  height: 100%;
-  padding: 8px 8px;
-  background-color: #fff;
-}
-.van-grid-item__text {
-  color: #a1a6b0;
-  font-size: 12px;
-  word-wrap: break-word;
-}
 .goods {
   padding-bottom: 50px;
 
