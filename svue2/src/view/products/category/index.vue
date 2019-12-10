@@ -9,54 +9,6 @@
       num="2"
       price="2.00"
       desc="大叔大婶大所大所大所大所大所多"
-      title="飞鹤奶粉"
-      origin-price="10.00"
-      thumb="http://babyroom.hecy.top/img/2.jpg"
-    >
-      <div slot="footer">
-        <van-button round icon="cart-circle-o" type="primary" @click="addCard" size="mini"></van-button>
-      </div>
-    </van-card>
-    <van-card
-      num="2"
-      price="2.00"
-      desc="大叔大婶大所大所大所大所大所多"
-      title="诗优乐奶粉"
-      origin-price="10.00"
-      thumb="http://babyroom.hecy.top/img/1.jpg"
-    >
-      <div slot="footer">
-        <van-button round icon="cart-circle-o" type="primary" @click="addCard" size="mini"></van-button>
-      </div>
-    </van-card>
-    <van-card
-      num="2"
-      price="2.00"
-      desc="大叔大婶大所大所大所大所大所多"
-      title="商品标题"
-      origin-price="10.00"
-      thumb="http://babyroom.hecy.top/img/1.jpg"
-    >
-      <div slot="footer">
-        <van-button round icon="cart-circle-o" type="primary" @click="addCard" size="mini"></van-button>
-      </div>
-    </van-card>
-    <van-card
-      num="2"
-      price="2.00"
-      desc="大叔大婶大所大所大所大所大所多"
-      title="商品标题"
-      origin-price="10.00"
-      thumb="http://babyroom.hecy.top/img/2.jpg"
-    >
-      <div slot="footer">
-        <van-button round icon="cart-circle-o" type="primary" @click="addCard" size="mini"></van-button>
-      </div>
-    </van-card>
-    <van-card
-      num="2"
-      price="2.00"
-      desc="大叔大婶大所大所大所大所大所多"
       title="商品标题"
       origin-price="10.00"
       thumb="http://babyroom.hecy.top/img/3.jpg"
@@ -107,6 +59,24 @@ export default {
               }
             ],
             k_s: "s1" // skuKeyStr：sku 组合列表（下方 list）中当前类目对应的 key 值，value 值会是从属于当前类目的一个规格值 id
+          },
+          {
+            k: "尺寸", // skuKeyName：规格类目名称
+            v: [
+              {
+                id: "30349", // skuValueId：规格值 id
+                name: "大码", // skuValueName：规格值名称
+                imgUrl: "http://babyroom.hecy.top/img/2.jpg", // 规格类目图片，只有第一个规格类目可以定义图片
+                previewImgUrl: "http://babyroom.hecy.top/img/2.jpg" // 用于预览显示的规格类目图片
+              },
+              {
+                id: "30349",
+                name: "小码",
+                imgUrl: "http://babyroom.hecy.top/img/2.jpg",
+                previewImgUrl: "http://babyroom.hecy.top/img/2.jpg"
+              }
+            ],
+            k_s: "s2" // skuKeyStr：sku 组合列表（下方 list）中当前类目对应的 key 值，value 值会是从属于当前类目的一个规格值 id
           }
         ],
         // 所有 sku 的组合列表，比如红色、M 码为一个 sku 组合，红色、S 码为另一个组合
@@ -160,26 +130,42 @@ export default {
         uploadMaxSize: 3,
         // placeholder 配置
         placeholderMap: {
-          text: "xxx",
-          tel: "xxx"
+          text: "留言板"
         }
       },
-      activeKey: 3,
-      value1: 1,
+      activeKey: 0,
+      value1: 0,
       value2: "a",
       option1: [
         { text: "全部商品", value: 0 },
-        { text: "奶粉", value: 1 },
-        { text: "尿不湿", value: 2 }
+        { text: "纸尿片", value: 1 },
+        { text: "奶粉", value: 2 },
+        { text: "奶壶", value: 3 },
+        { text: "宝妈用品", value: 4 },
+        { text: "宝宝玩具", value: 5 },
+        { text: "宝宝衣物", value: 6 },
+        { text: "宝宝辅食", value: 7 },
+        { text: "更多", value: 8 }
       ],
       option2: [
         { text: "默认排序", value: "a" },
-        { text: "好评排序", value: "b" },
+        { text: "价格排序", value: "b" },
         { text: "销量排序", value: "c" }
       ]
     };
   },
+  mounted() {
+    this.init();
+  },
   methods: {
+    init() {
+      var obj = this.$route.params;
+      if (obj != undefined && JSON.stringify(obj) != "{}") {
+        this.value1 = obj.id;
+      } else {
+        this.value1 = 0;
+      }
+    },
     addCard() {
       this.show = true;
     },

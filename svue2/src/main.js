@@ -7,8 +7,9 @@ import axios from 'axios';
 import tools from './tools'
 Vue.prototype.$axios = axios;
 Vue.prototype.$tools = tools;
-import { Lazyload, Icon, Cell, CellGroup, loading, Button, Popup,Toast,Field } from 'vant';
+import { Lazyload, Icon,Col, Cell, CellGroup, loading, Button, Popup,Toast,Field } from 'vant';
 Vue.use(Icon);
+Vue.use(Col);
 Vue.use(Cell);
 Vue.use(CellGroup);
 Vue.use(loading);
