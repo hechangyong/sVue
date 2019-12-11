@@ -37,6 +37,9 @@
           <span class="spanclass">添加商品规格:</span>
           <Button :size="buttonSize" icon="md-add-circle" @click="addSkuModel" type="dashed"></Button>
         </div>
+        <div class="filedClassDiv">
+          <skuTableModal></skuTableModal>
+        </div>
       </div>
     </Card>
 
@@ -48,7 +51,7 @@
 <script>
 import uploadImg from "./upload.vue";
 import addSkuModal from "./add-sku-modal.vue";
-
+import skuTableModal from "./sku-table-modal.vue";
 export default {
   data() {
     return {
@@ -81,6 +84,96 @@ export default {
           value: "6",
           label: "其他"
         }
+      ],
+      columns7: [
+        {
+          title: "Name",
+          key: "name",
+          editable: true,
+          render: (h, params) => {
+            return h("div", [
+              h("Icon", {
+                props: {
+                  type: "person"
+                }
+              }),
+              h("strong", params.row.name)
+            ]);
+          }
+        },
+        {
+          title: "Age",
+          key: "age"
+        },
+        {
+          title: "Address",
+          key: "address"
+        },
+        {
+          title: "Action",
+          key: "action",
+          width: 150,
+          align: "center",
+          render: (h, params) => {
+            return h("div", [
+              h(
+                "Button",
+                {
+                  props: {
+                    type: "primary",
+                    size: "small"
+                  },
+                  style: {
+                    marginRight: "5px"
+                  },
+                  on: {
+                    click: () => {
+                      this.show(params.index);
+                    }
+                  }
+                },
+                "View"
+              ),
+              h(
+                "Button",
+                {
+                  props: {
+                    type: "error",
+                    size: "small"
+                  },
+                  on: {
+                    click: () => {
+                      this.remove(params.index);
+                    }
+                  }
+                },
+                "Delete"
+              )
+            ]);
+          }
+        }
+      ],
+      data6: [
+        {
+          name: "John Brown",
+          age: 18,
+          address: "New York No. 1 Lake Park"
+        },
+        {
+          name: "Jim Green",
+          age: 24,
+          address: "London No. 1 Lake Park"
+        },
+        {
+          name: "Joe Black",
+          age: 30,
+          address: "Sydney No. 1 Lake Park"
+        },
+        {
+          name: "Jon Snow",
+          age: 26,
+          address: "Ottawa No. 2 Lake Park"
+        }
       ]
     };
   },
@@ -92,10 +185,20 @@ export default {
     changeAddskuModal() {
       console.log("this.showAddSkuModel: " + this.showAddSkuModel);
       this.showAddSkuModel = false;
+    },
+    show(index) {
+      this.$Modal.info({
+        title: "User Info",
+        content: `Name：${this.data6[index].name}<br>Age：${this.data6[index].age}<br>Address：${this.data6[index].address}`
+      });
+    },
+    remove(index) {
+      this.data6.splice(index, 1);
     }
   },
   components: {
     [uploadImg.name]: uploadImg,
+    [skuTableModal.name]: skuTableModal,
     [addSkuModal.name]: addSkuModal
   }
 };
@@ -108,7 +211,7 @@ export default {
   background-color: white;
 }
 .centerClass {
-  height: 30rem;
+  height: 70rem;
   margin-left: 10rem;
 }
 .spanclass {

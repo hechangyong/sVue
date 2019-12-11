@@ -9,26 +9,29 @@
           </div>
           <div class="filedClassDiv">
             <span class="spanclass">添加可选值:</span>
-            <Input placeholder="请输入可选属性值" style="width: auto" />
+            <Input
+              v-model="currentSkuValue"
+              placeholder="请输入可选属性值"
+              style="width: auto"
+            />
             <Button
               style="margin-left: 1rem;"
               icon="md-add-circle"
               clearable
               @click="addskuValue"
-              @change="onchange"
               type="primary"
             ></Button>
           </div>
           <div class="filedClassDiv">
-             <Tag
-              v-for="item in count"
+            <Tag
+              v-for="item in skuValueArr"
               type="border"
-              :key="item"
-              :name="item"
+              :key="item.name"
+              :name="item.name"
               closable
-              :color="randomColor"
+              :color="item.randomColor"
               @on-close="handleClose2"
-            >{{ item }}</Tag>
+            >{{ item.name }}</Tag>
           </div>
         </div>
       </Card>
@@ -54,8 +57,10 @@ export default {
   },
   data() {
     return {
-      count: [],
-      showflag: false
+      currentSkuValue: "",
+      skuValueArr: [],
+      showflag: false,
+      randomColor: "red"
     };
   },
   watch: {
@@ -76,30 +81,53 @@ export default {
   },
   methods: {
     addskuValue(value) {
-      console.log();
-       this.count.push(value);
+      this.changeRandomColor();
+      this.skuValueArr.push({
+        name: this.currentSkuValue,
+        randomColor: this.randomColor
+      });
     },
-    randomColor(){
-      let r, g, b;
-				r = Math.floor(Math.random() * 256);
-				g = Math.floor(Math.random() * 256);
-				b = Math.floor(Math.random() * 256);
-				return "rgb(" +r + ',' +g+ ',' +b+ ")"; 
-    },
-    onchange(value){
-      console.log("value:" + value);
-    },
+    changeRandomColor() {
+      var colors = [
+        "primary",
+        "success",
+        "warning",
+        "error",
+        "blue",
+        "green",
+        "red",
+        "yellow",
+        "pink",
+        "magenta",
+        "volcano",
+        "orange",
+        "gold",
+        "lime",
+        "cyan",
+        "geekblue"
+      ];
+      var num = Math.random();
+      num = Math.ceil(num * 10);
+      var ra = Math.floor(Math.random() * 16);
+      console.log("num: " + num);
+      console.log("ra: " + ra);
+      this.randomColor = colors[ra];
+    }, 
     handleClose2(event, name) {
-      console.log("name: " + name);
-      const index = this.count.indexOf(name);
-      this.count.splice(index, 1);
+      for (var i = 0; i < this.skuValueArr.length; i++) {
+        if (this.skuValueArr[i].name == name) {
+          this.skuValueArr.splice(i, 1);
+          break;
+        }
+      }
     },
     ok() {
-      this.$Message.info("Clicked ok");
+      // this.$Message.info("Clicked ok");
     },
     cancel() {
-      this.$Message.info("Clicked cancel");
       this.showflag = false;
+      this.skuValueArr=[];
+      this.currentSkuValue = "";
     }
   }
 };
