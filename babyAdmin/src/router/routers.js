@@ -109,6 +109,26 @@ export default [
     ]
   },
   {
+    path: '/babyroom_productsManagement',
+    name: '商品管理',
+    meta: {
+      icon: 'md-people',
+      title: '商品管理'
+    },
+    component: Main,
+    children: [
+      {
+        path: 'md-shirt',
+        name: '添加商品',
+        meta:  {
+          icon: 'md-shirt',
+          title: '添加商品'
+        },
+        component: () => import('@/view/babyroom/products/add-products.vue')
+      } 
+    ]
+  },
+  {
     path: '/components',
     name: 'components',
     meta: {

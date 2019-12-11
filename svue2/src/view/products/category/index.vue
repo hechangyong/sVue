@@ -64,13 +64,13 @@ export default {
             k: "尺寸", // skuKeyName：规格类目名称
             v: [
               {
-                id: "30349", // skuValueId：规格值 id
+                id: "30347", // skuValueId：规格值 id
                 name: "大码", // skuValueName：规格值名称
                 imgUrl: "http://babyroom.hecy.top/img/2.jpg", // 规格类目图片，只有第一个规格类目可以定义图片
                 previewImgUrl: "http://babyroom.hecy.top/img/2.jpg" // 用于预览显示的规格类目图片
               },
               {
-                id: "30349",
+                id: "30348",
                 name: "小码",
                 imgUrl: "http://babyroom.hecy.top/img/2.jpg",
                 previewImgUrl: "http://babyroom.hecy.top/img/2.jpg"
@@ -84,16 +84,37 @@ export default {
           {
             id: 2259, // skuId，下单时后端需要
             price: 100, // 价格（单位分）
-            s1: "1215", // 规格类目 k_s 为 s1 的对应规格值 id
-            s2: "1193", // 规格类目 k_s 为 s2 的对应规格值 id
+            s1: "30349", // 规格类目 k_s 为 s1 的对应规格值 id
+            s2: "30347", // 规格类目 k_s 为 s2 的对应规格值 id
             s3: "0", // 最多包含3个规格值，为0表示不存在该规格
             stock_num: 110 // 当前 sku 组合对应的库存
+          }, {
+            id: 2259, // skuId，下单时后端需要
+            price: 100, // 价格（单位分）
+            s1: "30349", // 规格类目 k_s 为 s1 的对应规格值 id
+            s2: "30348", // 规格类目 k_s 为 s2 的对应规格值 id
+            s3: "0", // 最多包含3个规格值，为0表示不存在该规格
+            stock_num: 117 // 当前 sku 组合对应的库存
+          },{
+            id: 2259, // skuId，下单时后端需要
+            price: 100, // 价格（单位分）
+            s1: "1215", // 规格类目 k_s 为 s1 的对应规格值 id
+            s2: "30347", // 规格类目 k_s 为 s2 的对应规格值 id
+            s3: "0", // 最多包含3个规格值，为0表示不存在该规格
+            stock_num: 110 // 当前 sku 组合对应的库存
+          }, {
+            id: 2259, // skuId，下单时后端需要
+            price: 100, // 价格（单位分）
+            s1: "1215", // 规格类目 k_s 为 s1 的对应规格值 id
+            s2: "30348", // 规格类目 k_s 为 s2 的对应规格值 id
+            s3: "0", // 最多包含3个规格值，为0表示不存在该规格
+            stock_num: 0 // 当前 sku 组合对应的库存
           }
         ],
         price: "1.00", // 默认价格（单位元）
         stock_num: 227, // 商品总库存
         collection_id: 2261, // 无规格商品 skuId 取 collection_id，否则取所选 sku 组合对应的 id
-        none_sku: false, // 是否无规格商品
+        none_sku: true, // 是否无规格商品
         messages: [
           {
             // 商品留言
