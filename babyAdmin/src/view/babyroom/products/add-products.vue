@@ -47,7 +47,11 @@
           >{{ item.name }}</Tag>
         </div>
         <div class="filedClassDiv">
-          <skuTableModal :showtable="showSkuTableModal" :parentTableData="skuTableData" :columnsDefault="skuTableTitleValueArr"></skuTableModal>
+          <skuTableModal
+            :showtable="showSkuTableModal"
+            :parentTableData="skuTableData"
+            :columnsDefault="skuTableTitleValueArr"
+          ></skuTableModal>
         </div>
       </div>
     </Card>
@@ -97,7 +101,10 @@ export default {
         }
       ],
       skuNameArr: [],
-      skuTableTitleValueArr: []
+      skuTableTitleValueArr: [],
+      currentSkuValueArr: [],
+      currentSkuValueArr_1: [],
+      skuTableData: []
     };
   },
   methods: {
@@ -130,35 +137,105 @@ export default {
       this.randomColor = colors[ra];
     },
     getSkuType(skuTypeName, skuValueArr) {
-      console.log("skuTypeName: " + skuTypeName);
       this.changeRandomColor();
       this.skuNameArr.push({
         name: skuTypeName,
         randomColor: this.randomColor
       });
-
+      this.assembleTableColums(this.skuNameArr);
+      this.assembleTableData(skuValueArr);
       this.showSkuTableModal = true;
     },
     skuNameClose(event, name) {
+      var closeIndex = 0;
+      var notCloseName = "";
       for (var i = 0; i < this.skuNameArr.length; i++) {
         if (this.skuNameArr[i].name == name) {
           this.skuNameArr.splice(i, 1);
+          closeIndex = i;
           break;
         }
       }
-    }
-  },
-  watch: {
-    skuNameArr(val) {
+      this.assembleTableColums(this.skuNameArr);
+      this.assembleTableData4Close(closeIndex);
+    },
+    assembleTableData4Close(closeIndex) {
+      this.skuTableData = [];
+      if (this.skuTableTitleValueArr.length <= 0) {
+        this.currentSkuValueArr = [];
+        this.currentSkuValueArr_1 = [];
+        return;
+      }
+      var tempKey = "key_0";
+      var tempskuValue = [];
+      console.log("closeIndex: " + closeIndex);
+      if (closeIndex == 0) {
+        tempskuValue = this.currentSkuValueArr_1;
+      } else {
+        tempskuValue = this.currentSkuValueArr;
+      }
+      console.log("-------: " + JSON.stringify(tempskuValue));
+      for (var i = 0; i < tempskuValue.length; i++) {
+        var tempObj = {};
+        tempObj[tempKey] = tempskuValue[i];
+        tempObj.inventory = 0;
+        tempObj.saleFee = 0;
+        this.skuTableData.push(tempObj);
+      }
+      console.log(" this.skuTableData: " + JSON.stringify(this.skuTableData));
+    },
+    assembleTableData(val) {
+      this.skuTableData = [];
+      var key0 = this.skuTableTitleValueArr[0].key;
+      if (this.currentSkuValueArr.length <= 0) {
+        for (var i = 0; i < val.length; i++) {
+          var tempObj = {};
+          tempObj[key0] = val[i].name;
+          tempObj.inventory = 0;
+          tempObj.saleFee = 0;
+          this.skuTableData.push(tempObj);
+          this.currentSkuValueArr.push(val[i].name);
+        }
+        console.log("skuTableData: " + JSON.stringify(this.skuTableData));
+      } else {
+        var key1 = this.skuTableTitleValueArr[1].key;
+        for (var i = 0; i < this.currentSkuValueArr.length; i++) {
+          for (var j = 0; j < val.length; j++) {
+            var tempObj = {};
+            tempObj[key0] = this.currentSkuValueArr[i];
+            tempObj[key1] = val[j].name;
+            tempObj.inventory = 0;
+            tempObj.saleFee = 0;
+            this.skuTableData.push(tempObj);
+          }
+        }
+        for (var j = 0; j < val.length; j++) {
+          this.currentSkuValueArr_1.push(val[j].name);
+        }
+      }
+    },
+    assembleTableColums(val) {
       this.skuTableTitleValueArr = [];
+       console.log(" this.val: " + JSON.stringify(val));
       for (var i = 0; i < val.length; i++) {
         this.skuTableTitleValueArr.push({
           title: val[i].name,
-          key: "sss"
+          key: "key_" + i
         });
       }
     }
   },
+  // watch: {
+  //   skuNameArr(val) {
+  //     this.skuTableTitleValueArr = [];
+  //     for (var i = 0; i < val.length; i++) {
+  //       this.skuTableTitleValueArr.push({
+  //         title: val[i].name,
+  //         key: "key_" + i
+  //       });
+  //     }
+  //   }
+  // },
   components: {
     [uploadImg.name]: uploadImg,
     [skuTableModal.name]: skuTableModal,

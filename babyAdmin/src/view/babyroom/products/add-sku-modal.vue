@@ -9,11 +9,7 @@
           </div>
           <div class="filedClassDiv">
             <span class="spanclass">添加可选值:</span>
-            <Input
-              v-model="currentSkuValue"
-              placeholder="请输入可选属性值"
-              style="width: auto"
-            />
+            <Input v-model="currentSkuValue" placeholder="请输入可选属性值" style="width: auto" />
             <Button
               style="margin-left: 1rem;"
               icon="md-add-circle"
@@ -57,7 +53,7 @@ export default {
   },
   data() {
     return {
-      currentSkuName:"",
+      currentSkuName: "",
       currentSkuValue: "",
       skuValueArr: [],
       showflag: false,
@@ -75,7 +71,7 @@ export default {
     },
     showflag(val) {
       if (!val) {
-         this.$emit("changeModal", false);
+        this.$emit("changeModal", false);
       }
     }
   },
@@ -105,10 +101,10 @@ export default {
         "lime",
         "cyan",
         "geekblue"
-      ];      
-      var ra = Math.floor(Math.random() * 16);         
+      ];
+      var ra = Math.floor(Math.random() * 16);
       this.randomColor = colors[ra];
-    }, 
+    },
     handleClose2(event, name) {
       for (var i = 0; i < this.skuValueArr.length; i++) {
         if (this.skuValueArr[i].name == name) {
@@ -118,11 +114,14 @@ export default {
       }
     },
     ok() {
-       this.$emit('getSkuType', this.currentSkuName,this.skuValueArr)
+      this.$emit("getSkuType", this.currentSkuName, this.skuValueArr);
+      this.skuValueArr = [];
+      this.currentSkuValue = "";
+      this.currentSkuName = "";
     },
     cancel() {
       this.showflag = false;
-      this.skuValueArr=[];
+      this.skuValueArr = [];
       this.currentSkuValue = "";
       this.currentSkuName = "";
     }
