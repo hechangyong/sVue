@@ -35,16 +35,25 @@
         </div>
         <div class="filedClassDiv">
           <span class="spanclass">添加商品规格:</span>
-          <Button :size="buttonSize" icon="md-add-circle" @click="addSkuModel" type="dashed"></Button>
+          <Button :size="buttonSize" icon="md-add-circle" @click="addSkuModel" type="dashed">添加规格</Button>
+          <Tag
+            v-for="item in skuNameArr"
+            style=" margin-left: 10px;"
+            :color="item.randomColor"
+            :key="item.name"
+            :name="item.name"
+            closable
+            @on-close="skuNameClose"
+          >{{ item.name }}</Tag>
         </div>
         <div class="filedClassDiv">
-          <skuTableModal></skuTableModal>
+          <skuTableModal :showtable="showSkuTableModal" :parentTableData="skuTableData" :columnsDefault="skuTableTitleValueArr"></skuTableModal>
         </div>
       </div>
     </Card>
 
     <!-- 添加商品规格 -->
-    <addSkuModal :show="showAddSkuModel" @changeModal="changeAddskuModal"></addSkuModal>
+    <addSkuModal :show="showAddSkuModel" @changeModal="changeAddskuModal" @getSkuType="getSkuType"></addSkuModal>
   </div>
 </template>
 
@@ -57,8 +66,10 @@ export default {
     return {
       selectProductModel: "1",
       switchValue: true,
-      buttonSize: "large",
+      buttonSize: "small",
       showAddSkuModel: false,
+      showSkuTableModal: false,
+      randomColor: "red",
       productType: [
         {
           value: "1",
@@ -85,115 +96,67 @@ export default {
           label: "其他"
         }
       ],
-      columns7: [
-        {
-          title: "Name",
-          key: "name",
-          editable: true,
-          render: (h, params) => {
-            return h("div", [
-              h("Icon", {
-                props: {
-                  type: "person"
-                }
-              }),
-              h("strong", params.row.name)
-            ]);
-          }
-        },
-        {
-          title: "Age",
-          key: "age"
-        },
-        {
-          title: "Address",
-          key: "address"
-        },
-        {
-          title: "Action",
-          key: "action",
-          width: 150,
-          align: "center",
-          render: (h, params) => {
-            return h("div", [
-              h(
-                "Button",
-                {
-                  props: {
-                    type: "primary",
-                    size: "small"
-                  },
-                  style: {
-                    marginRight: "5px"
-                  },
-                  on: {
-                    click: () => {
-                      this.show(params.index);
-                    }
-                  }
-                },
-                "View"
-              ),
-              h(
-                "Button",
-                {
-                  props: {
-                    type: "error",
-                    size: "small"
-                  },
-                  on: {
-                    click: () => {
-                      this.remove(params.index);
-                    }
-                  }
-                },
-                "Delete"
-              )
-            ]);
-          }
-        }
-      ],
-      data6: [
-        {
-          name: "John Brown",
-          age: 18,
-          address: "New York No. 1 Lake Park"
-        },
-        {
-          name: "Jim Green",
-          age: 24,
-          address: "London No. 1 Lake Park"
-        },
-        {
-          name: "Joe Black",
-          age: 30,
-          address: "Sydney No. 1 Lake Park"
-        },
-        {
-          name: "Jon Snow",
-          age: 26,
-          address: "Ottawa No. 2 Lake Park"
-        }
-      ]
+      skuNameArr: [],
+      skuTableTitleValueArr: []
     };
   },
   methods: {
     addSkuModel() {
-      console.log("this.showAddSkuModel: " + this.showAddSkuModel);
       this.showAddSkuModel = true;
     },
     changeAddskuModal() {
-      console.log("this.showAddSkuModel: " + this.showAddSkuModel);
       this.showAddSkuModel = false;
     },
-    show(index) {
-      this.$Modal.info({
-        title: "User Info",
-        content: `Name：${this.data6[index].name}<br>Age：${this.data6[index].age}<br>Address：${this.data6[index].address}`
-      });
+    changeRandomColor() {
+      var colors = [
+        "primary",
+        "success",
+        "warning",
+        "error",
+        "blue",
+        "green",
+        "red",
+        "yellow",
+        "pink",
+        "magenta",
+        "volcano",
+        "orange",
+        "gold",
+        "lime",
+        "cyan",
+        "geekblue"
+      ];
+      var ra = Math.floor(Math.random() * 16);
+      this.randomColor = colors[ra];
     },
-    remove(index) {
-      this.data6.splice(index, 1);
+    getSkuType(skuTypeName, skuValueArr) {
+      console.log("skuTypeName: " + skuTypeName);
+      this.changeRandomColor();
+      this.skuNameArr.push({
+        name: skuTypeName,
+        randomColor: this.randomColor
+      });
+
+      this.showSkuTableModal = true;
+    },
+    skuNameClose(event, name) {
+      for (var i = 0; i < this.skuNameArr.length; i++) {
+        if (this.skuNameArr[i].name == name) {
+          this.skuNameArr.splice(i, 1);
+          break;
+        }
+      }
+    }
+  },
+  watch: {
+    skuNameArr(val) {
+      this.skuTableTitleValueArr = [];
+      for (var i = 0; i < val.length; i++) {
+        this.skuTableTitleValueArr.push({
+          title: val[i].name,
+          key: "sss"
+        });
+      }
     }
   },
   components: {
@@ -219,5 +182,8 @@ export default {
   font-family: auto;
   width: 100px;
   float: left;
+}
+.skuNameClass {
+  margin-left: 10px;
 }
 </style>

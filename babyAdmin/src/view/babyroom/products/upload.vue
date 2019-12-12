@@ -47,14 +47,14 @@ export default {
     return {
       defaultList: [
         {
-          name: "a42bdcc1178e62b4694c830f028db5c0",
+          name: "icon_b_milkpot",
           url:
-            "https://avatars3.githubusercontent.com/u/5370542?v=3&s=60"
+            "http://babyroom.hecy.top/img_external/products/icon_b_milkpot.png"
         },
         {
-          name: "bc7521e033abdd1e92222d733590f104",
+          name: "icon_b_milkpot",
           url:
-            "https://avatars3.githubusercontent.com/u/5370542?v=3&s=60"
+            "http://babyroom.hecy.top/img_external/products/icon_b_milkpot.png"
         }
       ],
       imgName: "",
@@ -73,7 +73,7 @@ export default {
     },
     handleSuccess(res, file) {
       file.url =
-        "https://o5wwk8baw.qnssl.com/7eb99afb9d5f317c912f08b5212fd69a/avatar";
+        "http://babyroom.hecy.top/img_external/products/icon_b_milkpot.png";
       file.name = "7eb99afb9d5f317c912f08b5212fd69a";
     },
     handleFormatError(file) {

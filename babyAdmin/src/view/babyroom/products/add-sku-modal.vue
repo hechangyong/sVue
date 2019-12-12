@@ -5,7 +5,7 @@
         <div class="centerClass">
           <div class="filedClassDiv">
             <span class="spanclass">规格名称:</span>
-            <Input placeholder="规格名称：颜色" style="width: auto" />
+            <Input placeholder="规格名称：颜色" style="width: auto" v-model="currentSkuName" />
           </div>
           <div class="filedClassDiv">
             <span class="spanclass">添加可选值:</span>
@@ -51,12 +51,13 @@ export default {
     title: {
       type: String,
       default() {
-        return "创建活动产品";
+        return "添加规格";
       }
     }
   },
   data() {
     return {
+      currentSkuName:"",
       currentSkuValue: "",
       skuValueArr: [],
       showflag: false,
@@ -65,7 +66,7 @@ export default {
   },
   watch: {
     show(val) {
-      console.log("show value: " + val);
+      console.log(" addSkuModal show value: " + val);
       if (val) {
         this.showflag = true;
       } else {
@@ -74,8 +75,7 @@ export default {
     },
     showflag(val) {
       if (!val) {
-        //  console.log()
-        this.$emit("changeModal", false);
+         this.$emit("changeModal", false);
       }
     }
   },
@@ -105,12 +105,8 @@ export default {
         "lime",
         "cyan",
         "geekblue"
-      ];
-      var num = Math.random();
-      num = Math.ceil(num * 10);
-      var ra = Math.floor(Math.random() * 16);
-      console.log("num: " + num);
-      console.log("ra: " + ra);
+      ];      
+      var ra = Math.floor(Math.random() * 16);         
       this.randomColor = colors[ra];
     }, 
     handleClose2(event, name) {
@@ -122,12 +118,13 @@ export default {
       }
     },
     ok() {
-      // this.$Message.info("Clicked ok");
+       this.$emit('getSkuType', this.currentSkuName,this.skuValueArr)
     },
     cancel() {
       this.showflag = false;
       this.skuValueArr=[];
       this.currentSkuValue = "";
+      this.currentSkuName = "";
     }
   }
 };

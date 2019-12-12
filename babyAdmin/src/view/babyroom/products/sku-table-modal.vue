@@ -1,94 +1,130 @@
 <template>
-  <Table :columns="columns" :data="data">
-    <template slot-scope="{ row, index }" slot="name">
-      <span>{{ row.name }}</span>
-    </template>
-
-    <template slot-scope="{ row, index }" slot="age">
-      <Input type="text" v-model="editAge" v-if="editIndex === index" />
-      <span v-else>{{ row.age }}</span>
-    </template>
-
-    <template slot-scope="{ row, index }" slot="birthday">
-      <Input type="text" v-model="editBirthday" v-if="editIndex === index" />
-      <span v-else>{{ getBirthday(row.birthday) }}</span>
-    </template>
-
-    <template slot-scope="{ row, index }" slot="address">
-      <Input type="text" v-model="editAddress" v-if="editIndex === index" />
-      <span v-else>{{ row.address }}</span>
-    </template>
-
-    <template slot-scope="{ row, index }" slot="action">
-      <div v-if="editIndex === index">
-        <Button @click="handleSave(index)">保存</Button>
-        <Button @click="editIndex = -1">取消</Button>
-      </div>
-      <div v-else>
-        <Button @click="handleEdit(row, index)">操作</Button>
-      </div>
-    </template>
-  </Table>
+  <div v-if="showflag">
+    <Table border :columns="currentcolumnsDefault" :data="data6"></Table>
+  </div>
 </template>
 <script>
 export default {
   name: "skuTableModal",
+  props: {
+    showtable: {
+      type: Boolean,
+      default() {
+        return false;
+      }
+    },
+    columnsDefault: {
+      type: Array,
+      default() {
+        return [];
+      }
+    },
+    parentTableData: {
+      type: Array,
+      default() {
+        return [];
+      }
+    }
+  },
   data() {
     return {
-      columns: [
+      showflag: false,
+      currentcolumnsDefault: [],
+      columns7: [
         {
-          title: "姓名",
-          slot: "name"
+          title: "商品库存",
+          key: "inventory",
+          render: (h, params) => {
+            return h("div", [
+              h("Input", {
+                props: {
+                  value: params.row.name
+                },
+                on: {
+                  "on-change"(event) {
+                    console.log("event:" + JSON.stringify(event.target._value));
+                    params.row.name = event.target.value;
+                  }
+                }
+              })
+            ]);
+          }
         },
         {
-          title: "年龄",
-          slot: "age"
+          title: "销售价格",
+          key: "saleFee",
+          render: (h, params) => {
+            return h("div", [
+              h("Input", {
+                props: {
+                  value: params.row.name
+                },
+                on: {
+                  "on-change"(event) {
+                    params.row.name = event.target.value;
+                  }
+                }
+              })
+            ]);
+          }
         },
         {
-          title: "出生日期",
-          slot: "birthday"
-        },
-        {
-          title: "地址",
-          slot: "address"
-        },
-        {
-          title: "操作",
-          slot: "action"
+          title: "上传图片",
+          key: "action",
+          width: 150,
+          align: "center",
+          render: (h, params) => {
+            return h("div", [
+              h(
+                "Button",
+                {
+                  props: {
+                    type: "dashed",
+                    size: "large"
+                  },
+                  style: {
+                    marginRight: "5px"
+                  },
+                  on: {
+                    click: () => {
+                      this.show(params.index);
+                    }
+                  }
+                },
+                "上传图片"
+              )
+            ]);
+          }
         }
       ],
-      data: [
-        {
-          name: "王小明",
-          age: 18,
-          birthday: "919526400000",
-          address: "北京市朝阳区芍药居"
-        },
-        {
-          name: "张小刚",
-          age: 25,
-          birthday: "696096000000",
-          address: "北京市海淀区西二旗"
-        },
-        {
-          name: "李小红",
-          age: 30,
-          birthday: "563472000000",
-          address: "上海市浦东新区世纪大道"
-        },
-        {
-          name: "周小伟",
-          age: 26,
-          birthday: "687024000000",
-          address: "深圳市南山区深南大道"
-        }
-      ],
-      editIndex: -1, // 当前聚焦的输入框的行数
-      editName: "", // 第一列输入框，当然聚焦的输入框的输入内容，与 data 分离避免重构的闪烁
-      editAge: "", // 第二列输入框
-      editBirthday: "", // 第三列输入框
-      editAddress: "" // 第四列输入框
+      data6: []
     };
+  },
+  watch: {
+    showtable(val) {
+      console.log("table show value: " + val);
+      if (val) {
+        this.showflag = true;
+      } else {
+        this.showflag = false;
+      }
+    },
+    columnsDefault(val) {
+      this.currentcolumnsDefault = [];
+      if (val != undefined && val.length > 0) {
+        for (var i = 0; i < val.length; i++) {
+          this.currentcolumnsDefault.push(val[i]);
+        }
+        for (var j = 0; j < this.columns7.length; j++) {
+          this.currentcolumnsDefault.push(this.columns7[j]);
+        }
+      } else {
+        this.showflag = false;
+      }
+    },
+    parentTableData(val) {
+      this.data6 = val;
+    }
   },
   methods: {
     handleEdit(row, index) {
