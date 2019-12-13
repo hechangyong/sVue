@@ -1,5 +1,5 @@
 <template>
-  <div v-if="showflag">
+  <div style="margin-left: 115px;" v-if="showflag">
     <Table border :columns="currentcolumnsDefault" :data="data6"></Table>
   </div>
 </template>
@@ -38,7 +38,7 @@ export default {
             return h("div", [
               h("Input", {
                 props: {
-                  value: params.row.name
+                  value: params.row.inventory
                 },
                 on: {
                   "on-change"(event) {
@@ -57,7 +57,7 @@ export default {
             return h("div", [
               h("Input", {
                 props: {
-                  value: params.row.name
+                  value: params.row.saleFee
                 },
                 on: {
                   "on-change"(event) {
@@ -71,16 +71,15 @@ export default {
         {
           title: "上传图片",
           key: "action",
-          width: 150,
+          // width: 150,
           align: "center",
           render: (h, params) => {
             return h("div", [
               h(
-                "Button",
+                "Upload",
                 {
                   props: {
-                    type: "dashed",
-                    size: "large"
+                    action: "//jsonplaceholder.typicode.com/posts/"
                   },
                   style: {
                     marginRight: "5px"
@@ -91,7 +90,17 @@ export default {
                     }
                   }
                 },
-                "上传图片"
+                [
+                  h(
+                    "Button",
+                    {
+                      props: {
+                        icon: "ios-cloud-upload-outline"
+                      }
+                    },
+                    "上传图片"
+                  )
+                ]
               )
             ]);
           }

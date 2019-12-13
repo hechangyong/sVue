@@ -5,11 +5,11 @@
         <div class="filedClassDiv">
           <span class="spanclass">商品名称:</span>
 
-          <Input placeholder="请输入商品名称" style="width: auto" />
+          <Input placeholder="请输入商品名称" style="width: 20%" />
         </div>
         <div class="filedClassDiv">
           <span class="spanclass">商品类别:</span>
-          <Select v-model="selectProductModel" style="width:200px">
+          <Select v-model="selectProductModel" style="width:20%">
             <Option
               v-for="item in productType"
               :value="item.value"
@@ -19,15 +19,15 @@
         </div>
         <div class="filedClassDiv">
           <span class="spanclass">商品价格:</span>
-          <Input placeholder="请输入商品价格" style="width: auto" />
+          <Input placeholder="请输入商品价格" style="width: 20%" />
         </div>
         <div class="filedClassDiv">
           <span class="spanclass">商品优惠价:</span>
-          <Input placeholder="请输入商品优惠价" style="width: auto" />
+          <Input placeholder="请输入商品优惠价" style="width: 20%" />
         </div>
         <div class="filedClassDiv">
           <span class="spanclass">商品总库存:</span>
-          <Input placeholder="请输入商品总库存" style="width: auto" />
+          <Input placeholder="请输入商品总库存" style="width: 20%" />
         </div>
         <div class="filedClassDiv">
           <span class="spanclass">商品图片:</span>
@@ -47,11 +47,22 @@
           >{{ item.name }}</Tag>
         </div>
         <div class="filedClassDiv">
+          <span class="spanclass"></span>
           <skuTableModal
             :showtable="showSkuTableModal"
             :parentTableData="skuTableData"
             :columnsDefault="skuTableTitleValueArr"
           ></skuTableModal>
+        </div>
+        <div class="filedClassDiv">
+          <span class="spanclass">添加商品简介:</span>
+          <Input
+            v-model="textareaValue"
+            style="width: 20%"
+            type="textarea"
+            :rows="4"
+            placeholder="商品简介"
+          />
         </div>
       </div>
     </Card>
@@ -68,6 +79,7 @@ import skuTableModal from "./sku-table-modal.vue";
 export default {
   data() {
     return {
+      textareaValue: "",
       selectProductModel: "1",
       switchValue: true,
       buttonSize: "small",
@@ -104,7 +116,8 @@ export default {
       skuTableTitleValueArr: [],
       currentSkuValueArr: [],
       currentSkuValueArr_1: [],
-      skuTableData: []
+      skuTableData: [],
+      currentSkuDataObj:[]
     };
   },
   methods: {
@@ -142,9 +155,17 @@ export default {
         name: skuTypeName,
         randomColor: this.randomColor
       });
+      this.assemblecurrentSkuDataObj(skuTypeName, skuValueArr);
       this.assembleTableColums(this.skuNameArr);
       this.assembleTableData(skuValueArr);
       this.showSkuTableModal = true;
+    },
+    assemblecurrentSkuDataObj(skuName, skuValueArr) {
+        this.currentSkuDataObj.push({
+            k:skuName,
+            v:skuValueArr
+        });
+        console.log("currentSkuDataObj: " + JSON.stringify( this.currentSkuDataObj));
     },
     skuNameClose(event, name) {
       var closeIndex = 0;
@@ -170,8 +191,10 @@ export default {
       var tempskuValue = [];
       console.log("closeIndex: " + closeIndex);
       if (closeIndex == 0) {
+        this.currentSkuValueArr = [];
         tempskuValue = this.currentSkuValueArr_1;
       } else {
+        this.currentSkuValueArr_1 = [];
         tempskuValue = this.currentSkuValueArr;
       }
       console.log("-------: " + JSON.stringify(tempskuValue));
@@ -216,7 +239,7 @@ export default {
     },
     assembleTableColums(val) {
       this.skuTableTitleValueArr = [];
-       console.log(" this.val: " + JSON.stringify(val));
+      console.log(" this.val: " + JSON.stringify(val));
       for (var i = 0; i < val.length; i++) {
         this.skuTableTitleValueArr.push({
           title: val[i].name,
