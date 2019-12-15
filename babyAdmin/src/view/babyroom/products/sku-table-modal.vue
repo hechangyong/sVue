@@ -1,9 +1,11 @@
 <template>
-  <div style="margin-left: 115px;" v-if="showflag">
+  <div style="margin-left: 115px; width: 60%;" v-if="showflag">
     <Table border :columns="currentcolumnsDefault" :data="data6"></Table>
   </div>
 </template>
 <script>
+
+import Uploads from './uploadstemp.vue'
 export default {
   name: "skuTableModal",
   props: {
@@ -29,6 +31,7 @@ export default {
   data() {
     return {
       showflag: false,
+      uploadList:[],
       currentcolumnsDefault: [],
       columns7: [
         {
@@ -69,40 +72,91 @@ export default {
           }
         },
         {
-          title: "上传图片",
-          key: "action",
-          // width: 150,
-          align: "center",
+          title: "库存预警值",
+          key: "alarmNumber",
           render: (h, params) => {
             return h("div", [
-              h(
-                "Upload",
-                {
-                  props: {
-                    action: "//jsonplaceholder.typicode.com/posts/"
-                  },
-                  style: {
-                    marginRight: "5px"
-                  },
-                  on: {
-                    click: () => {
-                      this.show(params.index);
-                    }
-                  }
+              h("Input", {
+                props: {
+                  value: params.row.alarmNumber
                 },
-                [
-                  h(
-                    "Button",
-                    {
-                      props: {
-                        icon: "ios-cloud-upload-outline"
-                      }
-                    },
-                    "上传图片"
-                  )
-                ]
-              )
+                on: {
+                  "change"(event) {
+                    console.log("event:" + JSON.stringify(event.target._value));
+                    params.row.name = event.target.value;
+                  }
+                }
+              })
             ]);
+          }
+        },
+        // {
+        //   title: "上传图片",
+        //   key: "action",
+        //   width: 150,
+        //   align: "center",
+        //   render: (h, params) => {
+        //     return h("div", [
+        //       h(
+        //         "Upload",
+        //         {
+        //           props: {
+        //             action: "http://babyroom.hecy.top/babyroom/file/uploadFile"
+        //           },
+        //           style: {
+        //             marginRight: "5px"
+        //           },
+        //           on: {
+        //             click: () => {
+        //               console.log("params: " + JSON.stringify(params));
+        //               this.show(params.index);
+        //             },
+        //             "on-success"(response, file, fileList) {
+        //               console.log(
+        //                 "table-mo:" +
+        //                   file.name +
+        //                   "======" +
+        //                   JSON.stringify(response)
+        //               );
+        //             }
+        //           }
+        //         },
+        //         [
+        //           h(
+        //             "Button",
+        //             {
+        //               props: {
+        //                 icon: "ios-cloud-upload-outline"
+        //               }
+        //             },
+        //             "上传图片"
+        //           )
+        //         ]
+        //       )
+        //     ]);
+        //   }
+        // },
+        {
+          title: '上传升级文件',
+          key: 'action',
+          // width: 230,
+          align: 'center',
+          render: (h, params) => {
+            return h(Uploads, {
+              on: {
+                'addUploads': (e) => {
+                  console.log('成功获到值', e)
+                  console.log(this.uploadList.push(e))
+                  //uploadList
+                },
+                'cancelUploadsFile': (e) => {
+                  console.log('删除列表', e)
+                  let index = this.uploadList.indexOf(e);
+                  console.log('index====', index)
+                  this.uploadList.splice(index, 1)
+                }
+              }
+            }, this.file);
           }
         }
       ],
@@ -157,6 +211,8 @@ export default {
       const day = date.getDate();
       return `${year}-${month}-${day}`;
     }
+  },components: {
+    Uploads
   }
 };
 </script>

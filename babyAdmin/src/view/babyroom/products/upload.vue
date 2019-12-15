@@ -18,13 +18,13 @@
       :default-file-list="defaultList"
       :on-success="handleSuccess"
       :format="['jpg','jpeg','png']"
-      :max-size="2048"
+      :max-size="5124"
       :on-format-error="handleFormatError"
       :on-exceeded-size="handleMaxSize"
       :before-upload="handleBeforeUpload"
       multiple
       type="drag"
-      action="//jsonplaceholder.typicode.com/posts/"
+      action="http://babyroom.hecy.top/babyroom/file/uploadFile"
       style="display: inline-block;width:58px;"
     >
       <div style="width: 58px;height:58px;line-height: 58px;">
@@ -33,7 +33,7 @@
     </Upload>
     <Modal title="View Image" v-model="visible">
       <img
-        :src="'https://o5wwk8baw.qnssl.com/' + imgName + '/large'"
+        :src="'http://babyroom.hecy.top//hecy/upload/image/compress/2019-12-14/' + imgName"
         v-if="visible"
         style="width: 100%"
       />
@@ -45,18 +45,7 @@ export default {
   name: "uploadImg",
   data() {
     return {
-      defaultList: [
-        {
-          name: "icon_b_milkpot",
-          url:
-            "http://babyroom.hecy.top/img_external/products/icon_b_milkpot.png"
-        },
-        {
-          name: "icon_b_milkpot",
-          url:
-            "http://babyroom.hecy.top/img_external/products/icon_b_milkpot.png"
-        }
-      ],
+      defaultList: [],
       imgName: "",
       visible: false,
       uploadList: []
@@ -72,9 +61,17 @@ export default {
       this.$refs.upload.fileList.splice(fileList.indexOf(file), 1);
     },
     handleSuccess(res, file) {
-      file.url =
-        "http://babyroom.hecy.top/img_external/products/icon_b_milkpot.png";
-      file.name = "7eb99afb9d5f317c912f08b5212fd69a";
+      var dateStr = this.formatDate(new Date(), "YY-MM-DD");
+      if (res.code == "0000") {
+        var fileName = "compress_" + res.attachment + "-" + file.name;
+        file.url =
+          "http://babyroom.hecy.top//hecy/upload/image/compress/" +
+          dateStr +
+          "/" +
+          fileName;
+        file.name = fileName;
+        console.log("fileName: " + fileName);
+      }
     },
     handleFormatError(file) {
       this.$Notice.warning({
@@ -84,6 +81,29 @@ export default {
           file.name +
           " is incorrect, please select jpg or png."
       });
+    },
+    formatDate(time, format = "YY-MM-DD hh:mm:ss") {
+      var date = new Date(time);
+
+      var year = date.getFullYear(),
+        month = date.getMonth() + 1, //月份是从0开始的
+        day = date.getDate(),
+        hour = date.getHours(),
+        min = date.getMinutes(),
+        sec = date.getSeconds();
+      var preArr = Array.apply(null, Array(10)).map(function(elem, index) {
+        return "0" + index;
+      }); ////开个长度为10的数组 格式为 00 01 02 03
+
+      var newTime = format
+        .replace(/YY/g, year)
+        .replace(/MM/g, preArr[month] || month)
+        .replace(/DD/g, preArr[day] || day)
+        .replace(/hh/g, preArr[hour] || hour)
+        .replace(/mm/g, preArr[min] || min)
+        .replace(/ss/g, preArr[sec] || sec);
+
+      return newTime;
     },
     handleMaxSize(file) {
       this.$Notice.warning({

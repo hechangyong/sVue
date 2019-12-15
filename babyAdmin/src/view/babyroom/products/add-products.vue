@@ -64,6 +64,10 @@
             placeholder="商品简介"
           />
         </div>
+        <div class="filedClassDiv">
+           <Button type="primary" long>添加商品</Button>
+          
+        </div>
       </div>
     </Card>
 
@@ -114,14 +118,20 @@ export default {
       ],
       skuNameArr: [],
       skuTableTitleValueArr: [],
-      currentSkuValueArr: [],
-      currentSkuValueArr_1: [],
       skuTableData: [],
-      currentSkuDataObj:[]
+      currentSkuDataObj: []
     };
   },
   methods: {
     addSkuModel() {
+      if (this.currentSkuDataObj.length >= 2) {
+        this.$Modal.error({
+          title: "系统提示",
+          content:
+            "同一商品系统最多只支持添加两种规格！</br> 如果需要添加多种，请联系管理员！"
+        });
+        return;
+      }
       this.showAddSkuModel = true;
     },
     changeAddskuModal() {
@@ -156,109 +166,74 @@ export default {
         randomColor: this.randomColor
       });
       this.assemblecurrentSkuDataObj(skuTypeName, skuValueArr);
-      this.assembleTableColums(this.skuNameArr);
+      this.assembleTableColums(this.currentSkuDataObj);
       this.assembleTableData(skuValueArr);
       this.showSkuTableModal = true;
     },
     assemblecurrentSkuDataObj(skuName, skuValueArr) {
-        this.currentSkuDataObj.push({
-            k:skuName,
-            v:skuValueArr
-        });
-        console.log("currentSkuDataObj: " + JSON.stringify( this.currentSkuDataObj));
-    },
-    skuNameClose(event, name) {
-      var closeIndex = 0;
-      var notCloseName = "";
-      for (var i = 0; i < this.skuNameArr.length; i++) {
-        if (this.skuNameArr[i].name == name) {
-          this.skuNameArr.splice(i, 1);
-          closeIndex = i;
-          break;
-        }
-      }
-      this.assembleTableColums(this.skuNameArr);
-      this.assembleTableData4Close(closeIndex);
-    },
-    assembleTableData4Close(closeIndex) {
-      this.skuTableData = [];
-      if (this.skuTableTitleValueArr.length <= 0) {
-        this.currentSkuValueArr = [];
-        this.currentSkuValueArr_1 = [];
-        return;
-      }
-      var tempKey = "key_0";
-      var tempskuValue = [];
-      console.log("closeIndex: " + closeIndex);
-      if (closeIndex == 0) {
-        this.currentSkuValueArr = [];
-        tempskuValue = this.currentSkuValueArr_1;
-      } else {
-        this.currentSkuValueArr_1 = [];
-        tempskuValue = this.currentSkuValueArr;
-      }
-      console.log("-------: " + JSON.stringify(tempskuValue));
-      for (var i = 0; i < tempskuValue.length; i++) {
-        var tempObj = {};
-        tempObj[tempKey] = tempskuValue[i];
-        tempObj.inventory = 0;
-        tempObj.saleFee = 0;
-        this.skuTableData.push(tempObj);
-      }
-      console.log(" this.skuTableData: " + JSON.stringify(this.skuTableData));
-    },
-    assembleTableData(val) {
-      this.skuTableData = [];
-      var key0 = this.skuTableTitleValueArr[0].key;
-      if (this.currentSkuValueArr.length <= 0) {
-        for (var i = 0; i < val.length; i++) {
-          var tempObj = {};
-          tempObj[key0] = val[i].name;
-          tempObj.inventory = 0;
-          tempObj.saleFee = 0;
-          this.skuTableData.push(tempObj);
-          this.currentSkuValueArr.push(val[i].name);
-        }
-        console.log("skuTableData: " + JSON.stringify(this.skuTableData));
-      } else {
-        var key1 = this.skuTableTitleValueArr[1].key;
-        for (var i = 0; i < this.currentSkuValueArr.length; i++) {
-          for (var j = 0; j < val.length; j++) {
-            var tempObj = {};
-            tempObj[key0] = this.currentSkuValueArr[i];
-            tempObj[key1] = val[j].name;
-            tempObj.inventory = 0;
-            tempObj.saleFee = 0;
-            this.skuTableData.push(tempObj);
-          }
-        }
-        for (var j = 0; j < val.length; j++) {
-          this.currentSkuValueArr_1.push(val[j].name);
-        }
-      }
+      this.currentSkuDataObj.push({
+        k: skuName,
+        v: skuValueArr
+      });
     },
     assembleTableColums(val) {
       this.skuTableTitleValueArr = [];
       console.log(" this.val: " + JSON.stringify(val));
       for (var i = 0; i < val.length; i++) {
         this.skuTableTitleValueArr.push({
-          title: val[i].name,
+          title: val[i].k,
           key: "key_" + i
         });
       }
+    },
+    skuNameClose(event, name) {
+      for (var i = 0; i < this.currentSkuDataObj.length; i++) {
+        if (this.currentSkuDataObj[i].k == name) {
+          this.currentSkuDataObj.splice(i, 1);
+          break;
+        }
+      }
+      for (var i = 0; i < this.skuNameArr.length; i++) {
+        if (this.skuNameArr[i].name == name) {
+          this.skuNameArr.splice(i, 1);
+          break;
+        }
+      }
+      this.assembleTableColums(this.currentSkuDataObj);
+      this.assembleTableData();
+      if (this.currentSkuDataObj.length == 0) {
+        this.showSkuTableModal = false;
+      }
+    },
+    assembleTableData() {
+      this.skuTableData = [];
+      var key0 = "key_0";
+      var key1 = "key_1";
+      if (this.currentSkuDataObj.length == 1) {
+        for (var i = 0; i < this.currentSkuDataObj[0].v.length; i++) {
+          var tempObj = {};
+          tempObj[key0] = this.currentSkuDataObj[0].v[i].name;
+          tempObj.inventory = 0;
+          tempObj.saleFee = 0;
+          tempObj.alarmNumber = 0;
+          this.skuTableData.push(tempObj);
+        }
+      }
+      if (this.currentSkuDataObj.length == 2) {
+        for (var i = 0; i < this.currentSkuDataObj[0].v.length; i++) {
+          for (var j = 0; j < this.currentSkuDataObj[1].v.length; j++) {
+            var tempObj = {};
+            tempObj[key0] = this.currentSkuDataObj[0].v[i].name;
+            tempObj[key1] = this.currentSkuDataObj[1].v[j].name;
+            tempObj.inventory = 0;
+            tempObj.saleFee = 0;
+            tempObj.alarmNumber = 0;
+            this.skuTableData.push(tempObj);
+          }
+        }
+      }
     }
   },
-  // watch: {
-  //   skuNameArr(val) {
-  //     this.skuTableTitleValueArr = [];
-  //     for (var i = 0; i < val.length; i++) {
-  //       this.skuTableTitleValueArr.push({
-  //         title: val[i].name,
-  //         key: "key_" + i
-  //       });
-  //     }
-  //   }
-  // },
   components: {
     [uploadImg.name]: uploadImg,
     [skuTableModal.name]: skuTableModal,
@@ -267,6 +242,10 @@ export default {
 };
 </script>
 <style scoped>
+.ivu-btn-long {
+    margin-left: 115px;
+    width: 60%;
+}
 .filedClassDiv {
   margin-top: 20px;
 }

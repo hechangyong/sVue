@@ -5,20 +5,27 @@
         <div class="centerClass">
           <div class="filedClassDiv">
             <span class="spanclass">规格名称:</span>
-            <Input placeholder="规格名称：颜色" style="width: auto" v-model="currentSkuName" />
+            <Input
+              :disabled="typedisabled"
+              placeholder="规格名称：颜色"
+              style="width: 40%"
+              v-model="currentSkuName"
+            />
           </div>
           <div class="filedClassDiv">
             <span class="spanclass">添加可选值:</span>
-            <Input v-model="currentSkuValue" placeholder="请输入可选属性值" style="width: auto" />
+            <Input v-model="currentSkuValue" placeholder="请输入可选属性值" style="width: 40%" />
             <Button
               style="margin-left: 1rem;"
               icon="md-add-circle"
               clearable
+              :size="buttonSize"
               @click="addskuValue"
-              type="primary"
-            ></Button>
+              type="dashed"
+            >添加</Button>
           </div>
           <div class="filedClassDiv">
+             <span class="spanclass">已添加属性值:</span>
             <Tag
               v-for="item in skuValueArr"
               type="border"
@@ -53,6 +60,8 @@ export default {
   },
   data() {
     return {
+      buttonSize: "small",
+      typedisabled: false,
       currentSkuName: "",
       currentSkuValue: "",
       skuValueArr: [],
@@ -62,7 +71,6 @@ export default {
   },
   watch: {
     show(val) {
-      console.log(" addSkuModal show value: " + val);
       if (val) {
         this.showflag = true;
       } else {
@@ -76,12 +84,35 @@ export default {
     }
   },
   methods: {
-    addskuValue(value) {
+    addskuValue() {
+      var obj = this.dataCheck();
+      if (obj.code != 200) {
+        this.$Message.error(obj.errormsg);
+        return;
+      }
       this.changeRandomColor();
       this.skuValueArr.push({
         name: this.currentSkuValue,
         randomColor: this.randomColor
       });
+      this.currentSkuValue = "";
+      this.typedisabled = true;
+    },
+    dataCheck() {
+      var resultCode = 200;
+      var errormsg = "";
+      if (this.currentSkuValue == "") {
+        // this.$Message.error('请输入正确的规格值！！！');
+        resultCode = 500;
+        errormsg = " 规格值不能为空！！！";
+      }
+      for (var i = 0; i < this.skuValueArr.length; i++) {
+        if (this.skuValueArr[i].name == this.currentSkuValue) {
+          resultCode = 500;
+          errormsg = " 【" + this.currentSkuValue + "】值已存在！！！";
+        }
+      }
+      return { code: resultCode, errormsg: errormsg };
     },
     changeRandomColor() {
       var colors = [
@@ -112,8 +143,13 @@ export default {
           break;
         }
       }
+      if (this.skuValueArr.length <= 0) {
+        this.typedisabled = false;
+      }
     },
     ok() {
+      this.typedisabled = false;
+      
       this.$emit("getSkuType", this.currentSkuName, this.skuValueArr);
       this.skuValueArr = [];
       this.currentSkuValue = "";
@@ -139,7 +175,7 @@ export default {
 }
 .centerClass {
   height: 15rem;
-  margin-left: 5rem;
+  margin-left: 3rem;
 }
 .spanclass {
   margin-right: 15px;
