@@ -5,7 +5,7 @@
 </template>
 <script>
 
-import Uploads from './uploadstemp.vue'
+import Uploads from './uploadComponents.vue'
 export default {
   name: "skuTableModal",
   props: {
