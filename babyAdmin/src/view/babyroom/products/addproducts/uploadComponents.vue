@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="demo-upload-list" v-for="item in uploadList">
+    <div class="demo-upload-list" v-for="(item,index) in uploadList" :key="index">
       <template v-if="item.status === 'finished'">
         <img :src="item.url" />
         <div class="demo-upload-list-cover">
@@ -13,10 +13,9 @@
       </template>
     </div>
     <Upload
-      ref="upload"
+      ref="uploadTable"
       v-if="uploadList.length == 0"
       :show-upload-list="false"
-      :default-file-list="defaultList"
       :on-success="handleSuccess"
       :format="['jpg','jpeg','png']"
       :max-size="5124"
@@ -33,11 +32,7 @@
       </div>
     </Upload>
     <Modal title="View Image" v-model="visible">
-      <img
-        :src="imgName"
-        v-if="visible"
-        style="width: 100%"
-      />
+      <img :src="imgName" v-if="visible" style="width: 100%" />
     </Modal>
   </div>
 </template>
@@ -54,40 +49,46 @@ export default {
   },
   methods: {
     handleView(name) {
-        var dateStr = this.formatDate(new Date(), "YY-MM-DD");
-        this.imgName =
-          "http://babyroom.hecy.top//hecy/upload/image/compress/" +
-          dateStr +
-          "/" +
-          name;
+      var dateStr = this.formatDate(new Date(), "YY-MM-DD");
+      this.imgName =
+        "http://babyroom.hecy.top//hecy/upload/image/compress/" +
+        dateStr +
+        "/" +
+        name;
       // this.imgName = name;
       this.visible = true;
     },
     handleRemove(file) {
-      console.log("this.$refs.upload:" + JSON.stringify(this.$refs.upload));
+      console.log(
+        "this.$refs.uploadTable:" + JSON.stringify(this.$refs.uploadTable)
+      );
+      // const fileList = this.$refs.upload.fileList;
+      // this.$refs.upload.fileList.splice(fileList.indexOf(file), 1);
+
+
       const fileList = this.uploadList;
       this.uploadList.splice(fileList.indexOf(file), 1);
     },
-    handleSuccess(res, file) {
+    handleSuccess(res, file, fileList) {
       var dateStr = this.formatDate(new Date(), "YY-MM-DD");
       if (res.code == "0000") {
         var fileName = "compress_" + res.attachment + "-" + file.name;
         file.url =
           "http://babyroom.hecy.top//hecy/upload/image/compress/" +
           dateStr +
-          "/" +
-          fileName;
+          "/" +  fileName;
         file.name = fileName;
         console.log("fileName: " + fileName);
+         this.$emit("addUploads", file.name);
       }
+      console.log("fileList: "+ JSON.stringify(fileList));
+      this.uploadList = fileList;
     },
-    handleFormatError(file) { 
+    handleFormatError(file) {
       this.$Notice.warning({
         title: "文件格式有误",
         desc:
-          "文件名： " +
-          file.name +
-          " 类型不支持,请选择jpg或者png格式的文件."
+          "文件名： " + file.name + " 类型不支持,请选择jpg或者png格式的文件."
       });
     },
     formatDate(time, format = "YY-MM-DD hh:mm:ss") {
@@ -130,8 +131,8 @@ export default {
     }
   },
   mounted() {
-    console.log("mounted: "+　this.$refs.upload);
-     this.uploadList = this.$refs.upload.fileList;
+    console.log("mounted: " + this.$refs.uploadTable.fileList);
+    this.uploadList = this.$refs.uploadTable.fileList;
   }
 };
 </script>

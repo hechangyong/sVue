@@ -124,7 +124,16 @@ export default [
           icon: 'md-shirt',
           title: '添加商品'
         },
-        component: () => import('@/view/babyroom/products/add-products.vue')
+        component: () => import('@/view/babyroom/products/addproducts/add-products.vue')
+      },
+      {
+        path: 'md-shirt',
+        name: '查看商品',
+        meta:  {
+          icon: 'md-shirt',
+          title: '查看商品'
+        },
+        component: () => import('@/view/babyroom/products/addproducts/add-products.vue')
       } 
     ]
   },

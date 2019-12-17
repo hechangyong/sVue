@@ -243,8 +243,8 @@ export default {
 </script>
 <style scoped>
 .ivu-btn-long {
-    margin-left: 115px;
-    width: 60%;
+    /* margin-left: 115px; */
+    width: 35%;
 }
 .filedClassDiv {
   margin-top: 20px;

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="demo-upload-list" v-for="item in uploadList">
+    <div class="demo-upload-list" v-for="(item,index) in uploadList" :key="index">
       <template v-if="item.status === 'finished'">
         <img :src="item.url" />
         <div class="demo-upload-list-cover">
@@ -15,7 +15,6 @@
     <Upload
       ref="upload"
       :show-upload-list="false"
-      :default-file-list="defaultList"
       :on-success="handleSuccess"
       :format="['jpg','jpeg','png']"
       :max-size="5124"
@@ -33,7 +32,7 @@
     </Upload>
     <Modal title="View Image" v-model="visible">
       <img
-        :src="'http://babyroom.hecy.top//hecy/upload/image/compress/2019-12-14/' + imgName"
+        :src="imgName"
         v-if="visible"
         style="width: 100%"
       />
@@ -53,7 +52,12 @@ export default {
   },
   methods: {
     handleView(name) {
-      this.imgName = name;
+     var dateStr = this.formatDate(new Date(), "YY-MM-DD");
+      this.imgName =
+        "http://babyroom.hecy.top//hecy/upload/image/compress/" +
+        dateStr +
+        "/" +
+        name;
       this.visible = true;
     },
     handleRemove(file) {

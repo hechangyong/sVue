@@ -89,55 +89,9 @@ export default {
               })
             ]);
           }
-        },
-        // {
-        //   title: "上传图片",
-        //   key: "action",
-        //   width: 150,
-        //   align: "center",
-        //   render: (h, params) => {
-        //     return h("div", [
-        //       h(
-        //         "Upload",
-        //         {
-        //           props: {
-        //             action: "http://babyroom.hecy.top/babyroom/file/uploadFile"
-        //           },
-        //           style: {
-        //             marginRight: "5px"
-        //           },
-        //           on: {
-        //             click: () => {
-        //               console.log("params: " + JSON.stringify(params));
-        //               this.show(params.index);
-        //             },
-        //             "on-success"(response, file, fileList) {
-        //               console.log(
-        //                 "table-mo:" +
-        //                   file.name +
-        //                   "======" +
-        //                   JSON.stringify(response)
-        //               );
-        //             }
-        //           }
-        //         },
-        //         [
-        //           h(
-        //             "Button",
-        //             {
-        //               props: {
-        //                 icon: "ios-cloud-upload-outline"
-        //               }
-        //             },
-        //             "上传图片"
-        //           )
-        //         ]
-        //       )
-        //     ]);
-        //   }
-        // },
+        }, 
         {
-          title: '上传升级文件',
+          title: '上传规格图片',
           key: 'action',
           // width: 230,
           align: 'center',
