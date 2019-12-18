@@ -2,10 +2,11 @@
 import uploadImg from "./components/component-upload.vue";
 import addSkuModal from "./components/component-add-sku-modal.vue";
 import skuTableModal from "./components/component-sku-table-modal.vue";
+import { addProductApi } from '@/api/product'
 export default {
   data() {
     return {
-      textareaValue: "",
+      productDes: "",
       selectProductModel: "1",
       switchValue: true,
       buttonSize: "small",
@@ -45,7 +46,11 @@ export default {
       callbackSkuTableData: [],
       sureSkuTableDataFlag: false,
       hasSkus: "无",
-      productName:""
+      productName: "",
+      productFee: 0,
+      vipPrice: 0,
+      totalInventory: 0,
+      productImgs: []
     };
   },
   methods: {
@@ -53,14 +58,63 @@ export default {
      * 添加商品
      */
     addProducts() {
-      this.checkFormData();
+      // this.checkFormData();
+      console.log("productType: " + this.selectProductModel);
+      var productObj = {};
+      productObj.productDes = this.productDes;
+      productObj.productImgs = this.productImgs;
+      productObj.productName = this.productName;
+      productObj.productType = this.selectProductModel;
 
-      
+
+      addProductApi(productObj).then(content => {
+        this.obj = content
+      }).catch(err => {
+        console.log(err)
+      })
+    },
+    /**
+     * 添加商品图片
+     */
+    changeUploadsFile(imgs) {
+      this.productImgs = imgs;
+      console.log("this.productImgs: " + JSON.stringify(this.productImgs));
+
+
     },
     /**
      * 校验表单数据，提交数据
      */
     checkFormData() {
+
+      if (this.productName == '') {
+        this.$Message.error('请填写商品名称！');
+        this.$refs["productName"].focus();
+      }
+      console.log("this.productFee: " + this.productFee)
+      if (this.productFee == null || this.productFee == '' || isNaN(this.productFee)) {
+        this.$Message.error('请正确的商品价格！');
+        this.$refs["productFee"].focus();
+      }
+      if (isNaN(this.vipPrice)) {
+        this.$Message.error('请正确的商品优惠价！');
+        this.$refs["vipPrice"].focus();
+      }
+      if (this.totalInventory == 0 || isNaN(this.totalInventory)) {
+        this.$Message.error('请正确的商品总库存！');
+        this.$refs["totalInventory"].focus();
+      }
+      if (this.productImgs.length == 0) {
+        this.$Message.error('请上传至少一张商品图片！');
+        return;
+      }
+      if (this.productDes == "") {
+        this.$Message.error('请添加产品简单描述！');
+        this.$refs["productDes"].focus();
+        return;
+      }
+
+
       if (this.hasSkus == '有' && !this.sureSkuTableDataFlag) {
         this.$Modal.error({
           title: "系统提示",
@@ -68,10 +122,7 @@ export default {
         });
         return;
       }
-      if(this.productName == ''){
-        this.$Message.error('请填写商品名称');
-        this.$refs["productName"].focus();
-      }
+
 
     },
     /**

@@ -64,7 +64,8 @@ export default {
     handleRemove(file) {
       const fileList = this.$refs.upload.fileList;
       this.$refs.upload.fileList.splice(fileList.indexOf(file), 1);
-    },
+       this.$emit("changeUploadsFile",this.uploadList);
+   },
     handleSuccess(res, file) {
       var dateStr = this.$tools.formatDate(new Date(), "YY-MM-DD");
       if (res.code == "0000") {
@@ -75,7 +76,8 @@ export default {
           "/" +
           fileName;
         file.name = fileName;
-        console.log("fileName: " + fileName);
+        console.log("fileName: " + JSON.stringify(this.uploadList));
+         this.$emit("changeUploadsFile",this.uploadList);
       }
     },
     handleFormatError(file) {

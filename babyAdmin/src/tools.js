@@ -1,4 +1,5 @@
 
+/* eslint-disable */
 export default {
          formatDate: (time, format = 'YY-MM-DD HH:mm:ss') => {
              var date = new Date(time);

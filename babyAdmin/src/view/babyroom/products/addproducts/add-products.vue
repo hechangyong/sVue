@@ -4,7 +4,7 @@
       <div class="centerClass">
         <div class="filedClassDiv">
           <span class="spanclass">商品名称:</span>
-          <Input ref="productName" placeholder="请输入商品名称"  v-model="productName" style="width: 20%" />
+          <Input ref="productName" prefix="ios-paper-outline" placeholder="请输入商品名称"  v-model="productName" style="width: 20%" />
         </div>
         <div class="filedClassDiv">
           <span class="spanclass">商品类别:</span>
@@ -16,24 +16,25 @@
             >{{ item.label }}</Option>
           </Select>
         </div>
+    
         <div class="filedClassDiv">
           <span class="spanclass">商品价格:</span>
-          <Input placeholder="请输入商品价格" style="width: 20%" />
+          <Input  ref="productFee"   v-model="productFee" prefix="logo-yen" placeholder="请输入商品价格" style="width: 20%" />
         </div>
         <div class="filedClassDiv">
           <span class="spanclass">商品优惠价:</span>
-          <Input placeholder="请输入商品优惠价" style="width: 20%" />
+          <Input placeholder="请输入商品优惠价"  prefix="logo-yen" ref="vipPrice"  v-model="vipPrice" style="width: 20%" />
         </div>
         <div class="filedClassDiv">
           <span class="spanclass">商品总库存:</span>
-          <Input placeholder="请输入商品总库存" style="width: 20%" />
+          <Input placeholder="请输入商品总库存" prefix="ios-paper-outline"  ref="totalInventory"  v-model="totalInventory" style="width: 20%" />
         </div>
         <div class="filedClassDiv">
           <span class="spanclass">商品图片:</span>
-          <uploadImg></uploadImg>
+          <uploadImg @changeUploadsFile="changeUploadsFile"></uploadImg>
         </div>
         <div class="filedClassDiv">
-          <span class="spanclass">有无规格:</span>
+          <span class="spanclass">有无规格参数:</span>
           <RadioGroup @on-change="changeHasSkuStatus" v-model="hasSkus">
             <Radio label="无"></Radio>
             <Radio label="有"></Radio>
@@ -65,7 +66,9 @@
         <div class="filedClassDiv">
           <span class="spanclass">添加商品简介:</span>
           <Input
-            v-model="textareaValue"
+            ref="productDes"
+            prefix="ios-paper-outline"
+            v-model="productDes"
             style="width: 20%"
             type="textarea"
             :rows="4"
