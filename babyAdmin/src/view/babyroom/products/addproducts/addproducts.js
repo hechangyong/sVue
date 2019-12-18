@@ -70,7 +70,7 @@ export default {
       }
       if(productName == ''){
         this.$Message.error('请填写商品名称');
-        
+        this.$refs["productName"].focus();
       }
 
     },

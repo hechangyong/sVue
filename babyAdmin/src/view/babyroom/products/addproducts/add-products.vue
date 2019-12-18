@@ -4,7 +4,7 @@
       <div class="centerClass">
         <div class="filedClassDiv">
           <span class="spanclass">商品名称:</span>
-          <Input placeholder="请输入商品名称"  v-model="productName" style="width: 20%" />
+          <Input ref="productName" placeholder="请输入商品名称"  v-model="productName" style="width: 20%" />
         </div>
         <div class="filedClassDiv">
           <span class="spanclass">商品类别:</span>
