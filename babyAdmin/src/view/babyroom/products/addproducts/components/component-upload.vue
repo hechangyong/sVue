@@ -40,6 +40,7 @@
   </div>
 </template>
 <script>
+/* eslint-disable */
 export default {
   name: "uploadImg",
   data() {
@@ -52,7 +53,7 @@ export default {
   },
   methods: {
     handleView(name) {
-     var dateStr = this.formatDate(new Date(), "YY-MM-DD");
+     var dateStr = this.$tools.formatDate(new Date(), "YY-MM-DD");
       this.imgName =
         "http://babyroom.hecy.top//hecy/upload/image/compress/" +
         dateStr +
@@ -65,7 +66,7 @@ export default {
       this.$refs.upload.fileList.splice(fileList.indexOf(file), 1);
     },
     handleSuccess(res, file) {
-      var dateStr = this.formatDate(new Date(), "YY-MM-DD");
+      var dateStr = this.$tools.formatDate(new Date(), "YY-MM-DD");
       if (res.code == "0000") {
         var fileName = "compress_" + res.attachment + "-" + file.name;
         file.url =
@@ -85,30 +86,7 @@ export default {
           file.name +
           " is incorrect, please select jpg or png."
       });
-    },
-    formatDate(time, format = "YY-MM-DD hh:mm:ss") {
-      var date = new Date(time);
-
-      var year = date.getFullYear(),
-        month = date.getMonth() + 1, //月份是从0开始的
-        day = date.getDate(),
-        hour = date.getHours(),
-        min = date.getMinutes(),
-        sec = date.getSeconds();
-      var preArr = Array.apply(null, Array(10)).map(function(elem, index) {
-        return "0" + index;
-      }); ////开个长度为10的数组 格式为 00 01 02 03
-
-      var newTime = format
-        .replace(/YY/g, year)
-        .replace(/MM/g, preArr[month] || month)
-        .replace(/DD/g, preArr[day] || day)
-        .replace(/hh/g, preArr[hour] || hour)
-        .replace(/mm/g, preArr[min] || min)
-        .replace(/ss/g, preArr[sec] || sec);
-
-      return newTime;
-    },
+    }, 
     handleMaxSize(file) {
       this.$Notice.warning({
         title: "Exceeding file size limit",

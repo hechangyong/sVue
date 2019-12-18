@@ -42,6 +42,7 @@
   </Modal>
 </template>
 <script>
+/* eslint-disable */
 export default {
   name: "addSkuModal",
   props: {
@@ -90,7 +91,7 @@ export default {
         this.$Message.error(obj.errormsg);
         return;
       }
-      this.changeRandomColor();
+      this.randomColor = this.$tools.changeRandomColor(); //this.changeRandomColor();
       this.skuValueArr.push({
         name: this.currentSkuValue,
         randomColor: this.randomColor
@@ -113,28 +114,6 @@ export default {
         }
       }
       return { code: resultCode, errormsg: errormsg };
-    },
-    changeRandomColor() {
-      var colors = [
-        "primary",
-        "success",
-        "warning",
-        "error",
-        "blue",
-        "green",
-        "red",
-        "yellow",
-        "pink",
-        "magenta",
-        "volcano",
-        "orange",
-        "gold",
-        "lime",
-        "cyan",
-        "geekblue"
-      ];
-      var ra = Math.floor(Math.random() * 16);
-      this.randomColor = colors[ra];
     },
     handleClose2(event, name) {
       for (var i = 0; i < this.skuValueArr.length; i++) {

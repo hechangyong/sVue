@@ -37,6 +37,7 @@
   </div>
 </template>
 <script>
+/* eslint-disable */
 export default {
   name: "Uploads",
   data() {
@@ -49,9 +50,9 @@ export default {
   },
   methods: {
     handleView(name) {
-      var dateStr = this.formatDate(new Date(), "YY-MM-DD");
+      var dateStr = this.$tools.formatDate(new Date(), "YY-MM-DD");
       this.imgName =
-        "http://babyroom.hecy.top//hecy/upload/image/compress/" +
+        "http://babyroom.hecy.top/hecy/upload/image/compress/" +
         dateStr +
         "/" +
         name;
@@ -59,29 +60,23 @@ export default {
       this.visible = true;
     },
     handleRemove(file) {
-      console.log(
-        "this.$refs.uploadTable:" + JSON.stringify(this.$refs.uploadTable)
-      );
-      // const fileList = this.$refs.upload.fileList;
-      // this.$refs.upload.fileList.splice(fileList.indexOf(file), 1);
-
-
+      this.$emit("cancelUploadsFile", file.name);
       const fileList = this.uploadList;
       this.uploadList.splice(fileList.indexOf(file), 1);
     },
     handleSuccess(res, file, fileList) {
-      var dateStr = this.formatDate(new Date(), "YY-MM-DD");
-      if (res.code == "0000") {
+      var dateStr = this.$tools.formatDate(new Date(), "YY-MM-DD");
+      if (res.code === "0000") {
         var fileName = "compress_" + res.attachment + "-" + file.name;
         file.url =
-          "http://babyroom.hecy.top//hecy/upload/image/compress/" +
+          "http://babyroom.hecy.top/hecy/upload/image/compress/" +
           dateStr +
-          "/" +  fileName;
+          "/" +
+          fileName;
         file.name = fileName;
         console.log("fileName: " + fileName);
-         this.$emit("addUploads", file.name);
+        this.$emit("addUploads", file.name);
       }
-      console.log("fileList: "+ JSON.stringify(fileList));
       this.uploadList = fileList;
     },
     handleFormatError(file) {
@@ -90,29 +85,6 @@ export default {
         desc:
           "文件名： " + file.name + " 类型不支持,请选择jpg或者png格式的文件."
       });
-    },
-    formatDate(time, format = "YY-MM-DD hh:mm:ss") {
-      var date = new Date(time);
-
-      var year = date.getFullYear(),
-        month = date.getMonth() + 1, //月份是从0开始的
-        day = date.getDate(),
-        hour = date.getHours(),
-        min = date.getMinutes(),
-        sec = date.getSeconds();
-      var preArr = Array.apply(null, Array(10)).map(function(elem, index) {
-        return "0" + index;
-      }); ////开个长度为10的数组 格式为 00 01 02 03
-
-      var newTime = format
-        .replace(/YY/g, year)
-        .replace(/MM/g, preArr[month] || month)
-        .replace(/DD/g, preArr[day] || day)
-        .replace(/hh/g, preArr[hour] || hour)
-        .replace(/mm/g, preArr[min] || min)
-        .replace(/ss/g, preArr[sec] || sec);
-
-      return newTime;
     },
     handleMaxSize(file) {
       this.$Notice.warning({

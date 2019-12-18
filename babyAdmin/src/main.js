@@ -15,6 +15,7 @@ import '@/assets/icons/iconfont.css'
 import TreeTable from 'tree-table-vue'
 import VOrgTree from 'v-org-tree'
 import 'v-org-tree/dist/v-org-tree.css'
+import tools from './tools'
 // 实际打包时应该不引入mock
 /* eslint-disable */
 if (process.env.NODE_ENV !== 'production') require('@/mock')
@@ -24,6 +25,7 @@ Vue.use(iView, {
 })
 Vue.use(TreeTable)
 Vue.use(VOrgTree)
+
 /**
  * @description 注册admin内置插件
  */
@@ -36,6 +38,11 @@ Vue.config.productionTip = false
  * @description 全局注册应用配置
  */
 Vue.prototype.$config = config
+
+/**
+ * 定义全局的工具方法
+ */
+Vue.prototype.$tools = tools;
 /**
  * 注册指令
  */

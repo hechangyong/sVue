@@ -52,6 +52,8 @@
             :showtable="showSkuTableModal"
             :parentTableData="skuTableData"
             :columnsDefault="skuTableTitleValueArr"
+            @getSkuTableData="getSkuTableData"
+            @editSkuTableData="editSkuTableData"
           ></skuTableModal>
         </div>
         <div class="filedClassDiv">
@@ -65,8 +67,7 @@
           />
         </div>
         <div class="filedClassDiv">
-           <Button type="primary" long>添加商品</Button>
-          
+          <Button type="primary" @click="addProducts" long>添加商品</Button>
         </div>
       </div>
     </Card>
@@ -77,9 +78,10 @@
 </template>
 
 <script>
-import uploadImg from "./upload.vue";
-import addSkuModal from "./add-sku-modal.vue";
-import skuTableModal from "./sku-table-modal.vue";
+/* eslint-disable */
+import uploadImg from "./components/component-upload.vue";
+import addSkuModal from "./components/component-add-sku-modal.vue";
+import skuTableModal from "./components/component-sku-table-modal.vue";
 export default {
   data() {
     return {
@@ -119,10 +121,45 @@ export default {
       skuNameArr: [],
       skuTableTitleValueArr: [],
       skuTableData: [],
-      currentSkuDataObj: []
+      currentSkuDataObj: [],
+      callbackSkuTableData: [],
+      sureSkuTableDataFlag: false
     };
   },
   methods: {
+    /**
+     * 添加商品
+     */
+    addProducts() {
+      if (!this.sureSkuTableDataFlag) {
+        this.$Modal.error({
+          title: "系统提示",
+          content: "请明确各规格库存，价格，确认无误后，请点击确认！"
+        });
+        return;
+      }
+    },
+    /**
+     * sku table表格回调，获取表格动态值
+     *
+     */
+    getSkuTableData(tabledata) {
+      this.sureSkuTableDataFlag = true;
+      this.callbackSkuTableData = tabledata;
+      console.log(
+        "this.callbackSkuTableData" + JSON.stringify(this.callbackSkuTableData)
+      );
+    },
+    /**
+     * 点击编辑sku table表格时回调
+     *
+     */
+    editSkuTableData() {
+      this.sureSkuTableDataFlag = false;
+    },
+    /**
+     * 点击添加规格
+     */
     addSkuModel() {
       if (this.currentSkuDataObj.length >= 2) {
         this.$Modal.error({
@@ -134,33 +171,18 @@ export default {
       }
       this.showAddSkuModel = true;
     },
+    /**
+     * 修改添加规格弹出框状态
+     */
     changeAddskuModal() {
       this.showAddSkuModel = false;
     },
-    changeRandomColor() {
-      var colors = [
-        "primary",
-        "success",
-        "warning",
-        "error",
-        "blue",
-        "green",
-        "red",
-        "yellow",
-        "pink",
-        "magenta",
-        "volcano",
-        "orange",
-        "gold",
-        "lime",
-        "cyan",
-        "geekblue"
-      ];
-      var ra = Math.floor(Math.random() * 16);
-      this.randomColor = colors[ra];
-    },
+    /**
+     * 获取到规格值
+     */
     getSkuType(skuTypeName, skuValueArr) {
-      this.changeRandomColor();
+      this.randomColor = this.$tools.changeRandomColor();
+      console.log("this.randomColor: " + this.randomColor);
       this.skuNameArr.push({
         name: skuTypeName,
         randomColor: this.randomColor
@@ -170,12 +192,18 @@ export default {
       this.assembleTableData(skuValueArr);
       this.showSkuTableModal = true;
     },
+    /**
+     * 组装当前规格值
+     */
     assemblecurrentSkuDataObj(skuName, skuValueArr) {
       this.currentSkuDataObj.push({
         k: skuName,
         v: skuValueArr
       });
     },
+    /**
+     * 组装表格列数据
+     */
     assembleTableColums(val) {
       this.skuTableTitleValueArr = [];
       console.log(" this.val: " + JSON.stringify(val));
@@ -186,6 +214,9 @@ export default {
         });
       }
     },
+    /**
+     * 删除规格后触发
+     */
     skuNameClose(event, name) {
       for (var i = 0; i < this.currentSkuDataObj.length; i++) {
         if (this.currentSkuDataObj[i].k == name) {
@@ -205,6 +236,9 @@ export default {
         this.showSkuTableModal = false;
       }
     },
+    /**
+     * 组装表格数据
+     */
     assembleTableData() {
       this.skuTableData = [];
       var key0 = "key_0";
@@ -243,8 +277,8 @@ export default {
 </script>
 <style scoped>
 .ivu-btn-long {
-    /* margin-left: 115px; */
-    width: 35%;
+  /* margin-left: 115px; */
+  width: 35%;
 }
 .filedClassDiv {
   margin-top: 20px;
