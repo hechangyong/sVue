@@ -6,10 +6,8 @@
         editable
         border 
         searchable
-        height="700"
-        width="1000"
-        size="small" 
-        search-place="top"
+         width="1300"
+         search-place="top"
         :loading="isloading"
         v-model="tableData"
         :columns="columns"
@@ -38,24 +36,24 @@ export default {
     return {
       isloading:true,
       columns: [
-        { title: "名称", key: "name", width:"100", sortable: true },
-        { title: "类型", key: "productType", width:"100" },
-        { title: "原价", key: "productPrice", sortable: true , width:"100"},
-        { title: "原价", key: "productPrice", sortable: true, width:"100" },
-        { title: "原价", key: "productPrice", sortable: true , width:"100"},
-        { title: "原价", key: "productPrice", sortable: true , width:"100"},
-        { title: "原价", key: "productPrice", sortable: true , width:"100"},
-        { title: "原价", key: "productPrice", sortable: true, width:"100" },
-        { title: "原价", key: "productPrice", sortable: true , width:"100"},
-        { title: "原价", key: "productPrice", sortable: true , width:"100"},
-        { title: "原价", key: "productPrice", sortable: true , width:"100"},
-        { title: "原价", key: "productPrice", sortable: true , width:"100"},
-        { title: "优惠价", key: "vipPrice", sortable: true , width:"100"},
-        { title: "总库存", key: "totalInventory", sortable: true , width:"100"},
+        { title: "名称", key: "name", width:"130", fixed: 'left', sortable: true },
+        { title: "类型", key: "productType", width:"130" },
+        { title: "原价", key: "productPrice", sortable: true , width:"130"},
+        { title: "原价", key: "productPrice", sortable: true, width:"130" },
+        { title: "原价", key: "productPrice", sortable: true , width:"130"},
+        { title: "原价", key: "productPrice", sortable: true , width:"130"},
+        { title: "原价", key: "productPrice", sortable: true , width:"130"},
+        { title: "原价", key: "productPrice", sortable: true, width:"130" },
+        { title: "原价", key: "productPrice", sortable: true , width:"130"},
+        { title: "原价", key: "productPrice", sortable: true , width:"130"},
+        { title: "原价", key: "productPrice", sortable: true , width:"130"},
+        { title: "原价", key: "productPrice", sortable: true , width:"130"},
+        { title: "优惠价", key: "vipPrice", sortable: true , width:"130"},
+        { title: "总库存", key: "totalInventory", sortable: true , width:"130"},
         {
           title: "剩余库存",
           key: "status",
-          width:"100",
+          width:"130",
           render: (h, params) => {
             const row = params.row;
             const color =
@@ -88,7 +86,7 @@ export default {
         {
           title: "Handle",
           key: "handle",
-           width:"100",
+           width:"130",
            button: [
             (h, params, vm) => {
               return h(
