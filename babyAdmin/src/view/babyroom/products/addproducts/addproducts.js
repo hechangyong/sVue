@@ -47,7 +47,7 @@ export default {
       sureSkuTableDataFlag: false,
       hasSkus: "无",
       productName: "",
-      productFee: 0,
+      productPrice: 0,
       vipPrice: 0,
       totalInventory: 0,
       productImgs: []
@@ -58,15 +58,19 @@ export default {
      * 添加商品
      */
     addProducts() {
-      // this.checkFormData();
+      this.checkFormData();
       console.log("productType: " + this.selectProductModel);
       var productObj = {};
       productObj.productDes = this.productDes;
       productObj.productImgs = this.productImgs;
       productObj.productName = this.productName;
       productObj.productType = this.selectProductModel;
-
-
+      productObj.productPrice = this.productPrice;
+      productObj.vipPrice = this.vipPrice;
+      productObj.productImgs = this.productImgs;
+      productObj.callbackSkuTableData = this.callbackSkuTableData;
+      productObj.currentSkuDataObj = this.currentSkuDataObj;
+      productObj.totalInventory = this.totalInventory;
       addProductApi(productObj).then(content => {
         this.obj = content
       }).catch(err => {
@@ -77,10 +81,12 @@ export default {
      * 添加商品图片
      */
     changeUploadsFile(imgs) {
-      this.productImgs = imgs;
+      this.productImgs = [];
+      for (var i = 0; i < imgs.length; i++) {
+        var imgsname = imgs[i].name;
+        this.productImgs.push(imgsname);
+      }
       console.log("this.productImgs: " + JSON.stringify(this.productImgs));
-
-
     },
     /**
      * 校验表单数据，提交数据
@@ -91,10 +97,10 @@ export default {
         this.$Message.error('请填写商品名称！');
         this.$refs["productName"].focus();
       }
-      console.log("this.productFee: " + this.productFee)
-      if (this.productFee == null || this.productFee == '' || isNaN(this.productFee)) {
+      console.log("this.productPrice: " + this.productPrice)
+      if (this.productPrice == null || this.productPrice == '' || isNaN(this.productPrice)) {
         this.$Message.error('请正确的商品价格！');
-        this.$refs["productFee"].focus();
+        this.$refs["productPrice"].focus();
       }
       if (isNaN(this.vipPrice)) {
         this.$Message.error('请正确的商品优惠价！');

@@ -118,7 +118,7 @@ export default [
     component: Main,
     children: [
       {
-        path: 'md-shirt',
+        path: 'add-products',
         name: '添加商品',
         meta:  {
           icon: 'md-shirt',
@@ -127,13 +127,13 @@ export default [
         component: () => import('@/view/babyroom/products/addproducts/add-products.vue')
       },
       {
-        path: 'md-shirt',
+        path: 'viewproducts',
         name: '查看商品',
         meta:  {
           icon: 'md-shirt',
           title: '查看商品'
         },
-        component: () => import('@/view/babyroom/products/addproducts/add-products.vue')
+        component: () => import('@/view/babyroom/products/viewproducts/viewproducts.vue')
       } 
     ]
   },

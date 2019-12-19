@@ -16,10 +16,9 @@
             >{{ item.label }}</Option>
           </Select>
         </div>
-    
         <div class="filedClassDiv">
           <span class="spanclass">商品价格:</span>
-          <Input  ref="productFee"   v-model="productFee" prefix="logo-yen" placeholder="请输入商品价格" style="width: 20%" />
+          <Input  ref="productPrice"   v-model="productPrice" prefix="logo-yen" placeholder="请输入商品价格" style="width: 20%" />
         </div>
         <div class="filedClassDiv">
           <span class="spanclass">商品优惠价:</span>

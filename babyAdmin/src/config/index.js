@@ -17,7 +17,7 @@ export default {
    * @description api请求基础路径
    */
   baseUrl: {
-    dev: 'http://127.0.0.1:8011',
+    dev: 'http://192.168.1.146:8011',
     pro: 'http://babyroom.hecy.top'
   },
   /**

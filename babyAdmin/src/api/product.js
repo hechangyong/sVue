@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 import axios from '@/libs/api.request'
 
 
@@ -11,10 +13,8 @@ import axios from '@/libs/api.request'
  */
 export const addProductApi = (productObj) => {
     return axios.request({
-        url: 'addProduct',
+        url: '/baby/p/addProduct',
         method: 'post',
-        params: {
-            productObj
-        }
+        data:productObj        
     })
 }
