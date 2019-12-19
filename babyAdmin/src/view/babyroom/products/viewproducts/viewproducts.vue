@@ -7,6 +7,7 @@
         border 
         searchable
          width="1300"
+          height="400"
          search-place="top"
         :loading="isloading"
         v-model="tableData"
