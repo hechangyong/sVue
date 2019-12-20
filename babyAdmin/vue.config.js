@@ -43,7 +43,7 @@ module.exports = {
 
   devServer: {
     proxy: { 
-      '/baby/p/addProduct': {
+      '/baby/p': {
         target: 'http://192.168.1.146:8011',
         changeOrigin: true
       }

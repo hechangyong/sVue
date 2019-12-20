@@ -16,26 +16,34 @@ export default {
       productType: [
         {
           value: "1",
-          label: "奶粉"
+          label: "纸尿片"
         },
         {
           value: "2",
-          label: "奶壶"
+          label: "奶粉"
         },
         {
           value: "3",
-          label: "宝宝衣服"
+          label: "奶壶"
         },
         {
           value: "4",
-          label: "宝宝辅食"
-        },
-        {
-          value: "5",
           label: "宝妈用品"
         },
         {
+          value: "5",
+          label: "宝宝玩具"
+        },
+        {
           value: "6",
+          label: "宝宝衣物"
+        },
+        {
+          value: "7",
+          label: "宝宝辅食"
+        },
+        {
+          value: "8",
           label: "其他"
         }
       ],
