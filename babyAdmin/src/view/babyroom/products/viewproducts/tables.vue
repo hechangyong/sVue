@@ -321,9 +321,12 @@ export default {
       if (e.target.value === "") this.insideTableData = this.value;
     },
     handleSearch() {
-      this.insideTableData = this.value.filter(
-        item => item[this.searchKey].indexOf(this.searchValue) > -1
-      );
+      console.log("this.searchKey: " + this.searchKey);
+      if (this.searchKey != undefined && this.searchKey != "") {
+        this.insideTableData = this.value.filter(
+          item => item[this.searchKey].indexOf(this.searchValue) > -1
+        );
+      }
     },
     handleTableData() {
       this.insideTableData = this.value.map((item, index) => {

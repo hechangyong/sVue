@@ -19,14 +19,19 @@
         </div>
       </div>
     </Card>
-    <viewSkuModal :show="viewSkuModalShowflag"></viewSkuModal>
+    <viewSkuModal
+      :show="viewSkuModalShowflag"
+      :columsTitle="skuColumsTitles"
+      @changeModal="changeSkuModal"
+      :columsData="skuColumsdatas"
+    ></viewSkuModal>
   </div>
 </template>
 
 <script>
 /* eslint-disable */
 import Tables from "./tables.vue";
-import { selectProductApi } from "@/api/product";
+import { selectProductApi, getProductSkuApi } from "@/api/product";
 import viewSkuModal from "./components/component-view-sku-modal";
 
 export default {
@@ -41,12 +46,62 @@ export default {
       isloading: true,
       totalNum: 0,
       columns: [],
-      tableData: []
+      tableData: [],
+      skuColumsTitles: [],
+      skuColumsdatas: []
     };
   },
   methods: {
+    changeSkuModal() {
+      this.skuColumsdatas = [];
+      this.skuColumsTitles = [];
+      this.viewSkuModalShowflag = false;
+    },
     showViewSkuModal(index) {
-      this.viewSkuModalShowflag = true;
+      getProductSkuApi(index).then(res => {
+        console.log("index: " + index);
+        console.log("getProductSkuApi: " + JSON.stringify(res));
+        if (res.data.code == "0000") {
+          var columnstemp = res.data.attachment.title;
+          var dataTemp = res.data.attachment.data;
+          this.getSkuColumsTitle(columnstemp);
+          this.getSkuColumsData(dataTemp);
+          console.log("index: " + index);
+          this.viewSkuModalShowflag = true;
+        }
+      });
+    },
+    getSkuColumsData(dataTemp) {
+      this.skuColumsdatas = [];
+      this.skuColumsdatas = dataTemp;
+    },
+    getSkuColumsTitle(columnstemp) {
+      this.skuColumsTitles = [];
+      console.log("columnstemp: " + JSON.stringify(columnstemp));
+      if (columnstemp.c1 != undefined) {
+        this.fillSkuTableColumnTitle(columnstemp.c1, "d1_data");
+      }
+      if (columnstemp.c2 != undefined) {
+        this.fillSkuTableColumnTitle(columnstemp.c2, "d2_data");
+      }
+      if (columnstemp.c3 != undefined) {
+        this.fillSkuTableColumnTitle(columnstemp.c3, "d3_data");
+      }
+      this.fillSkuTableColumnTitle(columnstemp.c4, "d4");
+      this.fillSkuTableColumnTitle(columnstemp.c5, "d5");
+      this.fillSkuTableColumnTitle(columnstemp.c6, "d6");
+      this.fillSkuTableColumnTitle(columnstemp.c7, "d7");
+    },
+    fillSkuTableColumnTitle(name, key) {
+      var obj = {};
+      obj = {
+        title: name,
+        key: key,
+        width: "150",
+        sortable: true,
+        editable: true
+      };
+      this.skuColumsTitles.push(obj);
     },
 
     handleDelete(params) {
@@ -59,6 +114,11 @@ export default {
     exportExcel() {
       this.$refs.tables.exportCsv({
         filename: `table-${new Date().valueOf()}.csv`
+      });
+    },
+    getProductSkuInfo() {
+      getProductSkuApi(pid).then(res => {
+        console.log("getProductSkuApi: " + JSON.stringify(res));
       });
     },
     getTableDataByPage(pageIndex) {
@@ -88,6 +148,7 @@ export default {
             obj.productStatus = tableDataTemp[i].status;
             obj.createTime = tableDataTemp[i].itime;
             obj.productdes = tableDataTemp[i].description;
+            obj.id = tableDataTemp[i].id;
             this.tableData.push(obj);
           }
           this.totalNum = res.data.attachment.count;
@@ -253,7 +314,8 @@ export default {
               },
               on: {
                 click: () => {
-                  that.showViewSkuModal(params.index);
+                  console.log("params: " + JSON.stringify(params));
+                  that.showViewSkuModal(params.row.id);
                 }
               }
             },
@@ -262,7 +324,13 @@ export default {
         }
       },
       { title: "入库时间", key: "createTime", width: "150" },
-      { title: "描述", key: "productdes", ellipsis:true, editable: true, width: "150" },
+      {
+        title: "描述",
+        key: "productdes",
+        ellipsis: true,
+        editable: true,
+        width: "150"
+      },
       { title: "图片", key: "imgs", editable: true, width: "150" },
       {
         title: "操作",
@@ -275,7 +343,7 @@ export default {
             const type =
               row.productStatus === 1
                 ? "下架"
-                : row.productType === 0
+                : row.productStatus === 0
                 ? "上架"
                 : "上架";
             return h("div", [
