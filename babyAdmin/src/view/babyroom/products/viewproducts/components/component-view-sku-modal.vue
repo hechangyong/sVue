@@ -1,5 +1,5 @@
 <template>
-  <Modal v-model="showflag" title="查看商品规格" @on-ok="ok" @on-cancel="cancel">
+  <Modal v-model="showflag" class="modalClasa" title="查看商品规格" @on-ok="ok" @on-cancel="cancel">
     <div style="padding: 10px;background: #f8f8f9">
       <!-- <Table border :columns="currentcolumnsDefault" :data="data6"></Table> -->
 
@@ -20,6 +20,7 @@
 <script>
 /* eslint-disable */
 import Tables from "./skuTable/tables";
+import ViewUploads from "./component-table-upload";
 export default {
   name: "viewSkuModal",
   props: {
@@ -50,7 +51,7 @@ export default {
   },
   data() {
     return {
-      isloading:true,
+      isloading: true,
       buttonSize: "small",
       typedisabled: false,
       currentSkuName: "",
@@ -76,21 +77,40 @@ export default {
       }
     },
     columsTitle(val) {
+      let that = this;
       this.currentcolumnsDefault = [];
 
-      if (val!= undefined && val.length > 0) {
-        this.currentcolumnsDefault = val;
-        console.log(
-          "columsTitle: " + JSON.stringify(this.currentcolumnsDefault)
-        );
+      if (val != undefined && val.length > 0) {
+        var obj = {};
+
+        for (var i = 0; i < val.length; i++) {
+          if (val[i].key == "d7") {
+            obj = {
+              title: "图片",
+              key: "action",
+              width: "150",
+              align: "center",
+              render: (h, params) => {
+                console.log("params.row.d7: " + JSON.stringify(params.row.d7));
+                return h(ViewUploads, {
+                  props: {
+                    imgs: params.row.d7
+                  }
+                });
+              }
+            };
+            this.currentcolumnsDefault.push(obj);
+          } else {
+            this.currentcolumnsDefault.push(val[i]);
+          }
+        }
       }
     },
     columsData(val) {
       this.data6 = [];
-      if (val!= undefined && val.length > 0) {
+      if (val != undefined && val.length > 0) {
         this.data6 = val;
         this.isloading = false;
-        console.log("columsData: " + JSON.stringify(this.data6));
       }
     }
   },
@@ -110,27 +130,25 @@ export default {
     }
   },
   components: {
-    Tables
+    Tables,
+    ViewUploads
   }
 };
 </script>
 
 
-<style>
-.filedClassDiv {
-  margin-top: 20px;
+<style scoped lang="less">
+.modalClasa {
+  width: 700px !important;
 }
-.babyClass {
-  background-color: white;
-}
-.centerClass {
-  height: 15rem;
-  margin-left: 3rem;
-}
-.spanclass {
-  margin-right: 15px;
-  font-family: auto;
-  width: 100px;
-  float: left;
+
+/deep/ .ivu-modal {
+  width: 50% !important;
+  /* width: auto; */
+  margin: 0 auto;
+  position: relative;
+  outline: none;
+  top: 100px;
 }
 </style>
+ 

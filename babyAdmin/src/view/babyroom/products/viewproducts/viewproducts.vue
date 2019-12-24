@@ -30,7 +30,7 @@
 
 <script>
 /* eslint-disable */
-import Tables from "./tables.vue";
+import Tables from "./components-viewtable/tables";
 import { selectProductApi, getProductSkuApi } from "@/api/product";
 import viewSkuModal from "./components/component-view-sku-modal";
 
@@ -59,14 +59,11 @@ export default {
     },
     showViewSkuModal(index) {
       getProductSkuApi(index).then(res => {
-        console.log("index: " + index);
-        console.log("getProductSkuApi: " + JSON.stringify(res));
         if (res.data.code == "0000") {
           var columnstemp = res.data.attachment.title;
           var dataTemp = res.data.attachment.data;
-          this.getSkuColumsTitle(columnstemp);
           this.getSkuColumsData(dataTemp);
-          console.log("index: " + index);
+          this.getSkuColumsTitle(columnstemp);
           this.viewSkuModalShowflag = true;
         }
       });
@@ -77,7 +74,6 @@ export default {
     },
     getSkuColumsTitle(columnstemp) {
       this.skuColumsTitles = [];
-      console.log("columnstemp: " + JSON.stringify(columnstemp));
       if (columnstemp.c1 != undefined) {
         this.fillSkuTableColumnTitle(columnstemp.c1, "d1_data");
       }
@@ -94,6 +90,7 @@ export default {
     },
     fillSkuTableColumnTitle(name, key) {
       var obj = {};
+
       obj = {
         title: name,
         key: key,
@@ -101,6 +98,7 @@ export default {
         sortable: true,
         editable: true
       };
+
       this.skuColumsTitles.push(obj);
     },
 
@@ -114,11 +112,6 @@ export default {
     exportExcel() {
       this.$refs.tables.exportCsv({
         filename: `table-${new Date().valueOf()}.csv`
-      });
-    },
-    getProductSkuInfo() {
-      getProductSkuApi(pid).then(res => {
-        console.log("getProductSkuApi: " + JSON.stringify(res));
       });
     },
     getTableDataByPage(pageIndex) {
@@ -323,7 +316,19 @@ export default {
           );
         }
       },
-      { title: "入库时间", key: "createTime", width: "150" },
+      {
+        title: "入库时间",
+        key: "createTime",
+        width: "150",
+        render: (h, params) => {
+          const row = params.row;
+          const tempdate = that.$tools.formatDate(
+            row.createTime,
+            "YY-MM-DD HH:mm:ss"
+          );
+          return h("Span", {}, tempdate);
+        }
+      },
       {
         title: "描述",
         key: "productdes",

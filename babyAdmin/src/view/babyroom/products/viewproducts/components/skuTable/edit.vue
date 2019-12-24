@@ -23,7 +23,7 @@ export default {
   },
   computed: {
     isEditting () {
-      return this.edittingCellId === `editting-${this.params.index}-${this.params.column.key}`
+       return this.edittingCellId === `editting-${this.params.index}-${this.params.column.key}`
     }
   },
   methods: {

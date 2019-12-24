@@ -239,7 +239,6 @@ export default {
   },
   methods: {
     selectOptionValue(key) {
-      console.log("key: " + key);
       if (key == "name") {
         return true;
       }
@@ -265,6 +264,9 @@ export default {
               this.edittingText = val;
             },
             "on-start-edit": params => {
+              this.edittingText = this.value[params.row.initRowIndex][
+                params.column.key
+              ];
               this.edittingCellId = `editting-${params.index}-${params.column.key}`;
               this.$emit("on-start-edit", params);
             },
