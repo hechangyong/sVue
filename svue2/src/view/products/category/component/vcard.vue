@@ -10,7 +10,7 @@
       :id="cardId"
     >
       <div slot="num">
-        <span>剩余数量: {{cardNumber}}</span>
+        <span>剩余库存: {{cardNumber}}</span>
       </div>
       <div slot="footer">
         <van-button round icon="cart-circle-o" @click="addCard" type="info" size="small">购物车</van-button>
@@ -26,14 +26,13 @@
       @buy-clicked="onBuyClicked"
       @add-cart="onAddCartClicked"
     >
-      <div slot="sku-messages">
-       </div>
+      <div slot="sku-messages"></div>
     </van-sku>
   </div>
 </template>
 
 <script>
-import { Card, Button, Sku } from "vant";
+import { Card, Button, Sku, Toast } from "vant";
 
 export default {
   name: "vcard",
@@ -57,10 +56,10 @@ export default {
       cardId: -1,
       cardNumber: 0,
       cardPrice: 0.0,
-      cardDesc: "ssss",
-      cardTitle: "asdasdasda",
+      cardDesc: "",
+      cardTitle: "",
       cardOriginprice: 0,
-      cardOriginpriceImgs: "sssssss",
+      cardOriginpriceImgs: "",
       hasProducts: true,
       show: false,
       goodsId: 1,
@@ -144,17 +143,6 @@ export default {
         stock_num: 227, // 商品总库存
         collection_id: 2261, // 无规格商品 skuId 取 collection_id，否则取所选 sku 组合对应的 id
         none_sku: false, // 是否无规格商品
-        messages: [
-          {
-            // 商品留言
-            datetime: "0", // 留言类型为 time 时，是否含日期。'1' 表示包含
-            multiple: "0", // 留言类型为 text 时，是否多行文本。'1' 表示多行
-            name: "备注", // 留言名称
-            type: "text", // 留言类型，可选: id_no（身份证）, text, tel, date, time, email
-            required: "0", // 是否必填 '1' 表示必填
-            placeholder: "" // 可选值，占位文本
-          }
-        ],
         hide_stock: false // 是否隐藏剩余库存
       },
       goods: {
@@ -179,8 +167,99 @@ export default {
   },
   methods: {
     addCard() {
-      this.show = true;
+      var pid = this.$refs.cardInfo.id;
+      console.log("addcard -pid: " + pid);
+      this.$axios
+        .post(`/baby/p/getProductSku/` + pid)
+        .then(res => {
+          if (res.data.code == "0000") {
+            console.log("res: " + JSON.stringify(res));
+
+            if (res.data.attachment.data.length > 0) {
+              this.sku.none_sku = false;
+              this.packageSkuInfo(res.data.attachment);
+            } else {
+              this.sku.none_sku = true;
+            }
+            this.show = true;
+          } else {
+            console.log(res);
+          }
+        })
+        .catch(err => {
+          this.show = fase;
+          Toast("获取商品规格失败！请联系管理员！" + JSON.stringify(err));
+        });
     },
+    packageSkuInfo(obj) {
+      this.packageSkuTree(obj);
+      this.packageSkuList(obj);
+    },
+    packageSkuList(obj) {
+      // list: [
+      //     {
+      //       id: 2259, // skuId，下单时后端需要
+      //       price: 100, // 价格（单位分）
+      //       s1: "30349", // 规格类目 k_s 为 s1 的对应规格值 id
+      //       s2: "30347", // 规格类目 k_s 为 s2 的对应规格值 id
+      //       s3: "0", // 最多包含3个规格值，为0表示不存在该规格
+      //       stock_num: 110 // 当前 sku 组合对应的库存
+      //     },
+      var tempData = obj.data;
+      for (var i = 0; i < tempData.length; i++) {
+        var listObj = {};
+        for(var j=0;j<this.sku.tree.length; j++){
+          if(this.sku.tree.v){}
+        }
+        listObj.k_s_1 = this.sku.tree.
+      }
+    },
+    packageSkuTree(obj) {
+      var skuTitle = obj.title;
+      if (skuTitle.c1 != undefined) {
+        var d = this.$tools.groupBy(obj.data, function(item) {
+          return [item.d1_data];
+        });
+        var tempTreeObj = {};
+        tempTreeObj.k = skuTitle.c1;
+        tempTreeObj.v = [];
+        tempTreeObj.k_s = "k_s_1";
+        for (var i = 0; i < d.length; i++) {
+          var t = {};
+          t.id = "c1_" + i;
+          t.name = d[i][0].d1_data;
+          if (d[i][0].d7 == undefined || d[i][0].d7 == "") {
+            t.imgUrl = this.cardOriginpriceImgs;
+            t.previewImgUrl = this.cardOriginpriceImgs;
+          } else {
+            t.imgUrl = d[i][0].d7;
+            t.previewImgUrl = d[i][0].d7;
+          }
+
+          tempTreeObj.v.push(t);
+        }
+        this.sku.tree.push(tempTreeObj);
+      }
+      if (skuTitle.c2 != undefined) {
+        var d = this.$tools.groupBy(obj.data, function(item) {
+          return [item.d2_data];
+        });
+        var tempTreeObj = {};
+        tempTreeObj.k = skuTitle.c2;
+        tempTreeObj.v = [];
+        tempTreeObj.k_s = "k_s_2";
+        for (var i = 0; i < d.length; i++) {
+          var t = {};
+          t.id = "c1_" + i;
+          t.name = d[i][0].d2_data;
+          t.imgUrl = d[i][0].d7;
+          t.previewImgUrl = d[i][0].d7;
+          tempTreeObj.v.push(t);
+        }
+        this.sku.tree.push(tempTreeObj);
+      }
+    },
+
     onAddCartClicked(value) {
       console.log("onAddCartClicked value" + JSON.stringify(value));
     },
@@ -189,6 +268,7 @@ export default {
   components: {
     [Button.name]: Button,
     [Sku.name]: Sku,
+    [Toast.name]: Toast,
     [Card.name]: Card
   },
   mounted() {
