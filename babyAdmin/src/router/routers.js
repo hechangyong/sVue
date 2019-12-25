@@ -128,7 +128,7 @@ export default [
         component: () => import('@/view/babyroom/products/addproducts/add-products.vue')
       },
       {
-        path: 'viewproducts',
+        path: 'view-products',
         name: '查看商品',
         meta:  {
           icon: 'md-shirt',

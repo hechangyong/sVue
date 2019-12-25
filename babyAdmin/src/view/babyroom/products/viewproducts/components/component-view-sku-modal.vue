@@ -79,7 +79,7 @@ export default {
     columsTitle(val) {
       let that = this;
       this.currentcolumnsDefault = [];
-
+      console.log("columsTitle: " + JSON.stringify(val));
       if (val != undefined && val.length > 0) {
         var obj = {};
 

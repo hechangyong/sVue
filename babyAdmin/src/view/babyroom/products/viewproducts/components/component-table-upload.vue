@@ -60,7 +60,7 @@ export default {
     imgs(val) {
       if (val !== undefined && val != "") {
         this.uploadList = [];
-        this.uploadList.push({ name: 'temp', url: val });
+        this.uploadList.push({ name: val, url: val });
       }
     }
   },
@@ -126,7 +126,7 @@ export default {
   mounted() {
     console.log("mounted: " + this.imgs);
     if (this.imgs !== undefined && this.imgs != "") {
-      this.uploadList.push({ name: "temp", url: this.imgs });
+      this.uploadList.push({ name: this.imgs, url: this.imgs });
     }
     // this.uploadList = this.$refs.ViewUploads.fileList;
   }

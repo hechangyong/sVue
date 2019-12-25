@@ -82,6 +82,7 @@
 
 <script>
 /* eslint-disable */
+import { selectProductApi } from "@/api/product";
 import TablesEdit from "./edit.vue";
 import handleBtns from "./handle-btns";
 import "./index.less";
@@ -195,7 +196,7 @@ export default {
           label: "下架"
         },
         {
-          value: "1",
+          value: "2",
           label: "初始添加"
         }
       ],
@@ -323,12 +324,66 @@ export default {
       if (e.target.value === "") this.insideTableData = this.value;
     },
     handleSearch() {
-      console.log("this.searchKey: " + this.searchKey);
-      if (this.searchKey != undefined && this.searchKey != "") {
-        this.insideTableData = this.value.filter(
-          item => item[this.searchKey].indexOf(this.searchValue) > -1
-        );
-      }
+      // console.log("this.searchKey: " + this.searchKey);
+      
+      // this.isloading = true;
+      // this.tableData = [];
+      // var obj = {};
+      // obj.page = 1;
+      // obj.pageSize = 10;
+      // if (this.searchKey == "name") {
+      //   obj.productName = this.searchValue;
+      //   console.log("this.searchKey: " + this.searchValue);
+      // }
+      // if (this.searchKey == "productType") {
+      //   obj.productTypeId = this.selectProductModel;
+      //   console.log("this.selectProductModel: " + this.selectProductModel);
+      // }
+      // if (this.searchKey == "productStatus") {
+      //   obj.productStatus = this.productStatusSelectModel;
+      //   console.log(
+      //     "this.productStatusSelectModel: " + this.productStatusSelectModel
+      //   );
+      // }
+      // this.insideTableData = [];
+      // selectProductApi(obj)
+      //   .then(res => {
+      //     this.isloading = false;
+      //     console.log("selectProductApi res.code: " + res.data.code);
+      //     if (res.data.code == "0000") {
+      //       this.insideTableData = [];
+      //       var tableDataTemp = res.data.attachment.result;
+      //       for (var i = 0; i < tableDataTemp.length; i++) {
+      //         var obj = {};
+      //         var skuType = 0;
+      //         if (tableDataTemp[i].skuid != "") {
+      //           skuType = 1;
+      //         }
+      //         obj.name = tableDataTemp[i].name;
+      //         obj.productType = tableDataTemp[i].categoryid;
+      //         obj.productPrice = tableDataTemp[i].price;
+      //         obj.vipPrice = tableDataTemp[i].promotionprice;
+      //         obj.totalInventory = tableDataTemp[i].totalnumber;
+      //         obj.residueInventory = tableDataTemp[i].residuenumber;
+      //         obj.skuType = skuType;
+      //         obj.productStatus = tableDataTemp[i].status;
+      //         obj.createTime = tableDataTemp[i].itime;
+      //         obj.productdes = tableDataTemp[i].description;
+      //         obj.id = tableDataTemp[i].id;
+      //         this.insideTableData.push(obj);
+      //       }
+      //      }
+
+      //    })
+      //   .catch(error => {
+      //     console.log("error: " + error);
+      //   });
+
+      // if (this.searchKey != undefined && this.searchKey != "") {
+      //   this.insideTableData = this.value.filter(
+      //     item => item[this.searchKey].indexOf(this.searchValue) > -1
+      //   );
+      // }
     },
     handleTableData() {
       this.insideTableData = this.value.map((item, index) => {
@@ -380,6 +435,7 @@ export default {
       this.setDefaultSearchKey();
     },
     value(val) {
+      console.log("tables val: " + JSON.stringify(val));
       this.handleTableData();
       if (this.searchable) this.handleSearch();
     },

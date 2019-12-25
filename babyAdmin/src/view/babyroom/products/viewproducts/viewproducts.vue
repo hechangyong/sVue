@@ -58,15 +58,19 @@ export default {
       this.viewSkuModalShowflag = false;
     },
     showViewSkuModal(index) {
-      getProductSkuApi(index).then(res => {
-        if (res.data.code == "0000") {
-          var columnstemp = res.data.attachment.title;
-          var dataTemp = res.data.attachment.data;
-          this.getSkuColumsData(dataTemp);
-          this.getSkuColumsTitle(columnstemp);
-          this.viewSkuModalShowflag = true;
-        }
-      });
+      getProductSkuApi(index)
+        .then(res => {
+          if (res.data.code == "0000") {
+            var columnstemp = res.data.attachment.title;
+            var dataTemp = res.data.attachment.data;
+            this.getSkuColumsData(dataTemp);
+            this.getSkuColumsTitle(columnstemp);
+            this.viewSkuModalShowflag = true;
+          }
+        })
+        .catch(error => {
+          console.log("error: " + error);
+        });
     },
     getSkuColumsData(dataTemp) {
       this.skuColumsdatas = [];
@@ -120,35 +124,39 @@ export default {
       var obj = {};
       obj.page = pageIndex;
       obj.pageSize = 10;
-      selectProductApi(obj).then(res => {
-        this.isloading = false;
-        console.log("res.code: " + res.data.code);
-        if (res.data.code == "0000") {
-          var tableDataTemp = res.data.attachment.result;
-          for (var i = 0; i < tableDataTemp.length; i++) {
-            var obj = {};
-            var skuType = 0;
-            if (tableDataTemp[i].skuid != "") {
-              skuType = 1;
+      selectProductApi(obj)
+        .then(res => {
+          this.isloading = false;
+          console.log("res.code: " + res.data.code);
+          if (res.data.code == "0000") {
+            var tableDataTemp = res.data.attachment.result;
+            for (var i = 0; i < tableDataTemp.length; i++) {
+              var obj = {};
+              var skuType = 0;
+              if (tableDataTemp[i].skuid != "") {
+                skuType = 1;
+              }
+              obj.name = tableDataTemp[i].name;
+              obj.productType = tableDataTemp[i].categoryid;
+              obj.productPrice = tableDataTemp[i].price;
+              obj.vipPrice = tableDataTemp[i].promotionprice;
+              obj.totalInventory = tableDataTemp[i].totalnumber;
+              obj.residueInventory = tableDataTemp[i].residuenumber;
+              obj.skuType = skuType;
+              obj.productStatus = tableDataTemp[i].status;
+              obj.createTime = tableDataTemp[i].itime;
+              obj.productdes = tableDataTemp[i].description;
+              obj.id = tableDataTemp[i].id;
+              this.tableData.push(obj);
             }
-            obj.name = tableDataTemp[i].name;
-            obj.productType = tableDataTemp[i].categoryid;
-            obj.productPrice = tableDataTemp[i].price;
-            obj.vipPrice = tableDataTemp[i].promotionprice;
-            obj.totalInventory = tableDataTemp[i].totalnumber;
-            obj.residueInventory = tableDataTemp[i].residuenumber;
-            obj.skuType = skuType;
-            obj.productStatus = tableDataTemp[i].status;
-            obj.createTime = tableDataTemp[i].itime;
-            obj.productdes = tableDataTemp[i].description;
-            obj.id = tableDataTemp[i].id;
-            this.tableData.push(obj);
+            this.totalNum = res.data.attachment.count;
           }
-          this.totalNum = res.data.attachment.count;
-        }
 
-        // this.tableData = res.data;
-      });
+          // this.tableData = res.data;
+        })
+        .catch(error => {
+          console.log("error: " + error);
+        });
     }
   },
   mounted() {
