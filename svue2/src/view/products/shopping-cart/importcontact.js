@@ -16,6 +16,7 @@ import {
     CellGroup,
     Divider,
     Icon,
+    Stepper,
     Panel
 } from "vant";
 
@@ -34,6 +35,7 @@ export default {
         [AddressList.name]: AddressList,
         [Cell.name]: Cell,
         [Divider.name]: Divider,
+        [Stepper.name]: Stepper ,
         [CellGroup.name]: CellGroup,
         [Icon.name]: Icon,
         [Panel.name]: Panel
@@ -141,6 +143,27 @@ export default {
                 this.goodsId = 0;
             }
         },
+        touchinUk(index) {
+            console.log(index)
+            clearInterval(this.Loop); //再次清空定时器，防止重复注册定时器
+            this.Loop = setTimeout(function() {
+                this.$dialog.confirm({
+                    message: '是否删除'
+                }).then(() => {
+                    console.log("删除")
+                    this.arr.splice(index, 1);
+                }).catch(() => {
+                    // on cancel
+                    console.log("不删")
+                });
+        
+        
+            }.bind(this), 1000);
+        },
+        cleartime(index) {
+            // 这个方法主要是用来将每次手指移出之后将计时器清零
+            clearInterval(this.Loop);
+        }, 
         checkAll() {
             if (this.goodsId == 0) {
                 this.$refs.checkboxGroup.toggleAll(true);
@@ -158,6 +181,9 @@ export default {
             Toast("点击结算");
         },
 
+        /**
+         * 添加联系人地址
+         */
         onAdd() {
             this.$router.push({
                 name: "editAddress",

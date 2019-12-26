@@ -67,81 +67,33 @@ export default {
         // 所有sku规格类目与其值的从属关系，比如商品有颜色和尺码两大类规格，颜色下面又有红色和蓝色两个规格值。
         // 可以理解为一个商品可以有多个规格类目，一个规格类目下可以有多个规格值。
         tree: [
-          {
-            k: "颜色", // skuKeyName：规格类目名称
-            v: [
-              {
-                id: "30349", // skuValueId：规格值 id
-                name: "红色", // skuValueName：规格值名称
-                imgUrl: "http://babyroom.hecy.top/img/2.jpg", // 规格类目图片，只有第一个规格类目可以定义图片
-                previewImgUrl: "http://babyroom.hecy.top/img/2.jpg" // 用于预览显示的规格类目图片
-              },
-              {
-                id: "1215",
-                name: "蓝色",
-                imgUrl: "http://babyroom.hecy.top/img/2.jpg",
-                previewImgUrl: "http://babyroom.hecy.top/img/2.jpg"
-              }
-            ],
-            k_s: "s1" // skuKeyStr：sku 组合列表（下方 list）中当前类目对应的 key 值，value 值会是从属于当前类目的一个规格值 id
-          },
-          {
-            k: "尺寸", // skuKeyName：规格类目名称
-            v: [
-              {
-                id: "30347", // skuValueId：规格值 id
-                name: "大码", // skuValueName：规格值名称
-                imgUrl: "http://babyroom.hecy.top/img/2.jpg", // 规格类目图片，只有第一个规格类目可以定义图片
-                previewImgUrl: "http://babyroom.hecy.top/img/2.jpg" // 用于预览显示的规格类目图片
-              },
-              {
-                id: "30348",
-                name: "小码",
-                imgUrl: "http://babyroom.hecy.top/img/2.jpg",
-                previewImgUrl: "http://babyroom.hecy.top/img/2.jpg"
-              }
-            ],
-            k_s: "s2" // skuKeyStr：sku 组合列表（下方 list）中当前类目对应的 key 值，value 值会是从属于当前类目的一个规格值 id
-          }
+          //   {
+          //     k: "颜色", // skuKeyName：规格类目名称
+          //     v: [
+          //       {
+          //         id: "30349", // skuValueId：规格值 id
+          //         name: "红色", // skuValueName：规格值名称
+          //         imgUrl: "http://babyroom.hecy.top/img/2.jpg", // 规格类目图片，只有第一个规格类目可以定义图片
+          //         previewImgUrl: "http://babyroom.hecy.top/img/2.jpg" // 用于预览显示的规格类目图片
+          //       }
+          //     ],
+          //     k_s: "s1" // skuKeyStr：sku 组合列表（下方 list）中当前类目对应的 key 值，value 值会是从属于当前类目的一个规格值 id
+          //   }
         ],
         // 所有 sku 的组合列表，比如红色、M 码为一个 sku 组合，红色、S 码为另一个组合
         list: [
-          {
-            id: 2259, // skuId，下单时后端需要
-            price: 100, // 价格（单位分）
-            s1: "30349", // 规格类目 k_s 为 s1 的对应规格值 id
-            s2: "30347", // 规格类目 k_s 为 s2 的对应规格值 id
-            s3: "0", // 最多包含3个规格值，为0表示不存在该规格
-            stock_num: 110 // 当前 sku 组合对应的库存
-          },
-          {
-            id: 2259, // skuId，下单时后端需要
-            price: 100, // 价格（单位分）
-            s1: "30349", // 规格类目 k_s 为 s1 的对应规格值 id
-            s2: "30348", // 规格类目 k_s 为 s2 的对应规格值 id
-            s3: "0", // 最多包含3个规格值，为0表示不存在该规格
-            stock_num: 117 // 当前 sku 组合对应的库存
-          },
-          {
-            id: 2259, // skuId，下单时后端需要
-            price: 100, // 价格（单位分）
-            s1: "1215", // 规格类目 k_s 为 s1 的对应规格值 id
-            s2: "30347", // 规格类目 k_s 为 s2 的对应规格值 id
-            s3: "0", // 最多包含3个规格值，为0表示不存在该规格
-            stock_num: 110 // 当前 sku 组合对应的库存
-          },
-          {
-            id: 2259, // skuId，下单时后端需要
-            price: 100, // 价格（单位分）
-            s1: "1215", // 规格类目 k_s 为 s1 的对应规格值 id
-            s2: "30348", // 规格类目 k_s 为 s2 的对应规格值 id
-            s3: "0", // 最多包含3个规格值，为0表示不存在该规格
-            stock_num: 0 // 当前 sku 组合对应的库存
-          }
+          //   {
+          //     id: 2259, // skuId，下单时后端需要
+          //     price: 100, // 价格（单位分）
+          //     s1: "30349", // 规格类目 k_s 为 s1 的对应规格值 id
+          //     s2: "30347", // 规格类目 k_s 为 s2 的对应规格值 id
+          //     s3: "0", // 最多包含3个规格值，为0表示不存在该规格
+          //     stock_num: 110 // 当前 sku 组合对应的库存
+          //   }
         ],
-        price: "1.00", // 默认价格（单位元）
-        stock_num: 227, // 商品总库存
-        collection_id: 2261, // 无规格商品 skuId 取 collection_id，否则取所选 sku 组合对应的 id
+        price: "", // 默认价格（单位元）
+        stock_num: 0, // 商品总库存
+        collection_id: 0, // 无规格商品 skuId 取 collection_id，否则取所选 sku 组合对应的 id
         none_sku: false, // 是否无规格商品
         hide_stock: false // 是否隐藏剩余库存
       },
@@ -163,6 +115,7 @@ export default {
       this.cardOriginprice = val.vipPrice;
       this.cardOriginpriceImgs = val.imgUrl;
       this.cardId = val.id;
+      this.goodsId = val.id;
     }
   },
   methods: {
@@ -172,12 +125,22 @@ export default {
       this.$axios
         .post(`/baby/p/getProductSku/` + pid)
         .then(res => {
+          this.sku = {
+            tree: [],
+            list: [],
+            price: "",
+            stock_num: 0,
+            collection_id: 0,
+            none_sku: false,
+            hide_stock: false
+          };
           if (res.data.code == "0000") {
             console.log("res: " + JSON.stringify(res));
 
             if (res.data.attachment.data.length > 0) {
               this.sku.none_sku = false;
               this.packageSkuInfo(res.data.attachment);
+              console.log("finall  sku : " + JSON.stringify(this.sku));
             } else {
               this.sku.none_sku = true;
             }
@@ -187,34 +150,36 @@ export default {
           }
         })
         .catch(err => {
-          this.show = fase;
+          //   this.show = fase;
           Toast("获取商品规格失败！请联系管理员！" + JSON.stringify(err));
         });
+      console.log("this.sku : " + JSON.stringify(this.sku));
     },
     packageSkuInfo(obj) {
       this.packageSkuTree(obj);
       this.packageSkuList(obj);
+      this.sku.price = this.cardOriginprice;
+      this.sku.stock_num = this.cardNumber;
+      this.goods.title = this.cardTitle;
+      this.goods.picture = this.cardOriginpriceImgs;
     },
     packageSkuList(obj) {
-      // list: [
-      //     {
-      //       id: 2259, // skuId，下单时后端需要
-      //       price: 100, // 价格（单位分）
-      //       s1: "30349", // 规格类目 k_s 为 s1 的对应规格值 id
-      //       s2: "30347", // 规格类目 k_s 为 s2 的对应规格值 id
-      //       s3: "0", // 最多包含3个规格值，为0表示不存在该规格
-      //       stock_num: 110 // 当前 sku 组合对应的库存
-      //     },
+      console.log("--------------packageSkuList start ----------------");
       var tempData = obj.data;
       for (var i = 0; i < tempData.length; i++) {
         var listObj = {};
-        for(var j=0;j<this.sku.tree.length; j++){
-          if(this.sku.tree.v){}
-        }
-        listObj.k_s_1 = this.sku.tree.
+        listObj.id = tempData[i].gid;
+        listObj.k_s_1 = tempData[i].d1_data;
+        listObj.k_s_2 = tempData[i].d2_data;
+        listObj.price = tempData[i].d5 * 100;
+        listObj.stock_num = tempData[i].d4;
+        this.sku.list.push(listObj);
       }
+      console.log("--------------packageSkuList end ----------------");
     },
     packageSkuTree(obj) {
+      console.log("--------------packageSkuTree start ----------------");
+
       var skuTitle = obj.title;
       if (skuTitle.c1 != undefined) {
         var d = this.$tools.groupBy(obj.data, function(item) {
@@ -226,7 +191,7 @@ export default {
         tempTreeObj.k_s = "k_s_1";
         for (var i = 0; i < d.length; i++) {
           var t = {};
-          t.id = "c1_" + i;
+          t.id = d[i][0].d1_data;
           t.name = d[i][0].d1_data;
           if (d[i][0].d7 == undefined || d[i][0].d7 == "") {
             t.imgUrl = this.cardOriginpriceImgs;
@@ -235,7 +200,6 @@ export default {
             t.imgUrl = d[i][0].d7;
             t.previewImgUrl = d[i][0].d7;
           }
-
           tempTreeObj.v.push(t);
         }
         this.sku.tree.push(tempTreeObj);
@@ -250,7 +214,7 @@ export default {
         tempTreeObj.k_s = "k_s_2";
         for (var i = 0; i < d.length; i++) {
           var t = {};
-          t.id = "c1_" + i;
+          t.id = d[i][0].d2_data;
           t.name = d[i][0].d2_data;
           t.imgUrl = d[i][0].d7;
           t.previewImgUrl = d[i][0].d7;
@@ -258,12 +222,55 @@ export default {
         }
         this.sku.tree.push(tempTreeObj);
       }
+      console.log("--------------packageSkuTree end ----------------");
     },
 
     onAddCartClicked(value) {
-      console.log("onAddCartClicked value" + JSON.stringify(value));
+      var obj = value;
+      if (this.sku.none_sku) {
+        obj = {};
+        obj.goodsId = value.goodsId;
+        obj.selectedNum = value.selectedNum;
+      }
+      this.$axios
+        .post(`/baby/o/addShoppingCart`, obj)
+        .then(res => {
+          if ((res.data.code = "0000")) {
+            Toast("添加购物车成功！");
+          }
+        })
+        .catch(err => {
+          console.log("err: " + JSON.stringify(err));
+          Toast("添加购物车失败！请联系管理员！");
+        });
     },
-    onBuyClicked() {}
+    /**
+     * 点击立即购买
+     * 先将选择加入购物车，然后跳转到购物车页面
+     */
+    onBuyClicked(value) {
+      var obj = value;
+      if (this.sku.none_sku) {
+        obj = {};
+        obj.goodsId = value.goodsId;
+        obj.selectedNum = value.selectedNum;
+      }
+      console.log("onBuyClicked value" + JSON.stringify(value));
+      this.$axios
+        .post(`/baby/o/addShoppingCart`, obj)
+        .then(res => {
+          console.log("onBuyClicked: " + JSON.stringify(res));
+          if ((res.data.code = "0000")) {
+            this.$router.push({
+              name: "cart"
+            });
+          }
+        })
+        .catch(err => {
+          console.log("err: " + JSON.stringify(err));
+          Toast("添加购物车失败！请联系管理员！");
+        });
+    }
   },
   components: {
     [Button.name]: Button,
@@ -279,6 +286,7 @@ export default {
     this.cardOriginprice = this.cardItem.vipPrice;
     this.cardOriginpriceImgs = this.cardItem.imgUrl;
     this.cardId = this.cardItem.id;
+    this.goodsId = this.cardItem.id;
   }
 };
 </script>

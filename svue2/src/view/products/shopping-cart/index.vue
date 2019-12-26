@@ -4,13 +4,10 @@
       <van-icon slot="icon" name="add-square" class="user-defined-icon" />
     </van-cell>
 
-		<!-- <van-cell icon="dingwei" isLink title="张三  13512124547" label="浙江省 杭州市 西湖区 创新创业园dasdasdasdasdasdas" /> -->
-
     <van-cell
       :title="currentAddress.name"
       v-if="hasAddress"
       icon="location-o"
-      
       size="large"
       @click="showList = true"
       is-link
@@ -43,18 +40,32 @@
       />
     </van-popup>
 
-    <van-checkbox-group class="card-goods" :id="goodsId" v-model="checkedGoods" ref="checkboxGroup">
-      <van-checkbox class="card-goods__item" v-for="item in goods" :key="item.id" :name="item.id">
-        <van-card
-          :title="item.title"
-          :desc="item.desc"
-          :num="item.num"
-          :price="formatPrice(item.price)"
-          :thumb="item.thumb"
-          @click="toggle()"
-        />
-      </van-checkbox>
-    </van-checkbox-group>
+    <template v-for="item in goods">
+      <div :key="item.id">
+        <van-checkbox-group
+          class="card-goods"
+          :id="goodsId"
+          v-model="checkedGoods"
+          ref="checkboxGroup"
+        >
+          <van-checkbox class="card-goods__item" :name="item.id">
+            <van-card
+              :title="item.title"
+              :desc="item.desc"
+              :num="item.num"
+              :price="formatPrice(item.price)"
+              :thumb="item.thumb"
+              @touchstart.prevent="touchinUk(item)"
+              @click="toggle()"
+            >
+              <div slot="num">
+                <van-stepper v-model="item.num" min="5" max="8" />
+              </div>
+            </van-card>
+          </van-checkbox>
+        </van-checkbox-group>
+      </div>
+    </template>
 
     <van-submit-bar
       :price="totalPrice"

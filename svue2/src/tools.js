@@ -24,7 +24,7 @@ export default {
     },
 
     groupBy: (array, f) => {
-        debugger;
+        // debugger;
         const groups = {};
         array.forEach(function (o) {
             const group = JSON.stringify(f(o));
