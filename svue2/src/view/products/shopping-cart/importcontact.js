@@ -17,9 +17,10 @@ import {
     Divider,
     Icon,
     Stepper,
+    SwipeCell,
     Panel
 } from "vant";
-
+import IsEmpty from "@/view/is-empty/";
 export default {
     components: {
         [Card.name]: Card,
@@ -35,52 +36,32 @@ export default {
         [AddressList.name]: AddressList,
         [Cell.name]: Cell,
         [Divider.name]: Divider,
-        [Stepper.name]: Stepper ,
+        [Stepper.name]: Stepper,
+        [SwipeCell.name]: SwipeCell,
         [CellGroup.name]: CellGroup,
         [Icon.name]: Icon,
-        [Panel.name]: Panel
+        [Panel.name]: Panel,
+        IsEmpty
     },
     data() {
         return {
             // tipdes:"你的收货地址不支持同城送, 我们已为你推荐快递",
-            tipdes:"下单后我们会尽快与您联系，为您送货，请保持预留手机畅通哦。",
-
+            tipdes: "下单后我们会尽快与您联系，为您送货，请保持预留手机畅通哦。",
             editAddress: true,
             hasAddress: false,
-
             goodsId: 1,
-            currentAddress: {
-                name: "",
-                tel: "",
-                addressDetail: ""
-            },
+            currentAddress: {},
             chosenContactId: null,
             editingContact: {},
             showList: false,
             showEdit: false,
             isEdit: false,
-            chosenAddressId: 1,
-
-            addressList: [
-                {
-                    id: 1,
-                    name: "张三",
-                    tel: "13000000000",
-                    address: "安徽省合肥市肥东县文艺名都小区40#2902",
-                    areacode: "340122"
-                },
-                {
-                    id: 2,
-                    name: "张三",
-                    tel: "13000000000",
-                    address: "合肥市好好哦啊山东阿萨德",
-                    areacode: "340122"
-                }
-            ],
+            chosenAddressId: 0,
+            addressList: [],
             safeareabottom: true,
             active: 0,
             checked: 1,
-            checkedGoods: ["1", "2", "3"],
+            checkedGoods: [],
             goods: [
                 {
                     id: "1",
@@ -93,36 +74,32 @@ export default {
                 },
                 {
                     id: "2",
-                    title: "陕西蜜梨",
-                    desc: "约600g",
-                    price: 690,
+                    title: "进口香蕉",
+                    desc: "约250g，2根",
+                    price: 200,
                     num: 1,
                     thumb:
-                        "https://img.yzcdn.cn/public_files/2017/10/24/f6aabd6ac5521195e01e8e89ee9fc63f.jpeg"
-                },
-                {
-                    id: "3",
-                    title: "美国伽力果",
-                    desc: "约680g/3个",
-                    price: 2680,
-                    num: 1,
-                    thumb:
-                        "https://img.yzcdn.cn/public_files/2017/10/24/320454216bbe9e25c7651e1fa51b31fd.jpeg"
+                        "https://img.yzcdn.cn/public_files/2017/10/24/2f9a36046449dafb8608e99990b3c205.jpeg"
                 }
             ]
         };
     },
-
+    mounted() {
+        this.initAddress();
+    },
     computed: {
-        submitBarText() {
-            const count = this.checkedGoods.length;
-            return "结算" + (count ? `(${count})` : "");
-        },
+        //     submitBarText() {
+        //         const count = this.checkedGoods.length;
+        //         return "结算" + (count ? `(${count})` : "");
+        //     },
 
         totalPrice() {
+            console.log("totalPrice:" + JSON.stringify(this.checkedGoods));
+            console.log("totalPrice:" + JSON.stringify(this.goods));
+
             return this.goods.reduce(
                 (total, item) =>
-                    total + (this.checkedGoods.indexOf(item.id) !== -1 ? item.price : 0),
+                    total + (this.checkedGoods.indexOf(item.id) !== -1 ? item.price * item.num : 0),
                 0
             );
         },
@@ -132,55 +109,73 @@ export default {
     },
 
     methods: {
-        toggle() {
-            console.log("this.checkedGoods.length: " + this.checkedGoods.length);
-            console.log("this.goods.length: " + this.goods.length);
-            if (this.checkedGoods.length == (this.goods.length - 1)) {
-                this.checked = 1;
-                this.goodsId = 1;
-            } else {
-                this.checked = 0;
-                this.goodsId = 0;
-            }
+        toggle(goodsId) {
+
+            console.log("goodsId:" + goodsId);
+            console.log("checkedGoods:" + JSON.stringify(this.checkedGoods));
+            console.log("checkedGoods:" + JSON.stringify(this.goods));
+
         },
-        touchinUk(index) {
-            console.log(index)
-            clearInterval(this.Loop); //再次清空定时器，防止重复注册定时器
-            this.Loop = setTimeout(function() {
-                this.$dialog.confirm({
-                    message: '是否删除'
-                }).then(() => {
-                    console.log("删除")
-                    this.arr.splice(index, 1);
-                }).catch(() => {
-                    // on cancel
-                    console.log("不删")
-                });
-        
-        
-            }.bind(this), 1000);
+        deleteCart(item) {
+            console.log("item:" + JSON.stringify(item));
+            this.goods.splice(item, 1);
         },
-        cleartime(index) {
-            // 这个方法主要是用来将每次手指移出之后将计时器清零
-            clearInterval(this.Loop);
-        }, 
-        checkAll() {
-            if (this.goodsId == 0) {
-                this.$refs.checkboxGroup.toggleAll(true);
-                this.goodsId = 1;
-            } else {
-                this.$refs.checkboxGroup.toggleAll();
-                this.goodsId = 0;
-            }
-        },
+        /**
+         * 格式化价格
+         * @param {价格} price 
+         */
         formatPrice(price) {
             return (price / 100).toFixed(2);
         },
 
         onSubmit() {
+            if (JSON.stringify(this.currentAddress) == '{}') {
+                Toast("请选择收货地址！");
+                return;
+            }
+            var finallObj = {};
+            var finallGoods = [];
+            console.log("checkedGoods:" + JSON.stringify(this.checkedGoods));
+            console.log("checkedGoods:" + JSON.stringify(this.goods));
+            for (var i = 0; i < this.checkedGoods.length; i++) {
+                for (var j = 0; j < this.goods.length; j++) {
+                    if (this.goods[j].id == this.checkedGoods[i]) {
+                        finallGoods.push(this.goods[j]);
+                    }
+                }
+            }
+            console.log("finallGoods:" + JSON.stringify(finallGoods));
+            finallObj.goods = finallGoods;
+            finallObj.currentAddress = this.currentAddress;
             Toast("点击结算");
         },
 
+        initAddress() {
+            this.$axios
+                .post(`/baby/u/getUserAddress`)
+                .then(res => {
+                    console.log("res.data.code: " + res.data.code);
+                    if (res.data.code === "0000") {
+                        var useraddress = res.data.attachment;
+                        var taddressList = [];
+                        for (var i = 0; i < useraddress.length; i++) {
+                            var obj = {};
+                            obj.id = useraddress[i].id;
+                            obj.name = useraddress[i].name;
+                            obj.tel = useraddress[i].mobile;
+                            obj.address = useraddress[i].addressdetail;
+                            obj.areacode = useraddress[i].areacode;
+                            console.log("obj: " + JSON.stringify(obj));
+                            taddressList.push(obj);
+                        }
+                        this.addressList = taddressList;
+
+                    }
+                })
+                .catch(err => {
+                    console.log("获取用户地址信息失败");
+                });
+        },
         /**
          * 添加联系人地址
          */
@@ -215,7 +210,8 @@ export default {
             console.log("onSelect: " + JSON.stringify(item));
 
             this.currentAddress = {
-                name: item.name+"  " + item.tel,
+                id: item.id,
+                name: item.name + "  " + item.tel,
                 tel: item.tel,
                 addressDetail: item.address
             };

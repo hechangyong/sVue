@@ -40,44 +40,58 @@
       />
     </van-popup>
 
-    <template v-for="item in goods">
-      <div :key="item.id">
-        <van-checkbox-group
-          class="card-goods"
-          :id="goodsId"
-          v-model="checkedGoods"
-          ref="checkboxGroup"
-        >
-          <van-checkbox class="card-goods__item" :name="item.id">
-            <van-card
-              :title="item.title"
-              :desc="item.desc"
-              :num="item.num"
-              :price="formatPrice(item.price)"
-              :thumb="item.thumb"
-              @touchstart.prevent="touchinUk(item)"
-              @click="toggle()"
-            >
-              <div slot="num">
-                <van-stepper v-model="item.num" min="5" max="8" />
-              </div>
-            </van-card>
-          </van-checkbox>
-        </van-checkbox-group>
-      </div>
-    </template>
-
-    <van-submit-bar
-      :price="totalPrice"
-      :safe-area-inset-bottom="safeareabottom"
-      :disabled="!checkedGoods.length"
-      button-text="提交订单"
-      :tip="tipdes"
-      tip-icon="info-o"
-      @submit="onSubmit"
-    >
-      <van-checkbox v-model="checked" @click="checkAll">全选</van-checkbox>
-    </van-submit-bar>
+    <div>
+      <template v-for="item in goods">
+        <div :key="item.id">
+          <van-checkbox-group
+            class="card-goods"
+            :id="goodsId"
+            v-model="checkedGoods"
+            ref="checkboxGroup"
+          >
+            <van-swipe-cell>
+              <van-checkbox class="card-goods__item"   :name="item.id">
+                <van-card
+                  :title="item.title"
+                  :desc="item.desc"
+                  :num="item.num"
+                  :price="formatPrice(item.price)"
+                  :thumb="item.thumb"
+                >
+                  <div slot="num">
+                    <van-stepper v-model="item.num" @click.native.stop min="1"  />
+                  </div>
+                </van-card>
+              </van-checkbox>
+              <template slot="right">
+                <van-button
+                  square
+                  type="danger"
+                  class="batton_v"
+                  @click="deleteCart(item)"
+                  text="删除"
+                />
+              </template>
+            </van-swipe-cell>
+          </van-checkbox-group>
+        </div>
+      </template>
+      <div class="hiClass"></div>
+      <van-submit-bar
+        :price="totalPrice"
+        :safe-area-inset-bottom="safeareabottom"
+        :disabled="!checkedGoods.length"
+        button-text="提交订单"
+        :tip="tipdes"
+        tip-icon="info-o"
+        @submit="onSubmit"
+      >
+        <!-- <van-checkbox v-model="checked" @click="checkAll">全选</van-checkbox> -->
+      </van-submit-bar>
+    </div>
+    <is-empty v-if="goods.length == 0" altdes>
+      <span>空空如也,啥也没有~~~~~！快去选购吧！</span>
+    </is-empty>
   </div>
 </template>
 
@@ -86,6 +100,15 @@
  
 
 <style lang="less">
+.batton_v {
+  border-radius: 0;
+  position: relative;
+  // top: 12px;
+  height: 100%;
+}
+.hiClass {
+  height: 100px;
+}
 .span_lable {
   font-size: 12px;
 }
