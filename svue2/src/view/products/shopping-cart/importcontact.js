@@ -144,12 +144,38 @@ export default {
                     }
                 }
             }
-            console.log("finallGoods:" + JSON.stringify(finallGoods));
             finallObj.goods = finallGoods;
-            finallObj.currentAddress = this.currentAddress;
+            finallObj.userAddressVo = this.currentAddress;
+            console.log("finallObj:" + JSON.stringify(finallObj));
+            this.placeOrder(finallObj);
             Toast("点击结算");
         },
+        placeOrder(obj){
+            this.$axios
+                .post(`/baby/o/placeOrder`,obj)
+                .then(res => {
+                    console.log("res.data.code: " + res.data.code);
+                    if (res.data.code === "0000") {
+                        var useraddress = res.data.attachment;
+                        var taddressList = [];
+                        for (var i = 0; i < useraddress.length; i++) {
+                            var obj = {};
+                            obj.id = useraddress[i].id;
+                            obj.name = useraddress[i].name;
+                            obj.tel = useraddress[i].mobile;
+                            obj.address = useraddress[i].addressdetail;
+                            obj.areacode = useraddress[i].areacode;
+                            console.log("obj: " + JSON.stringify(obj));
+                            taddressList.push(obj);
+                        }
+                        this.addressList = taddressList;
 
+                    }
+                })
+                .catch(err => {
+                    console.log("获取用户地址信息失败");
+                });
+        },
         initAddress() {
             this.$axios
                 .post(`/baby/u/getUserAddress`)
