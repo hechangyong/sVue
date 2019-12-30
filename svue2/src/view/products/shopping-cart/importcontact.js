@@ -1,4 +1,5 @@
 
+/* eslint-disable */
 import {
     Checkbox,
     CheckboxGroup,
@@ -63,28 +64,20 @@ export default {
             checked: 1,
             checkedGoods: [],
             goods: [
-                {
-                    id: "1",
-                    title: "进口香蕉",
-                    desc: "约250g，2根",
-                    price: 200,
-                    num: 1,
-                    thumb:
-                        "https://img.yzcdn.cn/public_files/2017/10/24/2f9a36046449dafb8608e99990b3c205.jpeg"
-                },
-                {
-                    id: "2",
-                    title: "进口香蕉",
-                    desc: "约250g，2根",
-                    price: 200,
-                    num: 1,
-                    thumb:
-                        "https://img.yzcdn.cn/public_files/2017/10/24/2f9a36046449dafb8608e99990b3c205.jpeg"
-                }
+                // {
+                //     id: "1",
+                //     title: "进口香蕉",
+                //     desc: "约250g，2根",
+                //     price: 200,
+                //     num: 1,
+                //     thumb:
+                //         "https://img.yzcdn.cn/public_files/2017/10/24/2f9a36046449dafb8608e99990b3c205.jpeg"
+                // } 
             ]
         };
     },
     mounted() {
+        this.getGoods();
         this.initAddress();
     },
     computed: {
@@ -148,32 +141,49 @@ export default {
             finallObj.userAddressVo = this.currentAddress;
             console.log("finallObj:" + JSON.stringify(finallObj));
             this.placeOrder(finallObj);
-            Toast("点击结算");
-        },
-        placeOrder(obj){
-            this.$axios
-                .post(`/baby/o/placeOrder`,obj)
-                .then(res => {
-                    console.log("res.data.code: " + res.data.code);
-                    if (res.data.code === "0000") {
-                        var useraddress = res.data.attachment;
-                        var taddressList = [];
-                        for (var i = 0; i < useraddress.length; i++) {
-                            var obj = {};
-                            obj.id = useraddress[i].id;
-                            obj.name = useraddress[i].name;
-                            obj.tel = useraddress[i].mobile;
-                            obj.address = useraddress[i].addressdetail;
-                            obj.areacode = useraddress[i].areacode;
-                            console.log("obj: " + JSON.stringify(obj));
-                            taddressList.push(obj);
-                        }
-                        this.addressList = taddressList;
 
+        },
+        getGoods() {
+            this.$axios
+                .post(`/baby/o/getShoppingCartList`)
+                .then(res => {
+                    console.log("res.data.code: " + JSON.stringify(res));
+                    if (res.data.code === "0000") {
+                        var shopList = res.data.attachment;
+                        this.goods = shopList;
                     }
                 })
                 .catch(err => {
-                    console.log("获取用户地址信息失败");
+                    console.log("获取用户购物车列表失败！");
+                });
+        },
+        placeOrder(obj) {
+            Toast.loading({
+                duration: 0, // 持续展示 toast
+                forbidClick: true,
+            });
+            this.$axios
+                .post(`/baby/o/placeOrder`, obj)
+                .then(res => {
+                    console.log("res.data.code: " + res.data.code);
+                    if (res.data.code === "0000") {
+                        Toast.clear();
+                        this.$router.push({
+                            name: "successPay",
+                            params: {
+                                name: obj.userAddressVo.userName,
+                                tel: obj.userAddressVo.tel,
+                                addressDetail: obj.userAddressVo.addressDetail,
+                                payedInfoPrice: this.totalPrice
+                            }
+                        });
+                    } else {
+                        Toast.clear(); 
+                        Toast(res.data.message);
+                    }
+                })
+                .catch(err => {
+                    Toast("下单失败，请联系管理员！");
                 });
         },
         initAddress() {
@@ -195,7 +205,6 @@ export default {
                             taddressList.push(obj);
                         }
                         this.addressList = taddressList;
-
                     }
                 })
                 .catch(err => {
@@ -239,7 +248,8 @@ export default {
                 id: item.id,
                 name: item.name + "  " + item.tel,
                 tel: item.tel,
-                addressDetail: item.address
+                addressDetail: item.address,
+                userName: item.name
             };
             this.editAddress = false;
             this.hasAddress = true;

@@ -77,6 +77,13 @@ const routes = [
     }
   },
   {
+    name: 'successPay',
+    component: () => import('./view/products/successPay/successPay.vue'),
+    meta: {
+      title: '成功下单'
+    }
+  },
+  {
     name: 'category',
     component: () => import('./view/products/category'),
     meta: {

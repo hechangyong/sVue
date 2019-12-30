@@ -38,6 +38,14 @@ module.exports = {
       '/baby/o/addShoppingCart': {
         target: 'http://192.168.1.152:8011',
         changeOrigin: true
+      },
+      '/baby/o/placeOrder': {
+        target: 'http://192.168.1.152:8011',
+        changeOrigin: true
+      },
+      '/baby/o/': {
+        target: 'http://192.168.1.152:8011',
+        changeOrigin: true
       }
     }
   }
