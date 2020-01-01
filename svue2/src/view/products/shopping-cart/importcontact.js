@@ -110,8 +110,18 @@ export default {
 
         },
         deleteCart(item) {
-            console.log("item:" + JSON.stringify(item));
-            this.goods.splice(item, 1);
+            console.log(" deleteCart item:" + item.id);
+            this.$axios
+                .post(`/baby/o/deleteCart/` + item.id)
+                .then(res => {
+                    if (res.data.code === "0000") {
+                        Toast("清空购物车成功！");
+                        this.getGoods();
+                    }
+                })
+                .catch(err => {
+                    console.log("清除购物车失败！");
+                });
         },
         /**
          * 格式化价格
@@ -144,6 +154,7 @@ export default {
 
         },
         getGoods() {
+            this.goods = [];
             this.$axios
                 .post(`/baby/o/getShoppingCartList`)
                 .then(res => {
@@ -178,7 +189,7 @@ export default {
                             }
                         });
                     } else {
-                        Toast.clear(); 
+                        Toast.clear();
                         Toast(res.data.message);
                     }
                 })

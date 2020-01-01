@@ -164,7 +164,6 @@ export default {
       this.goods.picture = this.cardOriginpriceImgs;
     },
     packageSkuList(obj) {
-      console.log("--------------packageSkuList start ----------------");
       var tempData = obj.data;
       for (var i = 0; i < tempData.length; i++) {
         var listObj = {};
@@ -175,11 +174,8 @@ export default {
         listObj.stock_num = tempData[i].d4;
         this.sku.list.push(listObj);
       }
-      console.log("--------------packageSkuList end ----------------");
     },
     packageSkuTree(obj) {
-      console.log("--------------packageSkuTree start ----------------");
-
       var skuTitle = obj.title;
       if (skuTitle.c1 != undefined) {
         var d = this.$tools.groupBy(obj.data, function(item) {
@@ -222,10 +218,10 @@ export default {
         }
         this.sku.tree.push(tempTreeObj);
       }
-      console.log("--------------packageSkuTree end ----------------");
     },
 
     onAddCartClicked(value) {
+      console.log("onAddCartClicked: "+ JSON.stringify(value))
       var obj = value;
       if (this.sku.none_sku) {
         obj = {};

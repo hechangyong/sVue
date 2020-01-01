@@ -23,9 +23,7 @@ export default {
             ],
             option2: [
                 { text: "默认排序", value: "a" },
-                { text: "价格排序", value: "b" },
-                { text: "销量排序", value: "c" }
-            ],
+             ],
             cardList: []
         };
     },
@@ -83,7 +81,7 @@ export default {
                     }
                 })
                 .catch(err => {
-                    Toast("修改用户手机号码失败！请稍后在试！")
+                    Toast("获取商品列表失败！请稍后在试！")
                 });
         }
 

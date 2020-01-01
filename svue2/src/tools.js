@@ -34,6 +34,13 @@ export default {
         return Object.keys(groups).map(function (group) {
             return groups[group];
         });
+    },
+    /**
+     * 格式化价格
+     * @param {价格} price 
+    */
+    formatPrice: (price) => {
+        return (price / 100).toFixed(2);
     }
 
 }
