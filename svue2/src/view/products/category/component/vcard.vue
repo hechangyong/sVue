@@ -8,6 +8,7 @@
       :origin-price="cardOriginprice"
       :thumb="cardOriginpriceImgs"
       :id="cardId"
+      @click="toGoods"
     >
       <div slot="num">
         <span>剩余库存: {{cardNumber}}</span>
@@ -33,7 +34,6 @@
 
 <script>
 import { Card, Button, Sku, Toast } from "vant";
-
 export default {
   name: "vcard",
   props: {
@@ -119,6 +119,16 @@ export default {
     }
   },
   methods: {
+    toGoods(){
+      var pid = this.$refs.cardInfo.id;
+      console.log("to pid:" + pid);
+      this.$router.push({
+        name:"goods",
+        params:{
+          pid: pid
+        }
+      });
+    },
     addCard() {
       var pid = this.$refs.cardInfo.id;
       console.log("addcard -pid: " + pid);

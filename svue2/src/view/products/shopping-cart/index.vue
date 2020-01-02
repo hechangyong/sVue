@@ -50,7 +50,7 @@
             ref="checkboxGroup"
           >
             <van-swipe-cell>
-              <van-checkbox class="card-goods__item"   :name="item.id">
+              <van-checkbox class="card-goods__item" :name="item.id">
                 <van-card
                   :title="item.title"
                   :desc="item.desc"
@@ -58,8 +58,11 @@
                   :price="formatPrice(item.price)"
                   :thumb="item.thumb"
                 >
+                  <div slot="tags">
+                     <van-tag round  >1 段</van-tag>
+                  </div>
                   <div slot="num">
-                    <van-stepper v-model="item.num" @click.native.stop min="1"  />
+                    <van-stepper v-model="item.num" @click.native.stop min="1" />
                   </div>
                 </van-card>
               </van-checkbox>

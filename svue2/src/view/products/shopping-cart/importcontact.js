@@ -1,5 +1,6 @@
 
 /* eslint-disable */
+import { Tag } from 'vant';
 import {
     Checkbox,
     CheckboxGroup,
@@ -24,6 +25,7 @@ import {
 import IsEmpty from "@/view/is-empty/";
 export default {
     components: {
+        [Tag.name]: Tag,
         [Card.name]: Card,
         [Checkbox.name]: Checkbox,
         [SubmitBar.name]: SubmitBar,
