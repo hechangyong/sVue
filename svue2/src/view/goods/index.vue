@@ -102,7 +102,7 @@
     img {
       width: 100%;
       display: block;
-      height: 8rem;
+      height: 100%;
     }
   }
   &-des {
