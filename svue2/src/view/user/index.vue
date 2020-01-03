@@ -42,137 +42,17 @@
     </van-cell-group>
 
     <van-cell-group class="user-top-group">
-      <van-cell icon="home-o" title="我的卡劵" @click="toCardList" is-link />
+      <van-cell icon="coupon-o" title="我的卡劵" @click="toCardList" is-link />
+    </van-cell-group>
+
+
+    <van-cell-group v-if="userDetail.status == '1'" class="user-top-group">
+      <van-cell icon="todo-list-o" title="送货订单" @click="todelivergoods" is-link />
+      <van-cell icon="star-o" title="客户开卡" @click="toCardList" is-link />
     </van-cell-group>
   </div>
 </template>
 
-<script>
-import { Row, Col, Icon, Cell, CellGroup, Toast } from "vant";
-import axios from "axios";
-export default {
-  data() {
-    return {
-      userDetail: {
-        headImgUrl: "",
-        nickName: "",
-        mobile: "",
-        address: "",
-        id: 0
-      }
-    };
-  },
-  mounted() {
-    this.getUserBaseInfo();
-  },
-  methods: {
-    toOrderList() {
-      this.$router.push({
-        name: "orderList",
-        params: {
-          id: this.userDetail.id
-        }
-      });
-    },
-    tochangeMobile() {
-      this.$router.push({
-        name: "changeMobile",
-        params: {
-          phone: this.userDetail.mobile,
-          id: this.userDetail.id
-        }
-      });
-    },
-    toshopIntegral() {
-      Toast("功能暂未开放！");
-    },
-    toCardList() {
-      this.$router.push({
-        name: "cardlist",
-        params: {
-          id: this.userDetail.id
-        }
-      });
-    },
-    toSwimming() {
-      this.$router.push({
-        name: "swimming",
-        params: {
-          id: this.userDetail.id
-        }
-      });
-    },
-    getUserBaseInfo() {
-      axios
-        .post(`/baby/u/getUserInfo`)
-        .then(res => {
-          console.log("res: " + res.data.code);
-          if (res.data.code === "0000") {
-            var user = res.data.attachment;
-            console.log("user.nickName: " + user.nickname);
-            this.userDetail.nickName = user.nickname;
-            this.userDetail.headImgUrl = user.headimgurl;
-            this.userDetail.mobile = user.phone;
-            this.userDetail.address = user.addressdetail;
-            this.userDetail.id = user.id;
-          } else {
-            console.log("获取用户信息失败：" + res.data.code);
-          }
-        })
-        .catch(err => {
-          console.log("获取用户信息失败");
-        });
-    }
-  },
-  filters: {
-    cutOutAddress: function(addressValue) {
-      if (addressValue != undefined) {
-        var len = addressValue.length;
-        console.log("len:" + len);
-        if (len > 7) {
-          return addressValue.substring(0, 7) + "...";
-        }
-      }
-    }
-  },
-  components: {
-    [Row.name]: Row,
-    [Col.name]: Col,
-    [Icon.name]: Icon,
-    [Cell.name]: Cell,
-    [Toast.name]: Toast,
-    [CellGroup.name]: CellGroup
-  }
-};
-</script>
+<script src="./userindex.js"></script>
 
-<style scoped  src="./userIndex.css"></style>
-<style lang="less">
-.user {
-  &-poster {
-    width: 100%;
-    height: 53vw;
-    display: block;
-  }
-
-  &-group {
-    margin-bottom: 15px;
-    font-size: 18px;
-  }
-  &-top-group {
-    margin-top: 15px;
-  }
-
-  &-links {
-    padding: 15px 0;
-    font-size: 12px;
-    text-align: center;
-    background-color: #fff;
-
-    .van-icon {
-      display: block;
-      font-size: 24px;
-    }
-  }
-}
-</style>
+ 

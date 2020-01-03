@@ -178,6 +178,9 @@
 <script src="./orderlist.js"></script>
 
 <style lang="less" scoped>
+.van-hairline--top-bottom::after, .van-hairline-unset--top-bottom::after {
+     border-width: 0px 0; 
+}
 .van-panel__footer_reload {
   // padding-bottom: 10px;
   // padding-top: 10px;

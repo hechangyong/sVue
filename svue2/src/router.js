@@ -1,3 +1,4 @@
+/* eslint-disable */
 import Vue from 'vue';
 import Router from 'vue-router';
 
@@ -14,11 +15,11 @@ const routes = [
     meta: {
       title: '会员中心'
     }
-  },{
+  }, {
     name: 'swimming',
     component: () => import('./view/user/swimming'),
     meta: {
-      title: '会员中心'
+      title: '游泳中心'
     }
   },
   {
@@ -33,6 +34,13 @@ const routes = [
     component: () => import('./view/user/orderlist'),
     meta: {
       title: '订单列表'
+    }
+  },
+  {
+    name: 'delivergoods',
+    component: () => import('./view/user/delivergoods'),
+    meta: {
+      title: '送货列表'
     }
   },
   {
