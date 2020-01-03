@@ -72,7 +72,7 @@
                 <span style="color:red;font-size:16px;">{{orderinfo.subOrders | getTotalFee}}</span>
               </div>
               <div slot="footer" class="van-panel__footer_reload">
-                <van-button size="mini" round>取消订单</van-button>
+                <van-button size="mini" round @click="cancelOrder(orderinfo.id)">取消订单</van-button>
                 <van-button
                   size="mini"
                   @click="deleteOrder(orderinfo.id)"

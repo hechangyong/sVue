@@ -1,6 +1,6 @@
 <template>
   <div class="goods">
-    <van-swipe class="goods-swipe" :autoplay="4000">
+    <van-swipe class="goods-swipe_products" :autoplay="4000">
       <van-swipe-item v-for="thumb in goods.thumb" :key="thumb">
         <img class="feature_img_big" :src="thumb" />
       </van-swipe-item>
@@ -34,7 +34,7 @@
     <div v-if="recommendGoodList.length != 0">
       <van-grid>
         <template v-for="recommendGood in recommendGoodList">
-          <van-grid-item :key="recommendGood.id" @click="toGoods(recommendGood.id)">
+          <van-grid-item  :key="recommendGood.id" @click="toGoods(recommendGood.id)">
             <van-cell-group>
               <van-image class="feature_img" :src="recommendGood.img" />
               <van-cell class="vantCell_reload" :value="recommendGood.name" />

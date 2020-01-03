@@ -11,10 +11,16 @@
       @click="toGoods"
     >
       <div slot="num">
-        <span>剩余库存: {{cardNumber}}</span>
+        <span>剩余库存: {{residueInventory}}</span>
       </div>
       <div slot="footer">
-        <van-button round icon="cart-circle-o" @click="addCard" type="info" size="small">购物车</van-button>
+        <van-button
+          round
+          icon="cart-circle-o"
+          @click.native.stop="addCard"
+          type="info"
+          size="small"
+        >购物车</van-button>
       </div>
     </van-card>
 
@@ -55,6 +61,7 @@ export default {
     return {
       cardId: -1,
       cardNumber: 0,
+      residueInventory: 0,
       cardPrice: 0.0,
       cardDesc: "",
       cardTitle: "",
@@ -109,22 +116,23 @@ export default {
     cardItem(val) {
       console.log("vardval: " + val);
       this.cardNumber = val.totalInventory;
-      this.cardPrice = val.productPrice;
+      this.residueInventory = val.residueInventory;
+      this.cardPrice = val.vipPrice;
       this.cardDesc = val.productdes;
       this.cardTitle = val.name;
-      this.cardOriginprice = val.vipPrice;
+      this.cardOriginprice = val.productPrice;
       this.cardOriginpriceImgs = val.imgUrl;
       this.cardId = val.id;
       this.goodsId = val.id;
     }
   },
   methods: {
-    toGoods(){
+    toGoods() {
       var pid = this.$refs.cardInfo.id;
       console.log("to pid:" + pid);
       this.$router.push({
-        name:"goods",
-        params:{
+        name: "goods",
+        params: {
           pid: pid
         }
       });
@@ -231,7 +239,7 @@ export default {
     },
 
     onAddCartClicked(value) {
-      console.log("onAddCartClicked: "+ JSON.stringify(value))
+      console.log("onAddCartClicked: " + JSON.stringify(value));
       var obj = value;
       if (this.sku.none_sku) {
         obj = {};
@@ -286,10 +294,11 @@ export default {
   },
   mounted() {
     this.cardNumber = this.cardItem.totalInventory;
-    this.cardPrice = this.cardItem.productPrice;
+    this.residueInventory = this.cardItem.residueInventory;
+    this.cardPrice = this.cardItem.vipPrice + "/"+  this.cardItem.units;
     this.cardDesc = this.cardItem.productdes;
     this.cardTitle = this.cardItem.name;
-    this.cardOriginprice = this.cardItem.vipPrice;
+    this.cardOriginprice = this.cardItem.productPrice+ "/"+  this.cardItem.units;
     this.cardOriginpriceImgs = this.cardItem.imgUrl;
     this.cardId = this.cardItem.id;
     this.goodsId = this.cardItem.id;

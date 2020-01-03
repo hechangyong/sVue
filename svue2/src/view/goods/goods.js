@@ -45,9 +45,9 @@ export default {
       desc: '',
       show: false,
       goodsId: 1,
-      cardOriginpriceImgs:"",
-      cardOriginprice:0,
-      cardNumber:0,
+      cardOriginpriceImgs: "",
+      cardOriginprice: 0,
+      cardNumber: 0,
       pid: 0,
       sku: {
         tree: [],
@@ -64,7 +64,7 @@ export default {
     var obj = this.$route.params;
     if (obj != undefined) {
       this.pid = obj.pid;
-      this.goodsId =  obj.pid;
+      this.goodsId = obj.pid;
     }
     this.initProduct();
   },
@@ -84,14 +84,15 @@ export default {
             this.goods.price = currentGoods.price;
             this.goods.promotionprice = currentGoods.promotionprice;
             this.goods.des = currentGoods.description;
+            this.goods.units = currentGoods.units;
             this.goods.remain = currentGoods.residuenumber;
             this.goods.id = currentGoods.id;
-            this.goods.thumb = currentImgs;
-            this.goods.picture= currentImgs[0];
+            this.goods.thumb = originalImgList;
+            this.goods.picture = currentImgs[0];
             this.cardOriginpriceImgs = currentImgs[0];
             this.cardOriginprice = currentGoods.promotionprice;
             this.cardNumber = currentGoods.residuenumber;
-            this.goodsId =  currentGoods.id;
+            this.goodsId = currentGoods.id;
             for (var i = 0; i < originalImgList.length; i++) {
               this.desc = this.desc + '<img style="width: 100%;" alt="" src=' + originalImgList[i] + '>'
             }
@@ -102,8 +103,8 @@ export default {
           Toast("添加购物车失败！请联系管理员！");
         });
     },
-    formatPrice(value) {
-      return "¥" + value;
+    formatPrice(value, units) {
+      return "¥" + value + "/" + units;
       // return "¥" + (value/100).toFixed(2);
     },
 
@@ -158,7 +159,7 @@ export default {
         });
     },
     onAddCartClicked(value) {
-      console.log("onAddCartClicked: "+ JSON.stringify(value))
+      console.log("onAddCartClicked: " + JSON.stringify(value))
       var obj = value;
       if (this.sku.none_sku) {
         obj = {};

@@ -8,15 +8,15 @@
 
     <van-cell-group>
       <van-cell>
-        <div class="goods-title">{{ goods.title }}</div>
+        <div class="goods-title_new">{{ goods.title }}</div>
         <div class="goods-des">{{ goods.des }}</div>
         <!-- <div class="goods-price">{{ formatPrice(goods.price) }}</div> -->
         <van-cell
           class="vantCell_reload"
           title-class="cell_left_title_red"
-          :title="formatPrice(goods.promotionprice)"
-          :value="formatPrice(goods.price)"
-          value-class="rightCellClass"
+          :title="formatPrice(goods.promotionprice,goods.units)"
+          :value="formatPrice(goods.price,goods.units)"
+          value-class="rightCellClass_big"
         ></van-cell>
       </van-cell>
       <van-cell class="goods-express">
@@ -71,7 +71,7 @@
   line-height: 24px;
   background-color: #fff;
 }
-.rightCellClass {
+.rightCellClass_big {
   margin-right: 5rem;
   text-decoration: line-through;
   font-size: 10px;
@@ -110,8 +110,11 @@
     color: #999;
   }
 
-  &-title {
+  &-title_new {
     font-size: 16px;
+     color: #0a27e6;
+    // line-height: 14px;
+    font-weight: bold;
   }
 
   &-price {

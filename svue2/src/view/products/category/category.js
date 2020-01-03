@@ -68,6 +68,7 @@ export default {
                             obj.vipPrice = tableDataTemp[i].promotionprice;
                             obj.totalInventory = tableDataTemp[i].totalnumber;
                             obj.residueInventory = tableDataTemp[i].residuenumber;
+                            obj.units = tableDataTemp[i].units;
                             obj.skuType = skuType;
                             obj.productStatus = tableDataTemp[i].status;
                             obj.createTime = tableDataTemp[i].itime;

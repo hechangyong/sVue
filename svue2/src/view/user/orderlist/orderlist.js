@@ -22,7 +22,7 @@ export default {
     this.getOrderList();
   },
   methods: {
-   
+
     fillOrdersList() {
       this.payDoneOrderList = [];
       this.closeOrderList = [];
@@ -61,26 +61,26 @@ export default {
     },
     cancelOrder(oid) {
       console.log("取消订单：" + oid);
-      var tempOid = {};
-      for (var i = 0; i < this.allOrderList.length; i++) {
-        if (this.allOrderList[i].id == oid) {
-          tempOid =  this.allOrderList[i];
-        }
-      }
-      this.allOrderList.splice(tempOid, 1);
+      // var tempOid = {};
+      // for (var i = 0; i < this.allOrderList.length; i++) {
+      //   if (this.allOrderList[i].id == oid) {
+      //     tempOid =  this.allOrderList[i];
+      //   }
+      // }
+      // this.allOrderList.splice(tempOid, 1);
       
       this.$axios
         .post(`/baby/o/cancelOrder/`+oid)
         .then(res => {
           if (res.data.code === "0000") {
-
-
+            Toast("取消订单成功！");
+            this.getOrderList();
           }
         })
         .catch(err => {
           console.log("获取用户购物车列表失败！");
         });
-        this.getOrderList();
+       
     },
     getOrderList() {
       this.allOrderList = [];

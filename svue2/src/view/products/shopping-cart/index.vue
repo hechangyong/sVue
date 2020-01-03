@@ -59,7 +59,9 @@
                   :thumb="item.thumb"
                 >
                   <div slot="tags">
-                     <van-tag round  >1 段</van-tag>
+                    <template v-for="skuvalue in item.skuInfos">
+                     <van-tag mark  type="primary" style=" margin-right: 5px;" :key="skuvalue">{{skuvalue}}</van-tag>
+                     </template>
                   </div>
                   <div slot="num">
                     <van-stepper v-model="item.num" @click.native.stop min="1" />
