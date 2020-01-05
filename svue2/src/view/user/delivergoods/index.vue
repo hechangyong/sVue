@@ -28,7 +28,7 @@
               <van-collapse v-model="activeNames">
                 <van-collapse-item
                   title="送货地址"
-                  :name="orderinfo.addressInfo.id"
+                  :name="orderinfo.id"
                   :value="orderinfo.addressInfo.name"
                   icon="location-o"
                 >{{orderinfo.addressInfo | assembleAddressInfo }}</van-collapse-item>
@@ -39,7 +39,7 @@
                   @click="deleteOrder(orderinfo.id)"
                   style="margin-left: 10px;"
                   round
-                  type="info"
+                  type="default"
                 >确认收款</van-button>
               </div>
             </van-panel>
@@ -78,7 +78,7 @@
               <van-collapse v-model="activeNames">
                 <van-collapse-item
                   title="送货地址"
-                  :name="orderinfo.addressInfo.id | getAddressName"
+                  :name="orderinfo.id"
                   :value="orderinfo.addressInfo.name"
                   icon="location-o"
                 >{{orderinfo.addressInfo | assembleAddressInfo }}</van-collapse-item>
@@ -90,7 +90,7 @@
                   style="margin-left: 10px;"
                   round
                   disabled
-                  type="info"
+                  type="default"
                 >确认收款</van-button>
               </div>
             </van-panel>

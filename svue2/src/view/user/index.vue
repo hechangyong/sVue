@@ -50,6 +50,10 @@
       <van-cell icon="todo-list-o" title="送货订单" @click="todelivergoods" is-link />
       <van-cell icon="star-o" title="客户开卡" @click="toCardList" is-link />
     </van-cell-group>
+
+    <van-cell-group class="user-top-group">
+      <van-cell icon="coupon-o" title="关于店铺" @click="toStoreInfo" is-link />
+    </van-cell-group>
   </div>
 </template>
 

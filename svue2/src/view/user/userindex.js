@@ -35,6 +35,11 @@ export default {
         }
       });
     },
+    toStoreInfo() {
+      this.$router.push({
+        name: "storeInfo"
+      });
+    },
     toshopIntegral() {
       Toast("功能暂未开放！");
     },

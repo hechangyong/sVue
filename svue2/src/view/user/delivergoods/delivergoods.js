@@ -103,7 +103,10 @@ export default {
       return addressInfo.mobile + ", " + addressInfo.province + addressInfo.city + addressInfo.county + addressInfo.addressdetail
     },
     getAddressName(value){
-      return value + "_"+ Math.random()
+      var ss = value + "_"+ Math.random();
+      console.log(ss);
+      
+      return ss;
     }
 
   },
