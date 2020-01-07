@@ -85,6 +85,13 @@ const routes = [
     }
   },
   {
+    name: 'storeInfo',
+    component: () => import('./view/user/storeInfo'),
+    meta: {
+      title: '关于店铺'
+    }
+  },
+  {
     name: 'successPay',
     component: () => import('./view/products/successPay/successPay.vue'),
     meta: {

@@ -51,6 +51,10 @@
       <van-cell icon="star-o" title="客户开卡" @click="toCardList" is-link />
     </van-cell-group>
 
+    <van-cell-group class="user-top-group">
+      <van-cell icon="coupon-o" title="关于店铺" @click="toStoreInfo" is-link />
+    </van-cell-group>
+    
     <van-tabbar :safe-area-inset-bottom="safeareabottom" v-model="active">
       <van-tabbar-item  name="products" to="/products" icon="home-o">商品首页</van-tabbar-item>
       <van-tabbar-item name="cart" to="/cart" icon="shopping-cart-o">购物车</van-tabbar-item>
