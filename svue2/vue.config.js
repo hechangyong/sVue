@@ -50,6 +50,10 @@ module.exports = {
       '/baby/p/': {
         target: 'http://192.168.1.147:8011',
         changeOrigin: true
+      },
+      '/wechat/pay/zmbaby/pre/': {
+        target: 'http://192.168.1.147:8001',
+        changeOrigin: true
       }
     }
   }

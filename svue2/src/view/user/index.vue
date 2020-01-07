@@ -50,6 +50,12 @@
       <van-cell icon="todo-list-o" title="送货订单" @click="todelivergoods" is-link />
       <van-cell icon="star-o" title="客户开卡" @click="toCardList" is-link />
     </van-cell-group>
+
+    <van-tabbar :safe-area-inset-bottom="safeareabottom" v-model="active">
+      <van-tabbar-item  name="products" to="/products" icon="home-o">商品首页</van-tabbar-item>
+      <van-tabbar-item name="cart" to="/cart" icon="shopping-cart-o">购物车</van-tabbar-item>
+      <van-tabbar-item   name="user" icon="user-o" to="/user">我的</van-tabbar-item>
+    </van-tabbar>
   </div>
 </template>
 

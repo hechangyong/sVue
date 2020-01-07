@@ -60,8 +60,13 @@
                 >
                   <div slot="tags">
                     <template v-for="skuvalue in item.skuInfos">
-                     <van-tag mark  type="primary" style=" margin-right: 5px;" :key="skuvalue">{{skuvalue}}</van-tag>
-                     </template>
+                      <van-tag
+                        mark
+                        type="primary"
+                        style=" margin-right: 5px;"
+                        :key="skuvalue"
+                      >{{skuvalue}}</van-tag>
+                    </template>
                   </div>
                   <div slot="num">
                     <van-stepper v-model="item.num" @click.native.stop min="1" />
@@ -90,9 +95,11 @@
         :tip="tipdes"
         tip-icon="info-o"
         @submit="onSubmit"
-      >
-        <!-- <van-checkbox v-model="checked" @click="checkAll">全选</van-checkbox> -->
-      </van-submit-bar>
+      ></van-submit-bar> 
+      <van-dialog v-model="popupShow" title="选择支付方式" :show-confirm-button="showConfirmButton" show-cancel-button>
+        <van-button type="info" @click="notPaySubmit" block>货到付款</van-button>
+        <van-button type="primary"  @click="wxpayOrders" block>立即付款</van-button>
+      </van-dialog>
     </div>
     <is-empty v-if="goods.length == 0" altdes>
       <span>空空如也,啥也没有~~~~~！快去选购吧！</span>
@@ -105,6 +112,11 @@
  
 
 <style lang="less">
+.van-button--block {
+  display: block;
+  width: 90%;
+  margin: 20px;
+}
 .batton_v {
   border-radius: 0;
   position: relative;

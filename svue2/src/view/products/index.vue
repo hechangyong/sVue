@@ -34,7 +34,7 @@
     <div v-if="recommendGoodList.length != 0">
       <van-grid>
         <template v-for="recommendGood in recommendGoodList">
-          <van-grid-item  :key="recommendGood.id" @click="toGoods(recommendGood.id)">
+          <van-grid-item style="margin: 3px;" :key="recommendGood.id" @click="toGoods(recommendGood.id)">
             <van-cell-group>
               <van-image class="feature_img" :src="recommendGood.img" />
               <van-cell class="vantCell_reload" :value="recommendGood.name" />
@@ -59,9 +59,9 @@
     </div>
 
     <van-tabbar :safe-area-inset-bottom="safeareabottom" v-model="active">
-      <van-tabbar-item icon="home-o">商品首页</van-tabbar-item>
-      <van-tabbar-item to="/cart" icon="shopping-cart-o">购物车</van-tabbar-item>
-      <van-tabbar-item icon="user-o" to="/user">我的</van-tabbar-item>
+      <van-tabbar-item  name="products" to="/products" icon="home-o">商品首页</van-tabbar-item>
+      <van-tabbar-item name="cart" to="/cart" icon="shopping-cart-o">购物车</van-tabbar-item>
+      <van-tabbar-item   name="user" icon="user-o" to="/user">我的</van-tabbar-item>
     </van-tabbar>
   </div>
 </template>

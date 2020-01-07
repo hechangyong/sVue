@@ -8,7 +8,7 @@ export default {
             safeareabottom: true,
             hasRecommendGoods: true,
             border: false,
-            active: 0,
+            active: 'products',
             goods: {
                 title: "金摇篮产品导航",
                 title2: "金摇篮特色产品区",

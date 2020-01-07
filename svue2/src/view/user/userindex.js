@@ -1,16 +1,19 @@
 import "./userIndex.less";
-import { Row, Col, Icon, Cell, CellGroup, Toast } from "vant";
+import { Row, Col, Icon, Cell, CellGroup } from "vant";
+import { Tabbar, TabbarItem, Toast } from "vant";
 import axios from "axios";
 export default {
   data() {
     return {
+      active: "user",
+      safeareabottom: true,
       userDetail: {
-        nickName : "",
-        headImgUrl : "",
-        mobile : "",
-        address :"",
-        id : 0,
-        status :""
+        nickName: "",
+        headImgUrl: "",
+        mobile: "",
+        address: "",
+        id: 0,
+        status: ""
       }
     };
   },
@@ -69,7 +72,7 @@ export default {
           console.log("res: " + res.data.code);
           if (res.data.code === "0000") {
             var user = res.data.attachment;
-            console.log("user.nickName: "+ JSON.stringify(user));
+            console.log("user.nickName: " + JSON.stringify(user));
             this.userDetail.nickName = user.nickname;
             this.userDetail.headImgUrl = user.headimgurl;
             this.userDetail.mobile = user.phone;
@@ -86,7 +89,7 @@ export default {
     }
   },
   filters: {
-    cutOutAddress: function(addressValue) {
+    cutOutAddress: function (addressValue) {
       if (addressValue != undefined) {
         var len = addressValue.length;
         console.log("len:" + len);
@@ -102,6 +105,8 @@ export default {
     [Icon.name]: Icon,
     [Cell.name]: Cell,
     [Toast.name]: Toast,
+    [Tabbar.name]: Tabbar,
+    [TabbarItem.name]: TabbarItem,
     [CellGroup.name]: CellGroup
   }
 };

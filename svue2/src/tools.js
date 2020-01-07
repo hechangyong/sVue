@@ -41,6 +41,107 @@ export default {
     */
     formatPrice: (price) => {
         return (price / 100).toFixed(2);
+    },
+    /**
+     * 解析获取url参数
+     */
+    parseUrl: (queryKey) => {
+        var search = location.search;
+
+        if (search.length > 0 && search.indexOf('?') > -1) {
+            search = search.substring(1);
+            var cArr = search.split('&');
+
+            for (var i = 0, len = cArr.length; i < len; i++) {
+                var item = cArr[i],
+                    key = cArr[i].split('=')[0],
+                    val = cArr[i].split('=')[1];
+
+                if (key === queryKey) {
+                    return val;
+                }
+            }
+        }
+
+        return null;
+    },
+
+    /**
+     *  删除url上的某个参数
+     */
+    deleteUrlQuery: (queryKey) => {
+        var search = location.search;
+        var resSearch = '';
+        var queryArr = [].concat(queryKey);
+
+        if (search.length > 0 && search.indexOf('?') > -1) {
+            search = search.substring(1);
+            var cArr = search.split('&');
+
+            for (var i = 0, len = cArr.length; i < len; i++) {
+                var item = cArr[i],
+                    key = cArr[i].split('=')[0],
+                    val = cArr[i].split('=')[1];
+
+                if (queryArr.indexOf(key) === -1) {
+                    if (resSearch.length == 0) {
+                        resSearch += '?' + key + '=' + val;
+                    } else {
+                        resSearch += '&' + key + '=' + val;
+                    }
+                }
+            }
+        }
+
+        return location.origin + location.pathname + resSearch;
+    },
+    /**
+     * 获取url中的source，返回对应的shareSource
+     */
+    getShareSource: () => {
+        var source = parseUrl('source');
+
+        if (source && /^share(\d)+$/.test(source)) {
+            source = 'share' + (Number(source.slice(5)) + 1);
+        } else {
+            source = 'share0';
+        }
+
+        return source;
+    },
+
+    /**
+     * 是否是IOS
+     */
+    isIOS: () => {
+        var u = navigator.userAgent;
+        var isiOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); //ios终端
+
+        return isiOS;
+    },
+
+    /**
+     * // 是否是Android
+     */
+    isAndroid: () => {
+        var u = navigator.userAgent;
+        var isAndroid = u.indexOf('Android') > -1 || u.indexOf('Adr') > -1; //android终端
+
+        return isAndroid;
+    },
+    /**
+     * // 是否是微信环境
+     */
+
+    isWechat: () => {
+        //window.navigator.userAgent属性包含了浏览器类型、版本、操作系统类型、浏览器引擎类型等信息，这个属性可以用来判断浏览器类型
+        var ua = window.navigator.userAgent.toLowerCase();
+        //通过正则表达式匹配ua中是否含有MicroMessenger字符串
+        if (ua.match(/MicroMessenger/i) == 'micromessenger') {
+            return true;
+        } else {
+            return false;
+        }
     }
 
 }

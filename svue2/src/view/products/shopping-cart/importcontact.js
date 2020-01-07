@@ -1,51 +1,12 @@
 
 /* eslint-disable */
-import { Tag } from 'vant';
-import {
-    Checkbox,
-    CheckboxGroup,
-    Card,
-    SubmitBar,
-    Toast,
-    Tabbar,
-    TabbarItem,
-    ContactCard,
-    ContactList,
-    ContactEdit,
-    Popup,
-    AddressList,
-    Cell,
-    CellGroup,
-    Divider,
-    Icon,
-    Stepper,
-    SwipeCell,
-    Panel
-} from "vant";
+import { Tag, CellGroup, Divider, Icon, Stepper, Panel } from 'vant';
+import { Dialog, Card, SubmitBar, Toast, SwipeCell, Tabbar } from 'vant';
+import { Checkbox, Popup, Cell, AddressList, CheckboxGroup } from "vant";
+import { TabbarItem, ContactCard, ContactList, ContactEdit } from "vant";
 import IsEmpty from "@/view/is-empty/";
+let tools_
 export default {
-    components: {
-        [Tag.name]: Tag,
-        [Card.name]: Card,
-        [Checkbox.name]: Checkbox,
-        [SubmitBar.name]: SubmitBar,
-        [CheckboxGroup.name]: CheckboxGroup,
-        [Tabbar.name]: Tabbar,
-        [TabbarItem.name]: TabbarItem,
-        [ContactCard.name]: ContactCard,
-        [ContactList.name]: ContactList,
-        [Popup.name]: Popup,
-        [ContactEdit.name]: ContactEdit,
-        [AddressList.name]: AddressList,
-        [Cell.name]: Cell,
-        [Divider.name]: Divider,
-        [Stepper.name]: Stepper,
-        [SwipeCell.name]: SwipeCell,
-        [CellGroup.name]: CellGroup,
-        [Icon.name]: Icon,
-        [Panel.name]: Panel,
-        IsEmpty
-    },
     data() {
         return {
             // tipdes:"你的收货地址不支持同城送, 我们已为你推荐快递",
@@ -62,23 +23,17 @@ export default {
             chosenAddressId: 0,
             addressList: [],
             safeareabottom: true,
+            showConfirmButton: false,
+            popupShow: false,
             active: 0,
             checked: 1,
             checkedGoods: [],
-            goods: [
-                // {
-                //     id: "1",
-                //     title: "进口香蕉",
-                //     desc: "约250g，2根",
-                //     price: 200,
-                //     num: 1,
-                //     thumb:
-                //         "https://img.yzcdn.cn/public_files/2017/10/24/2f9a36046449dafb8608e99990b3c205.jpeg"
-                // } 
-            ]
+            goods: []
+
         };
     },
     mounted() {
+        tools_ = this.$tools;
         this.getGoods();
         this.initAddress();
     },
@@ -106,10 +61,6 @@ export default {
     methods: {
         toggle(goodsId) {
 
-            console.log("goodsId:" + goodsId);
-            console.log("checkedGoods:" + JSON.stringify(this.checkedGoods));
-            console.log("checkedGoods:" + JSON.stringify(this.goods));
-
         },
         deleteCart(item) {
             console.log(" deleteCart item:" + item.id);
@@ -132,16 +83,21 @@ export default {
         formatPrice(price) {
             return (price / 100).toFixed(2);
         },
-
-        onSubmit() {
-            if (JSON.stringify(this.currentAddress) == '{}') {
-                Toast("请选择收货地址！");
-                return;
-            }
+        /**
+         * 选择货到付款
+         */
+        notPaySubmit() {
+            this.submitOrder(false);
+        },
+        /**
+         * 选择微信付款方式下单
+         */
+        wxpayOrders() {
+            this.submitOrder(true);
+        },
+        submitOrder(iswxPayFlag) {
             var finallObj = {};
             var finallGoods = [];
-            console.log("checkedGoods:" + JSON.stringify(this.checkedGoods));
-            console.log("checkedGoods:" + JSON.stringify(this.goods));
             for (var i = 0; i < this.checkedGoods.length; i++) {
                 for (var j = 0; j < this.goods.length; j++) {
                     if (this.goods[j].id == this.checkedGoods[i]) {
@@ -152,7 +108,14 @@ export default {
             finallObj.goods = finallGoods;
             finallObj.userAddressVo = this.currentAddress;
             console.log("finallObj:" + JSON.stringify(finallObj));
-            this.placeOrder(finallObj);
+            this.placeOrder(finallObj, iswxPayFlag);
+        },
+        onSubmit() {
+            if (JSON.stringify(this.currentAddress) == '{}') {
+                Toast("请选择收货地址！");
+                return;
+            }
+            this.popupShow = true;
 
         },
         getGoods() {
@@ -170,7 +133,7 @@ export default {
                     console.log("获取用户购物车列表失败！");
                 });
         },
-        placeOrder(obj) {
+        placeOrder(obj, iswxPayFlag) {
             Toast.loading({
                 duration: 0, // 持续展示 toast
                 forbidClick: true,
@@ -178,18 +141,24 @@ export default {
             this.$axios
                 .post(`/baby/o/placeOrder`, obj)
                 .then(res => {
-                    console.log("res.data.code: " + res.data.code);
+                    console.log("res.data.code: " + res.data.attachment);
                     if (res.data.code === "0000") {
                         Toast.clear();
-                        this.$router.push({
-                            name: "successPay",
-                            params: {
-                                name: obj.userAddressVo.userName,
-                                tel: obj.userAddressVo.tel,
-                                addressDetail: obj.userAddressVo.addressDetail,
-                                payedInfoPrice: this.totalPrice
-                            }
-                        });
+                        if (iswxPayFlag) {
+                            var orderId = res.data.attachment;
+                            this.payMoney(orderId);
+                        } else {
+                            this.$router.push({
+                                name: "successPay",
+                                params: {
+                                    name: obj.userAddressVo.userName,
+                                    tel: obj.userAddressVo.tel,
+                                    addressDetail: obj.userAddressVo.addressDetail,
+                                    payedInfoPrice: this.totalPrice
+                                }
+                            });
+                        }
+
                     } else {
                         Toast.clear();
                         Toast(res.data.message);
@@ -198,6 +167,76 @@ export default {
                 .catch(err => {
                     Toast("下单失败，请联系管理员！");
                 });
+        },
+        // 预支付
+        payMoney(code) {
+            let vm = this
+            try {
+                return new Promise((resolve, reject) => {
+                    let openId = tools_.parseUrl('oid');
+                    this.$axios.get('/wechat/pay/zmbaby/pre/' + code + '?openId=' + openId).then(res => {
+                        console.log('pre:', res);
+                        if (res.status === 200) {
+                            if (res.data.status === 200) {
+                                this.requestWechatPay(res.data.entity);
+                            }
+                            else {
+                                this.set_hint_txt('调取支付失败,请重新支付', 3000);
+                                this.showPrice();
+                            }
+                        }
+                        else {
+                            this.set_hint_txt('调取支付失败,请重新支付', 3000);
+                            this.showPrice();
+                        }
+                    });
+                });
+            }
+            catch (err) {
+                reject(err);
+                this.set_hint_txt('调取支付失败,请重新支付', 3000);
+                this.showPrice();
+            }
+        },
+        // 支付
+        requestWechatPay(opt) {
+            let vm = this
+            return new Promise((resolve, reject) => {
+                if (WeixinJSBridge) {
+                    WeixinJSBridge.invoke(
+                        'getBrandWCPayRequest', {
+                        "appId": opt.appid, //公众号名称，由商户传入     
+                        "timeStamp": opt.timeStamp, //时间戳，自1970年以来的秒数     
+                        "nonceStr": opt.nonce_str, //随机串     
+                        "package": opt.packageStr,
+                        "signType": "MD5", //微信签名方式：     
+                        "paySign": opt.sign //微信签名 
+                    },
+                        (res) => {
+                            console.log('invoke:', res)
+                            if (res.err_msg == "get_brand_wcpay_request:ok") {
+                                // 使用以上方式判断前端返回,微信团队郑重提示：
+                                //res.err_msg将在用户支付成功后返回ok，但并不保证它绝对可靠。
+                                resolve();
+                                this.$router.push('/paysuccess')
+                            } else {
+                                reject('payfail')
+                                this.set_hint_txt('调取支付失败,请重新支付', 3000)
+                                this.showPrice()
+                            }
+                        });
+                } else {
+                    reject('请在微信端支付');
+                    this.set_hint_txt('调取支付失败,请重新支付', 3000)
+                    this.showPrice()
+                }
+            })
+        },
+        set_hint_txt(val, time) {
+            this.hint = val
+            setTimeout(() => {
+                this.hint = ''
+            }, Number(time))
         },
         initAddress() {
             this.$axios
@@ -292,6 +331,29 @@ export default {
                 this.chosenContactId = null;
             }
         }
+
+    }, components: {
+        [Tag.name]: Tag,
+        [Card.name]: Card,
+        [Checkbox.name]: Checkbox,
+        [SubmitBar.name]: SubmitBar,
+        [CheckboxGroup.name]: CheckboxGroup,
+        [Tabbar.name]: Tabbar,
+        [TabbarItem.name]: TabbarItem,
+        [ContactCard.name]: ContactCard,
+        [ContactList.name]: ContactList,
+        [Popup.name]: Popup,
+        [ContactEdit.name]: ContactEdit,
+        [AddressList.name]: AddressList,
+        [Cell.name]: Cell,
+        [Divider.name]: Divider,
+        [Stepper.name]: Stepper,
+        [SwipeCell.name]: SwipeCell,
+        [CellGroup.name]: CellGroup,
+        [Icon.name]: Icon,
+        [Dialog.Component.name]: Dialog.Component,
+        [Panel.name]: Panel,
+        IsEmpty
     }
 }
 
