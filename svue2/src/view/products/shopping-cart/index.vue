@@ -95,11 +95,19 @@
         :tip="tipdes"
         tip-icon="info-o"
         @submit="onSubmit"
-      ></van-submit-bar> 
-      <van-dialog v-model="popupShow" title="选择支付方式" :show-confirm-button="showConfirmButton" show-cancel-button>
+      ></van-submit-bar>
+      <van-dialog
+        v-model="popupShow"
+        title="选择支付方式"
+        :show-confirm-button="showConfirmButton"
+        show-cancel-button
+      >
         <van-button type="info" @click="notPaySubmit" block>货到付款</van-button>
-        <van-button type="primary"  @click="wxpayOrders" block>立即付款</van-button>
+        <van-button type="primary" @click="wxpayOrders" block>立即付款</van-button>
       </van-dialog>
+    </div>
+    <div class="shadow" v-if="hint">
+      <div class="hint" v-text="hint"></div>
     </div>
     <is-empty v-if="goods.length == 0" altdes>
       <span>空空如也,啥也没有~~~~~！快去选购吧！</span>
@@ -112,6 +120,28 @@
  
 
 <style lang="less">
+/* 信息提示 */
+.shadow {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 99;
+}
+
+.hint {
+  width: 2.1rem;
+  min-height: 0.32rem;
+  line-height: 0.32rem;
+  background-color: rgba(0, 0, 0, 0.5);
+  color: #fff;
+  font-size: 0.16rem;
+  text-align: center;
+  border-radius: 0.04rem;
+  margin: 0 auto;
+  margin-top: 50%;
+}
 .van-button--block {
   display: block;
   width: 90%;

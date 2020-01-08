@@ -1,7 +1,7 @@
 <template>
   <div>
     <van-notice-bar color="#280" background="#ECFFDC">
-      您已成功下单
+      {{message}}
       <template slot="left-icon">
         <van-icon name="passed" class="iconclass"></van-icon>
       </template>
@@ -20,15 +20,16 @@
       </ul>
     </div>
     <div class="toViewOrders">
-      您可以<router-link to="orderList">查看已经购买</router-link> 
+      您可以
+      <router-link to="orderList">查看已经购买</router-link>
     </div>
 
     <van-divider
       dashed
       :style="{   color: '#1989fa', borderColor: '#969799', padding: '0 16px' ,margin: '0px 0'}"
     ></van-divider>
- 
-    <van-panel icon="warning-o" title="注意" desc="请保持手机通讯正常！"></van-panel>
+
+    <van-panel icon="warning-o" title="注意" :desc="desc"></van-panel>
   </div>
 </template>
 
@@ -40,7 +41,12 @@ export default {
       addressDetail: "",
       tel: "",
       payedInfoPrice: 0,
-      name: ""
+      name: "",
+      iswxPayFlag: false,
+      desc: "",
+      message: "您已成功下单",
+      payStatus: false,
+      oid: ""
     };
   },
   mounted() {
@@ -50,11 +56,52 @@ export default {
     init() {
       var obj = this.$route.params;
       if (obj != undefined) {
-        this.name = obj.name;
-        this.tel = obj.tel;
-        this.addressDetail = obj.addressDetail;
-        this.payedInfoPrice = obj.payedInfoPrice;
+        // this.name = obj.name;
+        // this.tel = obj.tel;
+        // this.addressDetail = obj.addressDetail;
+        // this.payedInfoPrice = obj.payedInfoPrice;
+        this.iswxPayFlag = obj.iswxPayFlag;
+        this.payStatus = obj.payStatus;
+        this.iswxPayFlag = obj.iswxPayFlag;
+        this.getOrderdetailInfo(obj.oid);
       }
+      if (!this.payStatus && this.iswxPayFlag) {
+        this.message = "您已下单成功。但是支付失败";
+      }
+      if (!this.iswxPayFlag) {
+        this.desc =
+          "您选择了货到付款！收到货物请检查货物哦！还请保持手机通讯正常，方便工作人员与您联系！感谢您的支持！！";
+      } else {
+        this.desc =
+          "您选择了微信支付，支付完成后，预计0-3个工作日送达！收到货物请检查货物哦！还请保持手机通讯正常，方便工作人员与您联系！ 感谢您的支持！！";
+      }
+    },
+    getOrderdetailInfo(oid) {
+      this.$axios
+        .post(`/baby/o/getUserOrders/` + oid)
+        .then(res => {
+          console.log("res.data.code: " + res.data.attachment);
+          if (res.data.code === "0000") {
+            var orderinfo = res.data.attachment;
+            this.name = orderinfo.babyUserAddress.name;
+            this.tel = orderinfo.babyUserAddress.mobile;
+            this.addressDetail = orderinfo.babyUserAddress.addressdetail;
+
+            this.payedInfoPrice = this.getOrderPrice(orderinfo.subOrderInfoList);
+          }
+        })
+        .catch(err => {
+          Toast("获取订单信息失败，请联系管理员！");
+        });
+    },
+    getOrderPrice(subOrderInfoList) {
+       console.log("subOrderInfoList[i].price:"+ JSON.stringify(subOrderInfoList));
+      var price = 0;
+      for (var i = 0; i < subOrderInfoList.length; i++) {
+        console.log("subOrderInfoList[i].price:"+ subOrderInfoList[i].price);
+        price = price + subOrderInfoList[i].price;
+      }
+      return price;
     }
   },
 

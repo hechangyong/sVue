@@ -28,7 +28,9 @@ export default {
             active: 0,
             checked: 1,
             checkedGoods: [],
-            goods: []
+            goods: [],
+            hint: '',
+            submitOrderInfo: {}
 
         };
     },
@@ -97,6 +99,7 @@ export default {
         },
         submitOrder(iswxPayFlag) {
             var finallObj = {};
+            this.submitOrderInfo = {};
             var finallGoods = [];
             for (var i = 0; i < this.checkedGoods.length; i++) {
                 for (var j = 0; j < this.goods.length; j++) {
@@ -108,6 +111,7 @@ export default {
             finallObj.goods = finallGoods;
             finallObj.userAddressVo = this.currentAddress;
             console.log("finallObj:" + JSON.stringify(finallObj));
+            this.submitOrderInfo = finallObj;
             this.placeOrder(finallObj, iswxPayFlag);
         },
         onSubmit() {
@@ -148,15 +152,17 @@ export default {
                             var orderId = res.data.attachment;
                             this.payMoney(orderId);
                         } else {
-                            this.$router.push({
-                                name: "successPay",
-                                params: {
-                                    name: obj.userAddressVo.userName,
-                                    tel: obj.userAddressVo.tel,
-                                    addressDetail: obj.userAddressVo.addressDetail,
-                                    payedInfoPrice: this.totalPrice
-                                }
-                            });
+                            this.toPayResultPage(false, res.data.attachment);
+                            // this.$router.push({
+                            //     name: "successPay",
+                            //     params: {
+                            //         name: obj.userAddressVo.userName,
+                            //         tel: obj.userAddressVo.tel,
+                            //         addressDetail: obj.userAddressVo.addressDetail,
+                            //         payedInfoPrice: this.totalPrice,
+                            //         iswxPayFlag: false
+                            //     }
+                            // });
                         }
 
                     } else {
@@ -178,28 +184,38 @@ export default {
                         console.log('pre:', res);
                         if (res.status === 200) {
                             if (res.data.status === 200) {
-                                this.requestWechatPay(res.data.entity);
+                                this.requestWechatPay(res.data.entity, code);
                             }
                             else {
-                                this.set_hint_txt('调取支付失败,请重新支付', 3000);
-                                this.showPrice();
+                                this.set_hint_txt('调取支付失败,请重新支付', 3);
+                                // this.showPrice();
+                                console.log("预支付成功，支付失败！");
+                                this.toPayResultPage(true, code,false);
                             }
                         }
                         else {
-                            this.set_hint_txt('调取支付失败,请重新支付', 3000);
-                            this.showPrice();
+                            this.set_hint_txt('调取支付失败,请重新支付', 3);
+                            // this.showPrice();
+                            console.log("预支付失败，支付失败！");
+                            this.toPayResultPage(true, code,false);
+
                         }
                     });
+                }).catch(err => {
+                    console.log("-------------------------");
+                    this.toPayResultPage(true, code,false);
                 });
             }
             catch (err) {
                 reject(err);
-                this.set_hint_txt('调取支付失败,请重新支付', 3000);
-                this.showPrice();
+                this.set_hint_txt('调取支付失败,请重新支付', 3);
+                // this.showPrice();
+                this.toPayResultPage(true, orderId, false );
+
             }
         },
         // 支付
-        requestWechatPay(opt) {
+        requestWechatPay(opt, orderId) {
             let vm = this
             return new Promise((resolve, reject) => {
                 if (WeixinJSBridge) {
@@ -218,25 +234,60 @@ export default {
                                 // 使用以上方式判断前端返回,微信团队郑重提示：
                                 //res.err_msg将在用户支付成功后返回ok，但并不保证它绝对可靠。
                                 resolve();
-                                this.$router.push('/paysuccess')
+                                // this.$router.push('/paysuccess')
+                                this.toPayResultPage(true, orderId,true,'');
                             } else {
                                 reject('payfail')
-                                this.set_hint_txt('调取支付失败,请重新支付', 3000)
-                                this.showPrice()
+                                this.set_hint_txt('调取支付失败,请重新支付', 3)
+                                // this.showPrice()
+                                this.toPayResultPage(true, orderId, false);
                             }
                         });
                 } else {
                     reject('请在微信端支付');
-                    this.set_hint_txt('调取支付失败,请重新支付', 3000)
-                    this.showPrice()
+                    this.set_hint_txt('调取支付失败,请重新支付', 3)
+                    this.toPayResultPage(true, orderId,false);
+                    // this.showPrice()
                 }
             })
         },
+        /**
+         * 跳转下单成功页面
+         * @param {是否走了微信支付} iswxPayFlag 
+         * @param {订单id} oid 
+         * @param {微信支付状态} payStatus 
+         * @param {失败信息} err_msg 
+         */
+        toPayResultPage(iswxPayFlag, oid, payStatus) {
+            this.popupShow = false;
+            this.$router.push({
+                name: "successPay",
+                params: {
+                    oid: oid,
+                    payStatus: payStatus,
+                    iswxPayFlag: iswxPayFlag
+                }
+            });
+        },
         set_hint_txt(val, time) {
-            this.hint = val
-            setTimeout(() => {
-                this.hint = ''
-            }, Number(time))
+            this.popupShow = false;
+            const toast = Toast.loading({
+                duration: 0, // 持续展示 toast
+                forbidClick: true,
+                message: val
+            });
+
+            let second = time;
+            const timer = setInterval(() => {
+                second--;
+                if (second) {
+                    toast.message = val;
+                } else {
+                    clearInterval(timer);
+                    // 手动清除 Toast
+                    Toast.clear();
+                }
+            }, 1000);
         },
         initAddress() {
             this.$axios

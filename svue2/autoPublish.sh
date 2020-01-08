@@ -1,6 +1,5 @@
-cd target
 echo "开始传输文件 前端文件"
-scp  root@47.101.138.153:/hecy/babyroom/jarProject
+scp  -r dist/* root@47.101.138.153:/home/runner/babyroom/
 echo  "传输结束"
 
  
