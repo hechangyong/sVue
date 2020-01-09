@@ -51,11 +51,12 @@ export default {
           if (res.data.code === "0000") {
             Toast ("操作成功！");
             this.getOrderList();
+            this.currentOrderId = 0;
           }
         })
         .catch(err => {
           console.log("配送操作失败！请联系管理员");
-          Toast ("配送操作失败！请联系管理员！");
+          Toast("配送操作失败！请联系管理员！");
         });
     },
     cancelOrder(oid) {

@@ -49,7 +49,58 @@
           <span>没有需要送货的订单！</span>
         </is-empty>
       </van-tab>
-      <van-tab name="b" title="已完成">
+      <van-tab name="b" title="待发货">
+        <template v-for="orderinfo in  wxpayDoneOrderList">
+          <div class="rcorners2" :key="orderinfo.id">
+            <van-panel :title="orderinfo.title" icon="shop-o" :status="orderinfo.status">
+              <template v-for="subOrderInfo in orderinfo.subOrders">
+                <van-card
+                  :key="subOrderInfo.id"
+                  :num="subOrderInfo.num"
+                  :price="subOrderInfo.price"
+                  :desc="subOrderInfo.desc"
+                  :title="subOrderInfo.title"
+                  :thumb="subOrderInfo.thumb"
+                >
+                  <div slot="bottom">
+                    <div></div>
+                    <van-button disabled size="mini">{{subOrderInfo.skuValue}}</van-button>
+                    <van-button disabled size="mini">订单时间：{{subOrderInfo.date}}</van-button>
+                  </div>
+                </van-card>
+              </template>
+              <div style="font-size: 20px;">
+                <span
+                  style="font-size:12px;margin-left:40%"
+                >共 {{orderinfo.subOrders.length}} 件商品，合计：￥</span>
+                <span style="color:red;font-size:16px;">{{orderinfo.subOrders | getTotalFee}}</span>
+              </div>
+              <van-collapse v-model="activeNames">
+                <van-collapse-item
+                  title="送货地址"
+                  :name="orderinfo.id"
+                  :value="orderinfo.addressInfo.name"
+                  icon="location-o"
+                >{{orderinfo.addressInfo | assembleAddressInfo }}</van-collapse-item>
+              </van-collapse>
+              <div slot="footer" class="van-panel__footer_reload_new">
+                <van-button
+                  size="mini"
+                  @click="receipt(orderinfo.id)"
+                  style="margin-left: 10px;"
+                  round
+                  disabled
+                  type="default"
+                >确认发货</van-button>
+              </div>
+            </van-panel>
+          </div>
+        </template>
+        <is-empty v-if="wxpayDoneOrderList.length == 0" altdes="已完成">
+          <span>您还没有已完成的订单！</span>
+        </is-empty>
+      </van-tab>
+      <van-tab name="c" title="已完成">
         <template v-for="orderinfo in  payDoneOrderList">
           <div class="rcorners2" :key="orderinfo.id">
             <van-panel :title="orderinfo.title" icon="shop-o" :status="orderinfo.status">
