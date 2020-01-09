@@ -40,15 +40,7 @@ export default {
         this.initAddress();
     },
     computed: {
-        //     submitBarText() {
-        //         const count = this.checkedGoods.length;
-        //         return "结算" + (count ? `(${count})` : "");
-        //     },
-
         totalPrice() {
-            console.log("totalPrice:" + JSON.stringify(this.checkedGoods));
-            console.log("totalPrice:" + JSON.stringify(this.goods));
-
             return this.goods.reduce(
                 (total, item) =>
                     total + (this.checkedGoods.indexOf(item.id) !== -1 ? item.price * item.num : 0),
@@ -89,6 +81,10 @@ export default {
          * 选择货到付款
          */
         notPaySubmit() {
+            if (this.currentAddress.areacode != '340122') {
+                this.set_hint_txt("您所选地区超出商家配送范围！暂不支持货到付款！", 1);
+                return;
+            }
             this.submitOrder(false);
         },
         /**
@@ -110,6 +106,7 @@ export default {
             }
             finallObj.goods = finallGoods;
             finallObj.userAddressVo = this.currentAddress;
+            finallObj.payType = iswxPayFlag ? 1 : 0;
             console.log("finallObj:" + JSON.stringify(finallObj));
             this.submitOrderInfo = finallObj;
             this.placeOrder(finallObj, iswxPayFlag);
@@ -120,8 +117,10 @@ export default {
                 return;
             }
             this.popupShow = true;
-
         },
+        /**
+         * 获取购物车列表
+         */
         getGoods() {
             this.goods = [];
             this.$axios
@@ -152,17 +151,7 @@ export default {
                             var orderId = res.data.attachment;
                             this.payMoney(orderId);
                         } else {
-                            this.toPayResultPage(false, res.data.attachment);
-                            // this.$router.push({
-                            //     name: "successPay",
-                            //     params: {
-                            //         name: obj.userAddressVo.userName,
-                            //         tel: obj.userAddressVo.tel,
-                            //         addressDetail: obj.userAddressVo.addressDetail,
-                            //         payedInfoPrice: this.totalPrice,
-                            //         iswxPayFlag: false
-                            //     }
-                            // });
+                            this.toPayResultPage(false, res.data.attachment, false);
                         }
 
                     } else {
@@ -190,27 +179,27 @@ export default {
                                 this.set_hint_txt('调取支付失败,请重新支付', 3);
                                 // this.showPrice();
                                 console.log("预支付成功，支付失败！");
-                                this.toPayResultPage(true, code,false);
+                                this.toPayResultPage(true, code, false);
                             }
                         }
                         else {
                             this.set_hint_txt('调取支付失败,请重新支付', 3);
                             // this.showPrice();
                             console.log("预支付失败，支付失败！");
-                            this.toPayResultPage(true, code,false);
+                            this.toPayResultPage(true, code, false);
 
                         }
                     });
                 }).catch(err => {
                     console.log("-------------------------");
-                    this.toPayResultPage(true, code,false);
+                    this.toPayResultPage(true, code, false);
                 });
             }
             catch (err) {
                 reject(err);
                 this.set_hint_txt('调取支付失败,请重新支付', 3);
                 // this.showPrice();
-                this.toPayResultPage(true, orderId, false );
+                this.toPayResultPage(true, orderId, false);
 
             }
         },
@@ -235,7 +224,7 @@ export default {
                                 //res.err_msg将在用户支付成功后返回ok，但并不保证它绝对可靠。
                                 resolve();
                                 // this.$router.push('/paysuccess')
-                                this.toPayResultPage(true, orderId,true,'');
+                                this.toPayResultPage(true, orderId, true, '');
                             } else {
                                 reject('payfail')
                                 this.set_hint_txt('调取支付失败,请重新支付', 3)
@@ -246,7 +235,7 @@ export default {
                 } else {
                     reject('请在微信端支付');
                     this.set_hint_txt('调取支付失败,请重新支付', 3)
-                    this.toPayResultPage(true, orderId,false);
+                    this.toPayResultPage(true, orderId, false);
                     // this.showPrice()
                 }
             })
@@ -256,7 +245,6 @@ export default {
          * @param {是否走了微信支付} iswxPayFlag 
          * @param {订单id} oid 
          * @param {微信支付状态} payStatus 
-         * @param {失败信息} err_msg 
          */
         toPayResultPage(iswxPayFlag, oid, payStatus) {
             this.popupShow = false;

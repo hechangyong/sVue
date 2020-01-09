@@ -22,10 +22,12 @@ export default {
   },
   methods: {
     toOrderList() {
-      this.$router.push({
+      var openid = this.$tools.parseUrl('oid');
+       this.$router.push({
         name: "orderList",
         params: {
-          id: this.userDetail.id
+          id: this.userDetail.id,
+          openid: openid
         }
       });
     },
