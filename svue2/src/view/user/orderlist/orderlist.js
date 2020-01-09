@@ -42,7 +42,7 @@ export default {
       this.closeOrderList = [];
       this.unPayOrderList = [];
       for (var i = 0; i < this.allOrderList.length; i++) {
-        if (this.allOrderList[i].status === '未付款') {
+        if (this.allOrderList[i].status === '未付款' || this.allOrderList[i].status === '付款失败' ) {
           this.unPayOrderList.push(this.allOrderList[i]);
         } else if (this.allOrderList[i].status === '已完成') {
           this.payDoneOrderList.push(this.allOrderList[i]);
@@ -218,6 +218,7 @@ export default {
               obj.status = shopList[i].status === '0' ? '未付款' :
                 shopList[i].status === '1' ? '已完成' :
                   shopList[i].status === '3' ? '已付款' :
+                  shopList[i].status === '4' ? '未付款-付款失败' :
                     shopList[i].status === '2' ? '已取消' : '未知';
               obj.subOrders = [];
               for (var j = 0; j < shopList[i].subOrderInfoList.length; j++) {

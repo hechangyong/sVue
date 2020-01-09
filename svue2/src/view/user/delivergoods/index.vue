@@ -36,7 +36,7 @@
               <div slot="footer" class="van-panel__footer_reload_new">
                 <van-button
                   size="mini"
-                  @click="deleteOrder(orderinfo.id)"
+                  @click="receipt(orderinfo.id)"
                   style="margin-left: 10px;"
                   round
                   type="default"
@@ -86,7 +86,7 @@
               <div slot="footer" class="van-panel__footer_reload_new">
                 <van-button
                   size="mini"
-                  @click="deleteOrder(orderinfo.id)"
+                  @click="receipt(orderinfo.id)"
                   style="margin-left: 10px;"
                   round
                   disabled
@@ -101,6 +101,21 @@
         </is-empty>
       </van-tab>
     </van-tabs>
+    <van-dialog @confirm="receiptAmount" v-model="popupShow" title="确认收款" show-cancel-button>
+      <van-field v-model="number" type="number" label="实收金额" />
+      <van-cell-group>
+        <van-field
+          v-model="message"
+          rows="2"
+          autosize
+          label="备注"
+          type="textarea"
+          maxlength="50"
+          placeholder="请输入备注"
+          show-word-limit
+        />
+      </van-cell-group>
+    </van-dialog>
   </div>
 </template>
 

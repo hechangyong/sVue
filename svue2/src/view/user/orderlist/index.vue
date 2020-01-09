@@ -80,7 +80,7 @@
                   round
                   type="danger"
                 >删除订单</van-button>
-               <van-button size="mini" round @click="payMoney(orderinfo.id)">支付</van-button>
+               <van-button size="mini" round @click="payMoney(orderinfo.id)">重新支付</van-button>
 
               </div>
             </van-panel>

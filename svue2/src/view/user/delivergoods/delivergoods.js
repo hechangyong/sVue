@@ -1,7 +1,7 @@
 import { Collapse, CollapseItem } from "vant";
 import { Cell, CellGroup } from "vant";
 import { Tab, Tabs } from "vant";
-import { Panel } from "vant";
+import { Panel, Field } from "vant";
 import { Card, Tag, Button, Dialog, Toast } from "vant";
 import IsEmpty from "@/view/is-empty/";
 export default {
@@ -14,8 +14,11 @@ export default {
       date: "2019-11-29",
       allOrderList: [],
       payDoneOrderList: [],
-      unPayOrderList: []
-      
+      unPayOrderList: [],
+      popupShow: false,
+      currentOrderId: 0,
+      number: 0,
+      message: ""
     };
   },
   mounted() {
@@ -30,30 +33,30 @@ export default {
           this.unPayOrderList.push(this.allOrderList[i]);
         } else if (this.allOrderList[i].status === '已完成') {
           this.payDoneOrderList.push(this.allOrderList[i]);
-        }  
+        }
       }
     },
-    deleteOrder(oid) {
-      Dialog.confirm({
-        title: '删除订单',
-        message: '确定要删除这条订单记录吗？'
-      }).then(() => {
-        this.$axios
-          .post(`/baby/o/deleteOrder/` + oid)
-          .then(res => {
-            if (res.data.code === "0000") {
-              Toast("删除成功！");
-              this.getOrderList();
-            }
-          })
-          .catch(err => {
-            console.log("删除订单失败！");
-          });
-
-      }).catch(() => {
-        // on cancel
-      });
-
+    receipt(oid) {
+      this.popupShow = true;
+      this.currentOrderId = oid;
+    },
+    receiptAmount() {
+      this.popupShow = false;
+      var obj = {};
+      obj.amount = this.number;
+      obj.remark = this.message;
+      this.$axios
+        .post(`/baby/o/receipt/` + this.currentOrderId, obj)
+        .then(res => {
+          if (res.data.code === "0000") {
+            Toast ("操作成功！");
+            this.getOrderList();
+          }
+        })
+        .catch(err => {
+          console.log("配送操作失败！请联系管理员");
+          Toast ("配送操作失败！请联系管理员！");
+        });
     },
     cancelOrder(oid) {
 
@@ -71,7 +74,7 @@ export default {
               obj.id = shopList[i].id;
               obj.title = shopList[i].title;
               obj.status = shopList[i].status === '0' ? '未送货' :
-                shopList[i].status === '1' ? '已完成' :
+                shopList[i].status === '4' ? '已完成' :
                   shopList[i].status === '2' ? '已取消' : '未知';
               obj.subOrders = [];
               obj.addressInfo = shopList[i].babyUserAddress;
@@ -102,10 +105,10 @@ export default {
     assembleAddressInfo(addressInfo) {
       return addressInfo.mobile + ", " + addressInfo.province + addressInfo.city + addressInfo.county + addressInfo.addressdetail
     },
-    getAddressName(value){
-      var ss = value + "_"+ Math.random();
+    getAddressName(value) {
+      var ss = value + "_" + Math.random();
       console.log(ss);
-      
+
       return ss;
     }
 
@@ -115,6 +118,7 @@ export default {
     [Tabs.name]: Tabs,
     [Card.name]: Card,
     [Panel.name]: Panel,
+    [Field.name]: Field,
     [Toast.name]: Toast,
     [Cell.name]: Cell,
     [CellGroup.name]: CellGroup,
@@ -122,7 +126,7 @@ export default {
     [CollapseItem.name]: CollapseItem,
     [Tag.name]: Tag,
     [Button.name]: Button,
-    [Dialog.name]: Dialog,
+    [Dialog.Component.name]: Dialog.Component,
     [IsEmpty.name]: IsEmpty
   }
 
