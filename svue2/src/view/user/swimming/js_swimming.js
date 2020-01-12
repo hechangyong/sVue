@@ -117,7 +117,7 @@ export default {
         },
         initUserQcCode() {
             console.log("获取用户二维码");
-            var sceneStr = this.cardInfo.userid + "_"
+            var sceneStr = this.cardInfo.userid + "_swim"
             if (this.checked) {
                 sceneStr = sceneStr + "_1"
             } else {
@@ -126,7 +126,7 @@ export default {
 
             this.$axios
                 .get(
-                    `http://babyroom.hecy.top/wechat/qrcode/babyroom/create-qrcode?sceneStr=` + sceneStr + `&expireSeconds=10000`
+                    `http://babyroom.hecy.top/wechat/qrcode/zmbaby/create-qrcode?sceneStr=` + sceneStr + `&expireSeconds=10000`
                 )
                 .then(res => {
                     console.log(JSON.stringify(res));
