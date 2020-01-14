@@ -15,6 +15,7 @@ export default {
       allOrderList: [],
       payDoneOrderList: [],
       unPayOrderList: [],
+      wxpayDoneOrderList: [],
       popupShow: false,
       currentOrderId: 0,
       number: 0,
@@ -29,8 +30,10 @@ export default {
       this.payDoneOrderList = [];
       this.unPayOrderList = [];
       for (var i = 0; i < this.allOrderList.length; i++) {
-        if (this.allOrderList[i].status === '未送货') {
+        if (this.allOrderList[i].status === '待送货') {
           this.unPayOrderList.push(this.allOrderList[i]);
+        } else if (this.allOrderList[i].status === '待发货') {
+          this.wxpayDoneOrderList.push(this.allOrderList[i]);
         } else if (this.allOrderList[i].status === '已完成') {
           this.payDoneOrderList.push(this.allOrderList[i]);
         }
@@ -49,7 +52,7 @@ export default {
         .post(`/baby/o/receipt/` + this.currentOrderId, obj)
         .then(res => {
           if (res.data.code === "0000") {
-            Toast ("操作成功！");
+            Toast("操作成功！");
             this.getOrderList();
             this.currentOrderId = 0;
           }
@@ -74,9 +77,20 @@ export default {
               var obj = {};
               obj.id = shopList[i].id;
               obj.title = shopList[i].title;
-              obj.status = shopList[i].status === '0' ? '未送货' :
-                shopList[i].status === '4' ? '已完成' :
-                  shopList[i].status === '2' ? '已取消' : '未知';
+              if (shopList[i].payType == 1) {
+                obj.status = shopList[i].status === '3' ? '待发货' :
+                  shopList[i].status === '4' ? '支付失败' :
+                  shopList[i].status === '0' ? '支付失败' :
+                   shopList[i].status === '2' ? '取消' :
+                    shopList[i].status === '1' ? '完成' : '未知';
+              } else {
+                obj.status = shopList[i].status === '0' ? '待送货' :
+                  shopList[i].status === '4' ? '待送货' :
+                  shopList[i].status === '3' ? '待送货' :
+                  shopList[i].status === '1' ? '完成' :
+                    shopList[i].status === '2' ? '已取消' : '未知';
+              }
+
               obj.subOrders = [];
               obj.addressInfo = shopList[i].babyUserAddress;
               for (var j = 0; j < shopList[i].subOrderInfoList.length; j++) {
