@@ -30,6 +30,13 @@ const routes = [
     }
   },
   {
+    name: 'opencard',
+    component: () => import('./view/user/opencard/opencard.vue'),
+    meta: {
+      title: '用户开卡'
+    }
+  },
+  {
     name: 'orderList',
     component: () => import('./view/user/orderlist'),
     meta: {

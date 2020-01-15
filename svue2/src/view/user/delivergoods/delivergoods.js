@@ -55,6 +55,8 @@ export default {
             Toast("操作成功！");
             this.getOrderList();
             this.currentOrderId = 0;
+            this.number = 0;
+            this.message= '';
           }
         })
         .catch(err => {

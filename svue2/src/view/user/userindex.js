@@ -40,6 +40,15 @@ export default {
         }
       });
     },
+    toOpencard() {
+      this.$router.push({
+        name: "opencard",
+        params: {
+          phone: this.userDetail.mobile,
+          id: this.userDetail.id
+        }
+      });
+    },
     toStoreInfo() {
       this.$router.push({
         name: "storeInfo"
