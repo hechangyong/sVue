@@ -16,10 +16,11 @@
         >{{value.name}}</li>
       </transition-group>
     </div>
-    <!-- <van-list v-if="list.length != 0" v-model="loading" :finished="finished" finished-text="没有查到对应昵称用户，需要先关注公众号哦" @load="onLoad">
-      <van-cell v-for="item in list" :key="item" :title="item" />
-    </van-list>-->
+
     <div class="rcorners2_new" v-if="hasUserInfo">
+      <van-cell title="头像">
+        <van-icon slot="right-icon" :name="userinfo.headimgurl" style="line-height: inherit;" />
+      </van-cell>
       <van-cell title="昵称" :value="userinfo.nickname" />
       <van-cell title="用户姓名" :value="userinfo.name" />
       <van-cell title="手机号码" :value="userinfo.phone" />
@@ -31,7 +32,7 @@
       <van-cell title="充值金额">
         <!-- 使用 title 插槽来自定义标题 -->
         <template slot="default">
-          <van-stepper v-model="cardInfo.totalFee" min="0"  />
+          <van-stepper v-model="cardInfo.totalFee" min="0" />
         </template>
       </van-cell>
       <van-cell title="赠送金额">
@@ -45,19 +46,19 @@
       <van-cell title="充值金额">
         <!-- 使用 title 插槽来自定义标题 -->
         <template slot="default">
-          <van-stepper v-model="cardInfo.totalFee" min="0"   />
+          <van-stepper v-model="cardInfo.totalFee" min="0" />
         </template>
       </van-cell>
       <van-cell title="兑换次数">
         <!-- 使用 title 插槽来自定义标题 -->
         <template slot="default">
-          <van-stepper v-model="cardInfo.totalNumber" min="0"  />
+          <van-stepper v-model="cardInfo.totalNumber" min="0" />
         </template>
       </van-cell>
       <van-cell title="赠送次数">
         <!-- 使用 title 插槽来自定义标题 -->
         <template slot="default">
-          <van-stepper v-model="cardInfo.giveNumber" min="0"  />
+          <van-stepper v-model="cardInfo.giveNumber" min="0" />
         </template>
       </van-cell>
     </van-cell-group>
@@ -68,6 +69,7 @@
 <script>
 import { Search, Picker, Panel, ActionSheet, List, Toast } from "vant";
 import { Stepper } from "vant";
+import { Image } from "vant";
 export default {
   data() {
     return {
@@ -102,12 +104,33 @@ export default {
   },
   methods: {
     onSearch() {
-      this.myData.push({
-        id: this.myData.length,
-        name: "何长勇_" + this.myData.length,
-        nickname: "哼啊大苏",
-        phone: "17681102630"
-      });
+      this.myData = [];
+      var obj = {};
+      obj.name = this.value;
+      this.$axios
+        .post(`/baby/u/getStoreUsers`, obj)
+        .then(res => {
+          console.log("res: " + res.data.code);
+          if (res.data.code === "0000") {
+            var user = res.data.attachment;
+            for (var i = 0; i < user.length; i++) {
+              this.myData.push({
+                id: user[i].id,
+                name: user[i].name,
+                nickname: user[i].nickname,
+                phone: user[i].phone,
+                headimgurl: user[i].headimgurl
+              });
+            }
+          } else {
+            console.log("获取商户信息失败：" + res.data.code);
+          }
+        })
+        .catch(err => {
+          console.log("获取用户信息失败");
+        });
+
+    
 
       this.finished = true;
     },
@@ -168,7 +191,6 @@ export default {
     },
     clearInput: function() {
       this.keyword = "";
-     
     },
     getIndex: function(index) {
       this.searchIndex = index;
@@ -194,6 +216,7 @@ export default {
     [Panel.name]: Panel,
     [Toast.name]: Toast,
     [List.name]: List,
+    [Image.name]: Image,
     [Stepper.name]: Stepper,
     [Picker.name]: Picker
   }
@@ -201,6 +224,10 @@ export default {
 </script>
 
 <style scoped>
+.van-icon__image {
+  width: 60px;
+  height: 50px;
+}
 .rcorners2_new {
   border-radius: 20px;
   border: 0px solid #c4c7bd;
