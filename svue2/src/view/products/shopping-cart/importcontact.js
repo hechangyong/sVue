@@ -81,8 +81,9 @@ export default {
          * 选择货到付款
          */
         notPaySubmit() {
+            console.log("-------------:"+ JSON.stringify(this.currentAddress));
             if (this.currentAddress.areacode != '340122') {
-                this.set_hint_txt("您所选地区超出商家配送范围！暂不支持货到付款！", 1);
+                this.set_hint_txt("您所选地区超出商家配送范围！暂不支持货到付款！", 3);
                 return;
             }
             this.submitOrder(false);
@@ -340,7 +341,8 @@ export default {
                 name: item.name + "  " + item.tel,
                 tel: item.tel,
                 addressDetail: item.address,
-                userName: item.name
+                userName: item.name,
+                areacode:item.areacode
             };
             this.editAddress = false;
             this.hasAddress = true;

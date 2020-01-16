@@ -28,7 +28,7 @@
 
     <van-cell is-link title="卡类型" @click="showPopup" :value="cardType"></van-cell>
 
-    <van-cell-group v-if="numberCardType">
+    <van-cell-group v-if="amountCardType">
       <van-cell title="充值金额">
         <!-- 使用 title 插槽来自定义标题 -->
         <template slot="default">
@@ -42,7 +42,7 @@
         </template>
       </van-cell>
     </van-cell-group>
-    <van-cell-group v-if="amountCardType">
+    <van-cell-group v-if="numberCardType">
       <van-cell title="充值金额">
         <!-- 使用 title 插槽来自定义标题 -->
         <template slot="default">
@@ -63,264 +63,16 @@
       </van-cell>
     </van-cell-group>
     <van-action-sheet v-model="show" :actions="actions" @select="onSelect" />
+
+
+     <van-button
+        class="buttonclass-next-opencard"
+        @click="openCard()"
+        round
+        type="info"
+      >开卡</van-button>
   </div>
 </template>
 
-<script>
-import { Search, Picker, Panel, ActionSheet, List, Toast } from "vant";
-import { Stepper } from "vant";
-import { Image } from "vant";
-export default {
-  data() {
-    return {
-      value: "",
-      show: false,
-      list: [],
-      loading: false,
-      finished: false,
-      keyword: "", //v-model绑定的输入框的value
-      now: -1,
-      userinfo: {},
-      hasUserInfo: false,
-      searchIndex: 0,
-      amountCardType: false,
-      numberCardType: true,
-      myData: [], //用来接收ajax得到的数据
-      actions: [
-        { name: "次卡" },
-        { name: "充值卡" }
-        // { name: '选项', subname: '描述信息' }
-      ],
-      cardType: "",
-      cardInfo: {
-        totalNumber: 0,
-        residueNumber: 0,
-        giveNumber: 0,
-        totalFee: 0,
-        residueFee: 0,
-        giveFee: 0
-      }
-    };
-  },
-  methods: {
-    onSearch() {
-      this.myData = [];
-      var obj = {};
-      obj.name = this.value;
-      this.$axios
-        .post(`/baby/u/getStoreUsers`, obj)
-        .then(res => {
-          console.log("res: " + res.data.code);
-          if (res.data.code === "0000") {
-            var user = res.data.attachment;
-            for (var i = 0; i < user.length; i++) {
-              this.myData.push({
-                id: user[i].id,
-                name: user[i].name,
-                nickname: user[i].nickname,
-                phone: user[i].phone,
-                headimgurl: user[i].headimgurl
-              });
-            }
-          } else {
-            console.log("获取商户信息失败：" + res.data.code);
-          }
-        })
-        .catch(err => {
-          console.log("获取用户信息失败");
-        });
-
-    
-
-      this.finished = true;
-    },
-    showPopup() {
-      this.show = true;
-    },
-    onSelect(item) {
-      this.show = false;
-      this.cardType = item.name;
-      if (this.cardType == "次卡") {
-        this.amountCardType = false;
-        this.numberCardType = true;
-      } else {
-        this.amountCardType = true;
-        this.numberCardType = false;
-      }
-    },
-    onChange(picker, value, index) {
-      Toast(`当前值：${value}, 当前索引：${index}`);
-    },
-    // &event是实参，表示event对象
-    get: function(ev) {
-      // 如果按得键是上或者下，就不进行ajax
-      if (ev.keyCode == 38 || ev.keyCode == 40) {
-        return;
-      }
-    },
-    selectDown: function() {
-      this.now++;
-      //到达最后一个时，再按下就回到第一个
-      if (this.now == this.myData.length) {
-        this.now = 0;
-      }
-      this.keyword = this.myData[this.now];
-    },
-    selectUp: function() {
-      this.now--;
-      //同上
-      if (this.now == -1) {
-        this.now = this.myData.length - 1;
-      }
-      this.keyword = this.myData[this.now];
-    },
-    search: function() {
-      //打开对应的搜索界面
-      window.open(this.logoData[this.searchIndex].searchSrc + this.keyword);
-    },
-    selectHover: function(index) {
-      this.now = index;
-    },
-    selectClick: function(index) {
-      this.userinfo = {};
-      this.keyword = this.myData[index];
-      //   this.search();
-      this.userinfo = this.myData[index];
-      this.hasUserInfo = true;
-      this.myData = [];
-    },
-    clearInput: function() {
-      this.keyword = "";
-    },
-    getIndex: function(index) {
-      this.searchIndex = index;
-    },
-    onLoad() {
-      //   // 异步更新数据
-      //   setTimeout(() => {
-      //     for (let i = 0; i < 10; i++) {
-      //       this.list.push(this.list.length + 1);
-      //     }
-      //     // 加载状态结束
-      //     this.loading = false;
-      //     // 数据全部加载完成
-      //     if (this.list.length >= 10) {
-      //       this.finished = true;
-      //     }
-      //   }, 500);
-    }
-  },
-  components: {
-    [Search.name]: Search,
-    [ActionSheet.name]: ActionSheet,
-    [Panel.name]: Panel,
-    [Toast.name]: Toast,
-    [List.name]: List,
-    [Image.name]: Image,
-    [Stepper.name]: Stepper,
-    [Picker.name]: Picker
-  }
-};
-</script>
-
-<style scoped>
-.van-icon__image {
-  width: 60px;
-  height: 50px;
-}
-.rcorners2_new {
-  border-radius: 20px;
-  border: 0px solid #c4c7bd;
-  padding: 20px;
-  /* width: 200px; */
-  background-color: white;
-  margin: 5px;
-}
-.search-input {
-  height: 45px;
-  width: 600px;
-  margin: 0 auto;
-  margin-top: 10px;
-  position: relative;
-}
-.search-input input {
-  border: 1px solid #e4e4e4;
-  box-sizing: border-box;
-  width: 500px;
-  height: 45px;
-  font-size: 18px;
-  float: left;
-  padding-left: 10px;
-  padding-right: 10px;
-  overflow: hidden;
-}
-.search-btn {
-  height: 45px;
-  width: 100px;
-  border: 1px solid mediumseagreen;
-  background-color: mediumseagreen;
-  color: white;
-  font-size: 16px;
-  font-weight: bold;
-  float: left;
-}
-.search-btn {
-  cursor: pointer;
-}
-.search-select {
-  position: absolute;
-  top: 45px;
-  width: 100%;
-  box-sizing: border-box;
-  z-index: 999;
-}
-.search-select li {
-  border: 1px solid #d4d4d4;
-  border-top: none;
-  border-bottom: none;
-  background-color: #fff;
-  font-size: 16px;
-  width: 100%;
-}
-.search-select-option {
-  box-sizing: border-box;
-  padding: 7px 10px;
-}
-.selectback {
-  background-color: #eee !important;
-  cursor: pointer;
-}
-input::-ms-clear {
-  display: none;
-}
-.search-reset {
-  width: 21px;
-  height: 21px;
-  position: absolute;
-  display: block;
-  line-height: 21px;
-  text-align: center;
-  cursor: pointer;
-  font-size: 20px;
-  right: 110px;
-  top: 12px;
-}
-.search-select-list {
-  transition: all 0.5s;
-}
-.itemfade-enter,
-.itemfade-leave-active {
-  opacity: 0;
-}
-.itemfade-leave-active {
-  position: absolute;
-}
-.selectback {
-  background-color: #eee !important;
-  cursor: pointer;
-}
-.search-select ul {
-  margin: 0;
-  text-align: left;
-}
-</style>
+<script src="./opencard.js"></script>
+ 
