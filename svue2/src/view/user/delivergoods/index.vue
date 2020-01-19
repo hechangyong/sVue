@@ -1,7 +1,7 @@
 <template>
   <div>
     <van-tabs v-model="activeName">
-      <van-tab name="c" title="待送货">
+      <van-tab name="a" title="待送货">
         <template v-for="orderinfo in  unPayOrderList">
           <div class="rcorners2" :key="orderinfo.id">
             <van-panel :title="orderinfo.title" icon="shop-o" :status="orderinfo.status">
@@ -97,7 +97,7 @@
           </div>
         </template>
         <is-empty v-if="wxpayDoneOrderList.length == 0" altdes="已完成">
-          <span>您还没有已完成的订单！</span>
+          <span>您还没有待发货的订单！</span>
         </is-empty>
       </van-tab>
       <van-tab name="c" title="已完成">
