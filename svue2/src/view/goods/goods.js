@@ -87,7 +87,7 @@ export default {
             this.goods.units = currentGoods.units;
             this.goods.remain = currentGoods.residuenumber;
             this.goods.id = currentGoods.id;
-            this.goods.thumb = originalImgList;
+            this.goods.thumb = currentImgs;
             this.goods.picture = currentImgs[0];
             this.cardOriginpriceImgs = currentImgs[0];
             this.cardOriginprice = currentGoods.promotionprice;

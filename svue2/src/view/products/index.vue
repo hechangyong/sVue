@@ -41,8 +41,8 @@
               <van-cell
                 class="vantCell_reload"
                 title-class="cell_left_title_red"
-                :title="formatPrice(recommendGood.price,recommendGood.units)"
-                :value="formatPrice(recommendGood.promotionprice,recommendGood.units)"
+                :title="formatPrice(recommendGood.promotionprice,recommendGood.units)"
+                :value="formatPrice(recommendGood.price,recommendGood.units)"
                 value-class="rightCellClass"
               >
                 <van-icon
