@@ -33,6 +33,10 @@
           <uploadImg @changeUploadsFile="changeUploadsFile"></uploadImg>
         </div>
         <div class="filedClassDiv">
+          <span class="spanclass">商品详情图片:</span>
+          <uploadImg @changeUploadsFile="changeUploadsFileDetail"></uploadImg>
+        </div>
+        <div class="filedClassDiv">
           <span class="spanclass">有无规格参数:</span>
           <RadioGroup @on-change="changeHasSkuStatus" v-model="hasSkus">
             <Radio label="无"></Radio>

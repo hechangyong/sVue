@@ -58,7 +58,8 @@ export default {
       productPrice: 0,
       vipPrice: 0,
       totalInventory: 0,
-      productImgs: []
+      productImgs: [],
+      imgDetails:[]
     };
   },
   methods: {
@@ -71,6 +72,7 @@ export default {
       var productObj = {};
       productObj.productDes = this.productDes;
       productObj.productImgs = this.productImgs;
+      productObj.imgDetails = this.imgDetails;
       productObj.productName = this.productName;
       productObj.productType = this.selectProductModel;
       productObj.productPrice = this.productPrice;
@@ -95,6 +97,17 @@ export default {
         this.productImgs.push(imgsname);
       }
       console.log("this.productImgs: " + JSON.stringify(this.productImgs));
+    },
+    /**
+     * 添加商品详情图片
+     */
+    changeUploadsFileDetail(imgs) {
+      this.imgDetails = [];
+      for (var i = 0; i < imgs.length; i++) {
+        var imgsname = imgs[i].name;
+        this.imgDetails.push(imgsname);
+      }
+      console.log("this.imgDetails: " + JSON.stringify(this.imgDetails));
     },
     /**
      * 校验表单数据，提交数据
