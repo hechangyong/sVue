@@ -49,13 +49,25 @@ export default {
         }
       });
     },
+    toIntegral() {
+      this.$router.push({
+        name: "integral",
+        params: {
+          phone: this.userDetail.mobile,
+          id: this.userDetail.id
+        }
+      });
+    },
     toStoreInfo() {
       this.$router.push({
         name: "storeInfo"
       });
     },
     toshopIntegral() {
-      Toast("功能暂未开放！");
+      this.$router.push({
+        name: "integral"
+      });
+      // Toast("功能暂未开放！");
     },
     toCardList() {
       this.$router.push({

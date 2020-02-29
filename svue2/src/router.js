@@ -92,6 +92,13 @@ const routes = [
     }
   },
   {
+    name: 'integral',
+    component: () => import('./view/user/integral/integral.vue'),
+    meta: {
+      title: '积分中心'
+    }
+  },
+  {
     name: 'storeInfo',
     component: () => import('./view/user/storeInfo'),
     meta: {
