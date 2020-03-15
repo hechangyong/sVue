@@ -31,7 +31,18 @@ export default {
     [Dialog.name]: Dialog,
     [GoodsActionButton.name]: GoodsActionButton
   },
-
+  beforeRouteEnter(to, from, next) {
+    console.log("****************goods*********Enter*********");
+    console.log(this, 'beforeRouteEnter'); // undefined
+    console.log('to', to);
+    console.log('from', from);
+    console.log('next', next);
+    next(vm => {
+      //因为当钩子执行前，组件实例还没被创建
+      // vm 就是当前组件的实例相当于上面的 this，所以在 next 方法里你就可以把 vm 当 this 来用了。
+      console.log(vm);//当前组件的实例
+    });
+  },
   data() {
     return {
       goods: {
@@ -61,11 +72,18 @@ export default {
     };
   },
   mounted() {
-    var obj = this.$route.params;
-    if (obj != undefined) {
-      this.pid = obj.pid;
-      this.goodsId = obj.pid;
+    // var obj = this.$route.params;
+    // if (obj != undefined) {
+    //   this.pid = obj.pid;
+    //   this.goodsId = obj.pid;
+    // }
+
+    var pid = this.$route.query.pid;
+    if (pid != undefined) {
+      this.pid = pid;
+      this.goodsId = pid;
     }
+    console.log("pid: " + pid);
     this.initProduct();
   },
   methods: {
@@ -104,6 +122,12 @@ export default {
         });
     },
     formatPrice(value, units) {
+      if(value == undefined){
+        return "";
+      }
+      if(units == undefined){
+        return "";
+      }
       return "¥" + value + "/" + units;
       // return "¥" + (value/100).toFixed(2);
     },

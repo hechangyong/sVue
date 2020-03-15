@@ -1,6 +1,6 @@
 <template>
   <div>
-    <van-tabs v-model="activeName">
+    <van-tabs v-model="activeName" sticky>
       <van-tab name="a" title="待送货">
         <template v-for="orderinfo in  unPayOrderList">
           <div class="rcorners2" :key="orderinfo.id">
@@ -86,10 +86,9 @@
               <div slot="footer" class="van-panel__footer_reload_new">
                 <van-button
                   size="mini"
-                  @click="receipt(orderinfo.id)"
+                  @click="deliverGoods(orderinfo.id)"
                   style="margin-left: 10px;"
-                  round
-                  disabled
+                  round 
                   type="default"
                 >确认发货</van-button>
               </div>
@@ -134,16 +133,7 @@
                   icon="location-o"
                 >{{orderinfo.addressInfo | assembleAddressInfo }}</van-collapse-item>
               </van-collapse>
-              <div slot="footer" class="van-panel__footer_reload_new">
-                <van-button
-                  size="mini"
-                  @click="receipt(orderinfo.id)"
-                  style="margin-left: 10px;"
-                  round
-                  disabled
-                  type="default"
-                >确认收款</van-button>
-              </div>
+               
             </van-panel>
           </div>
         </template>

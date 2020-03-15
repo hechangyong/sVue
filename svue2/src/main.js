@@ -3,6 +3,8 @@ import App from './App';
 import ElementUI from 'element-ui';
 import rem from 'amfe-flexible';
 import { router } from './router';
+// import Clipboard from 'clipboard';
+import VueClipboard from 'vue-clipboard2'
 import axios from 'axios';
 import tools from './tools'
 Vue.prototype.$axios = axios;
@@ -10,6 +12,7 @@ Vue.prototype.$tools = tools;
 import { Lazyload, Icon,Col, Cell, CellGroup, loading, Button, Popup,Toast,Field } from 'vant';
 Vue.use(Icon);
 Vue.use(Col);
+Vue.use(VueClipboard)
 Vue.use(Cell);
 Vue.use(CellGroup);
 Vue.use(loading);

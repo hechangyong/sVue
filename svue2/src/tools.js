@@ -46,13 +46,16 @@ export default {
      * 解析获取url参数
      */
     parseUrl: (queryKey) => {
+        console.log("parseUrl queryKey: " + queryKey);
         var after = window.location.search;
         console.log("window.location.search: " + after);
+        console.log("window.location. : " + JSON.stringify(window.location));
         //key存在先通过search取值如果取不到就通过hash来取
         // after = after.substr(1) || window.location.hash.split("?")[1];
-         var search = location.search;
-        if(search == '' || search == undefined || search == null ){
-            search = after.substr(1) || "?"+ window.location.hash.split("?")[1];
+        console.log("window.location.hash: " + window.location.hash);
+        var search = location.search;
+        if (search == '' || search == undefined || search == null) {
+            search = after.substr(1) || "?" + window.location.hash.split("?")[1];
         }
         console.log("parseUrl search: " + search);
         if (search.length > 0 && search.indexOf('?') > -1) {

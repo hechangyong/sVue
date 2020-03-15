@@ -58,10 +58,10 @@
       </van-grid>
     </div>
 
-    <van-tabbar :safe-area-inset-bottom="safeareabottom" v-model="active">
-      <van-tabbar-item  name="products" to="/products" icon="home-o">商品首页</van-tabbar-item>
-      <van-tabbar-item name="cart" to="/cart" icon="shopping-cart-o">购物车</van-tabbar-item>
-      <van-tabbar-item   name="user" icon="user-o" to="/user">我的</van-tabbar-item>
+     <van-tabbar :safe-area-inset-bottom="safeareabottom" @change="changeTabbar" v-model="active">
+      <van-tabbar-item   name="products"  icon="home-o">商品首页</van-tabbar-item>
+      <van-tabbar-item name="cart" icon="shopping-cart-o">购物车</van-tabbar-item>
+      <van-tabbar-item   name="user" icon="user-o">我的</van-tabbar-item>
     </van-tabbar>
   </div>
 </template>

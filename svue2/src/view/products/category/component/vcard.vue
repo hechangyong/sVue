@@ -132,9 +132,10 @@ export default {
       console.log("to pid:" + pid);
       this.$router.push({
         name: "goods",
-        params: {
-          pid: pid
-        }
+        // params: {
+        //   pid: pid
+        // },
+        query:{pid:pid}
       });
     },
     addCard() {

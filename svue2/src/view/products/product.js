@@ -15,7 +15,7 @@ export default {
                 thumb: [
                     "http://babyroom.hecy.top/img/1.jpg",
                     "http://babyroom.hecy.top/img/2.jpg",
-                    "http://babyroom.hecy.top/img/3.jpg",
+                    //  "http://babyroom.hecy.top/img/banner1_small.jpg",
                     "http://babyroom.hecy.top/img/4.jpg"
                 ],
                 btnList: [
@@ -84,6 +84,16 @@ export default {
         this.initRecommendGoodsData();
     },
     methods: {
+        changeTabbar(activeName) {
+            var openid = this.$tools.parseUrl('oid');
+            console.log("openid: " + openid);
+            this.$router.push({
+              name: activeName,
+              query: {
+                oid: openid
+              }
+            });
+          },
         initRecommendGoodsData() {
             this.$axios
                 .post(`/baby/p/getRecommendGoods`)
@@ -109,7 +119,10 @@ export default {
         toGoods(pid) {
             this.$router.push({
                 name: "goods",
-                params: {
+                // params: {
+                //     pid: pid
+                // },
+                query:{
                     pid: pid
                 }
             });

@@ -1,23 +1,34 @@
 <template>
   <div>
-    <van-cell v-if="editAddress" title="添加收货地址" @click="showList = true" :center="true" is-link>
-      <van-icon slot="icon" name="add-square" class="user-defined-icon" />
-    </van-cell>
-
-    <van-cell
-      :title="currentAddress.name"
-      v-if="hasAddress"
-      icon="location-o"
-      size="large"
-      @click="showList = true"
-      is-link
-    >
-      <template slot="label">
-        <span class="span_lable">{{currentAddress.addressDetail}}</span>
-      </template>
-    </van-cell>
-
-    <van-divider class="van-contact-card-divP" />
+    <van-sticky :offset-top="0">
+      <van-cell v-if="editAddress" title="添加收货地址" @click="showList = true" :center="true" is-link>
+        <van-icon slot="icon" name="add-square" class="user-defined-icon" />
+      </van-cell>
+      <van-cell
+        :title="currentAddress.name"
+        v-if="hasAddress"
+        icon="location-o"
+        size="large"
+        @click="showList = true"
+        is-link
+      >
+        <template slot="label">
+          <span class="span_lable">{{currentAddress.addressDetail}}</span>
+        </template>
+      </van-cell>
+      <van-cell-group>
+        <van-field
+          v-model="agentCode"
+          label="代理人推荐码"
+          input-align	="right"
+          left-icon="smile-o"
+          right-icon="warning-o"
+          placeholder="非必填项"
+          @click-right-icon="clickrightIcon"
+        />
+      </van-cell-group>
+      <van-divider class="van-contact-card-divP" />
+    </van-sticky>
 
     <!-- 联系人列表 -->
     <van-popup v-model="showList" :style="{ height: '100%' }" position="bottom">
@@ -55,7 +66,8 @@
                   :title="item.title"
                   :desc="item.desc"
                   :num="item.num"
-                  :price="formatPrice(item.price)"
+                  :price="countPrice(item)"
+                  :origin-price="formatPrice(item.price)"
                   :thumb="item.thumb"
                 >
                   <div slot="tags">
@@ -70,6 +82,10 @@
                   </div>
                   <div slot="num">
                     <van-stepper v-model="item.num" @click.native.stop min="1" />
+                  </div>
+                  <div slot="footer">
+                    店铺折扣：  -{{formatPrice(item.discountPrice)}} 元<br>
+                    代理人优惠折扣：-{{formatPrice(item.agentDiscountPrice)}}元
                   </div>
                 </van-card>
               </van-checkbox>

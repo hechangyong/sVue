@@ -95,13 +95,12 @@ export default {
         });
     },
     getOrderPrice(subOrderInfoList) {
-       console.log("subOrderInfoList[i].price:"+ JSON.stringify(subOrderInfoList));
       var price = 0;
       for (var i = 0; i < subOrderInfoList.length; i++) {
-        console.log("subOrderInfoList[i].price:"+ subOrderInfoList[i].price);
-        price = price + subOrderInfoList[i].price;
+        console.log("subOrderprice: "+ subOrderInfoList[i].price +", num: "+ subOrderInfoList[i].num);
+        price = price + (subOrderInfoList[i].price * subOrderInfoList[i].num);
       }
-      return price;
+      return price.toFixed(2);
     }
   },
 

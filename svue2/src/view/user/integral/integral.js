@@ -8,6 +8,8 @@ export default {
   data() {
     return {
       active: "user",
+      activeSignIn: 1,
+      activeSignIn1: 8,
       safeareabottom: true,
       allIntegralList: [],
       exchangeRecordList: [],
@@ -22,25 +24,77 @@ export default {
         address: "",
         id: 0,
         status: ""
+      },
+      weekSignRecord: {
+        week_day_1: false,
+        week_day_2: false,
+        week_day_3: false,
+        week_day_4: false,
+        week_day_5: false,
+        week_day_6: false,
+        week_day_7: false,
       }
+
     };
   },
   mounted() {
     this.getUserBaseInfo();
+    this.getSignInRecord();
     this.getUserIntegralRecodes();
+
   },
   methods: {
+    getSignInRecord() {
+      axios
+        .post(`/baby/u/getUserSignInRecord`)
+        .then(res => {
+          if (res.data.code === "0000") {
+            this.activeSignIn = res.data.attachment.currentWeekDay;
+            for (var i = 1; i <= 7; i++) {
+              var key = "week_day_" + i;
+              if (res.data.attachment.weekSignInCheck[key]) {
+                this.weekSignRecord[key] = true;
+              }
+            }
+          }
+        })
+        .catch(err => {
+          console.log("用户签到失败");
+        });
+    },
+    signIn() {
+      axios
+        .post(`/baby/u/usersignIn`)
+        .then(res => {
+          if (res.data.code === "0000") {
+            Toast({
+              message: '签到成功',
+              icon: 'like-o'
+            });
+            this.getSignInRecord();
+            this.getUserIntegralRecodes();
+          } else if (res.data.code === "1001") {
+            Toast.fail('您今天已经签到成功！无需重复签到！');
+          }
+        })
+        .catch(err => {
+          console.log("用户签到失败");
+        });
+    },
+
     // 1-购买产品获得 2-邀请用户 3-首次关注 4-抵扣产品价钱
     parseChannel(code) {
-      var zh_channel = "【获得】";
+      var zh_channel ="";
       if (code == 1) {
-        zh_channel = zh_channel + " 购买商品获得：";
+        zh_channel = zh_channel + "【购物】 购买商品获得积分：";
       } else if (code == 2) {
-        zh_channel = zh_channel + " 邀请一位新用户获得：";
+        zh_channel = zh_channel + "【邀新】 邀请一位新用户获得积分：";
       } else if (code == 3) {
-        zh_channel = zh_channel + " 首次关注获得：";
+        zh_channel = zh_channel + "【关注】 首次关注获得积分：";
       } else if (code == 4) {
         zh_channel = "【兑换】购买商品使用积分： ";
+      } else if (code == 5) {
+        zh_channel = "【签到】获得积分：";
       }
       return zh_channel;
     },
@@ -48,17 +102,17 @@ export default {
       this.show = true;
     },
     closeOverlay() {
-      console.log("closeOverlay---");
       this.show = false;
     },
     getUserIntegralRecodes() {
+      this.allIntegralList = [];
+      this.exchangeRecordList = [];
       axios
         .post(`/baby/p/getIntegralRecords`)
         .then(res => {
           console.log("res: " + res.data);
           if (res.data.code === "0000") {
             var recordList = res.data.attachment;
-            console.log("recordList: " + JSON.stringify(recordList));
             var surplusIntegral = 0;
             var totalIntegral = 0;
             for (var i = 0; i < recordList.length; i++) {
@@ -84,7 +138,6 @@ export default {
             }
 
 
-            console.log("allIntegralList: " + JSON.stringify(this.allIntegralList));
           } else {
             console.log("获取活动用户积分记录" + res.data.code);
           }

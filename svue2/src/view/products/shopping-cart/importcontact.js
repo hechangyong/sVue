@@ -1,9 +1,9 @@
 
 /* eslint-disable */
 import { Tag, CellGroup, Divider, Icon, Stepper, Panel } from 'vant';
-import { Dialog, Card, SubmitBar, Toast, SwipeCell, Tabbar } from 'vant';
+import { Dialog, Card, Field, SubmitBar, Toast, SwipeCell, Tabbar } from 'vant';
 import { Checkbox, Popup, Cell, AddressList, CheckboxGroup } from "vant";
-import { TabbarItem, ContactCard, ContactList, ContactEdit } from "vant";
+import { TabbarItem, Sticky, ContactCard, ContactList, ContactEdit } from "vant";
 import IsEmpty from "@/view/is-empty/";
 let tools_
 export default {
@@ -14,6 +14,7 @@ export default {
             editAddress: true,
             hasAddress: false,
             goodsId: 1,
+            agentCode: "",
             currentAddress: {},
             chosenContactId: null,
             editingContact: {},
@@ -30,7 +31,8 @@ export default {
             checkedGoods: [],
             goods: [],
             hint: '',
-            submitOrderInfo: {}
+            submitOrderInfo: {},
+            currentOpenid: ''
 
         };
     },
@@ -38,12 +40,13 @@ export default {
         tools_ = this.$tools;
         this.getGoods();
         this.initAddress();
+        this.getOpenid();
     },
     computed: {
         totalPrice() {
             return this.goods.reduce(
                 (total, item) =>
-                    total + (this.checkedGoods.indexOf(item.id) !== -1 ? item.price * item.num : 0),
+                    total + (this.checkedGoods.indexOf(item.id) !== -1 ? (item.price - item.discountPrice - item.agentDiscountPrice) * item.num : 0),
                 0
             );
         },
@@ -53,6 +56,13 @@ export default {
     },
 
     methods: {
+        clickrightIcon() {
+            Dialog.alert({
+                message: '此输入框为推荐人的推荐码。'
+            }).then(() => {
+                // on close
+            });
+        },
         toggle(goodsId) {
 
         },
@@ -78,10 +88,16 @@ export default {
             return (price / 100).toFixed(2);
         },
         /**
+         * 计算价格
+         * @param {计算价格} price 
+         */
+        countPrice(item) {
+            return ((item.price - item.discountPrice - item.agentDiscountPrice) / 100).toFixed(2);
+        },
+        /**
          * 选择货到付款
          */
         notPaySubmit() {
-            console.log("-------------:"+ JSON.stringify(this.currentAddress));
             if (this.currentAddress.areacode != '340122') {
                 this.set_hint_txt("您所选地区超出商家配送范围！暂不支持货到付款！", 3);
                 return;
@@ -108,6 +124,7 @@ export default {
             finallObj.goods = finallGoods;
             finallObj.userAddressVo = this.currentAddress;
             finallObj.payType = iswxPayFlag ? 1 : 0;
+            finallObj.agentCode = this.agentCode;
             console.log("finallObj:" + JSON.stringify(finallObj));
             this.submitOrderInfo = finallObj;
             this.placeOrder(finallObj, iswxPayFlag);
@@ -118,6 +135,21 @@ export default {
                 return;
             }
             this.popupShow = true;
+        },
+        getOpenid() {
+            this.currentOpenid = '';
+            this.$axios
+                .post(`/baby/u/getUserOpenid`)
+                .then(res => {
+                    console.log("getUserOpenid : " + JSON.stringify(res));
+                    if (res.data.code === "0000") {
+                        this.currentOpenid = res.data.attachment;
+                    }
+                })
+                .catch(err => {
+                    console.log("获取用户openid");
+                });
+
         },
         /**
          * 获取购物车列表
@@ -150,7 +182,8 @@ export default {
                         Toast.clear();
                         if (iswxPayFlag) {
                             var orderId = res.data.attachment;
-                            this.payMoney(orderId);
+                            
+                            this.payMoney(orderId, this.currentOpenid);
                         } else {
                             this.toPayResultPage(false, res.data.attachment, false);
                         }
@@ -165,13 +198,16 @@ export default {
                 });
         },
         // 预支付
-        payMoney(code) {
+        payMoney(code, openId) {
             let vm = this
             try {
                 return new Promise((resolve, reject) => {
-                    let openId = tools_.parseUrl('oid');
+                    console.log('payMoney openId:' + openId);
+                    if (openId == undefined || openId == '' || openId == null) {
+                        openId = tools_.parseUrl('oid');
+                    }
                     this.$axios.get('/wechat/pay/zmbaby/pre/' + code + '?openId=' + openId).then(res => {
-                        console.log('pre:', res);
+
                         if (res.status === 200) {
                             if (res.data.status === 200) {
                                 this.requestWechatPay(res.data.entity, code);
@@ -192,7 +228,7 @@ export default {
                         }
                     });
                 }).catch(err => {
-                    console.log("-------------------------");
+
                     this.toPayResultPage(true, code, false);
                 });
             }
@@ -342,7 +378,7 @@ export default {
                 tel: item.tel,
                 addressDetail: item.address,
                 userName: item.name,
-                areacode:item.areacode
+                areacode: item.areacode
             };
             this.editAddress = false;
             this.hasAddress = true;
@@ -391,9 +427,11 @@ export default {
         [Stepper.name]: Stepper,
         [SwipeCell.name]: SwipeCell,
         [CellGroup.name]: CellGroup,
+        [Field.name]: Field,
         [Icon.name]: Icon,
         [Dialog.Component.name]: Dialog.Component,
         [Panel.name]: Panel,
+        [Sticky.name]: Sticky,
         IsEmpty
     }
 }

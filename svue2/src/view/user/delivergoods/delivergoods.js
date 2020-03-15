@@ -29,6 +29,7 @@ export default {
     fillOrdersList() {
       this.payDoneOrderList = [];
       this.unPayOrderList = [];
+      this.wxpayDoneOrderList=[];
       for (var i = 0; i < this.allOrderList.length; i++) {
         if (this.allOrderList[i].status === '待送货') {
           this.unPayOrderList.push(this.allOrderList[i]);
@@ -43,6 +44,20 @@ export default {
       this.popupShow = true;
       this.currentOrderId = oid;
     },
+    deliverGoods(oid) {
+      this.$axios
+        .post(`/baby/o/deliverGoods/` + oid)
+        .then(res => {
+          if (res.data.code === "0000") {
+            Toast("操作成功！");
+            this.getOrderList();
+          }
+        })
+        .catch(err => {
+          console.log("配送操作失败！请联系管理员");
+          Toast("发货！请联系管理员！");
+        });
+    },
     receiptAmount() {
       this.popupShow = false;
       var obj = {};
@@ -56,7 +71,7 @@ export default {
             this.getOrderList();
             this.currentOrderId = 0;
             this.number = 0;
-            this.message= '';
+            this.message = '';
           }
         })
         .catch(err => {
@@ -82,15 +97,15 @@ export default {
               if (shopList[i].payType == 1) {
                 obj.status = shopList[i].status === '3' ? '待发货' :
                   shopList[i].status === '4' ? '支付失败' :
-                  shopList[i].status === '0' ? '支付失败' :
-                   shopList[i].status === '2' ? '取消' :
-                    shopList[i].status === '1' ? '完成' : '未知';
+                    shopList[i].status === '0' ? '支付失败' :
+                      shopList[i].status === '2' ? '取消' :
+                        shopList[i].status === '1' ? '已完成' : '未知';
               } else {
                 obj.status = shopList[i].status === '0' ? '待送货' :
                   shopList[i].status === '4' ? '待送货' :
-                  shopList[i].status === '3' ? '待送货' :
-                  shopList[i].status === '1' ? '完成' :
-                    shopList[i].status === '2' ? '已取消' : '未知';
+                    shopList[i].status === '3' ? '待送货' :
+                      shopList[i].status === '1' ? '已完成' :
+                        shopList[i].status === '2' ? '已取消' : '未知';
               }
 
               obj.subOrders = [];

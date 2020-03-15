@@ -1,7 +1,7 @@
 import { Collapse, CollapseItem } from "vant";
 import { Cell, CellGroup } from "vant";
 import { Tab, Tabs } from "vant";
-import { Panel } from "vant";
+import { Panel, Sticky } from "vant";
 import { Card, Tag, Button, Dialog, Toast } from "vant";
 import IsEmpty from "@/view/is-empty/";
 let tools_
@@ -11,7 +11,7 @@ export default {
     return {
       activeNames: ["1"],
       isEmpty: false,
-      activeName: "a",
+      activeName: "c",
       date: "2019-11-29",
       allOrderList: [],
       userOpenid: '',
@@ -19,13 +19,15 @@ export default {
       payDoneOrderList: [],
       unPayOrderList: [],
       closeOrderList: [],
-      successPayList: []
+      successPayList: [],
+      refundOrderList:[]
     };
   },
   mounted() {
     tools_ = this.$tools;
     this.init();
     this.getOrderList();
+    this.getOpenid();
 
   },
   methods: {
@@ -37,29 +39,88 @@ export default {
       }
       console.log("userOpenid: " + this.userOpenid);
     },
+    getOpenid() {
+      var openid = '';
+      this.$axios
+        .post(`/baby/u/getUserOpenid`)
+        .then(res => {
+          console.log("res.data.code: " + JSON.stringify(res));
+          if (res.data.code === "0000") {
+            openid = res.data.attachment;
+            this.userOpenid = res.data.attachment;
+          }
+        })
+        .catch(err => {
+          console.log("获取用户openid");
+        });
+      return openid;
+    },
+
     fillOrdersList() {
       this.payDoneOrderList = [];
       this.closeOrderList = [];
       this.unPayOrderList = [];
+      this.refundOrderList=[];
+      this.successPayList=[];
       for (var i = 0; i < this.allOrderList.length; i++) {
-        if (this.allOrderList[i].status === '未付款' || this.allOrderList[i].status === '付款失败' ) {
+        if (this.allOrderList[i].status === '未付款' || this.allOrderList[i].status === '付款失败') {
           this.unPayOrderList.push(this.allOrderList[i]);
         } else if (this.allOrderList[i].status === '已完成') {
           this.payDoneOrderList.push(this.allOrderList[i]);
         } else if (this.allOrderList[i].status === '已取消') {
           this.closeOrderList.push(this.allOrderList[i]);
-        } else if (this.allOrderList[i].status === '已付款') {
+        } else if (this.allOrderList[i].status === '待收货') {
           this.successPayList.push(this.allOrderList[i]);
+        } else if (this.allOrderList[i].status === '退货/款') {
+          this.refundOrderList.push(this.allOrderList[i]);
         }
       }
+    },
+    getOrderList() {
+      this.allOrderList = [];
+      this.$axios
+        .post(`/baby/o/getUserOrders`)
+        .then(res => {
+          if (res.data.code === "0000") {
+            var shopList = res.data.attachment;
+            for (var i = 0; i < shopList.length; i++) {
+              var obj = {};
+              obj.id = shopList[i].id;
+              obj.title = shopList[i].title;
+              obj.status = shopList[i].status === '0' ? '未付款' :
+                shopList[i].status === '1' ? '已完成' :
+                  shopList[i].status === '3' ? '待收货' :
+                    shopList[i].status === '4' ? '未付款-付款失败' :
+                      shopList[i].status === '5' ? '退货/款' :
+                        shopList[i].status === '2' ? '已取消' : '未知';
+              obj.subOrders = [];
+              for (var j = 0; j < shopList[i].subOrderInfoList.length; j++) {
+                obj.subOrders.push(shopList[i].subOrderInfoList[j]);
+              }
+              this.allOrderList.push(obj);
+            }
+            this.fillOrdersList();
+
+          }
+        })
+        .catch(err => {
+          console.log("获取用户购物车列表失败！");
+        });
     },
     // 预支付
     payMoney(code) {
       let vm = this
       try {
+        // let openId = this.getOpenid();
+        console.log("orderlist openid : " + this.userOpenid);
         return new Promise((resolve, reject) => {
-          let openId = this.userOpenid != '' ? this.userOpenid : tools_.parseUrl('oid');
-          this.$axios.get('/wechat/pay/zmbaby/pre/' + code + '?openId=' + openId).then(res => {
+
+          // let openId = this.getOpenid();
+          // if (openId == undefined || openId == '' || openId == null) {
+          //   openId = this.userOpenid != '' ? this.userOpenid : tools_.parseUrl('oid');
+          // }
+          // let openId = this.userOpenid != '' ? this.userOpenid : tools_.parseUrl('oid');
+          this.$axios.get('/wechat/pay/zmbaby/pre/' + code + '?openId=' + this.userOpenid).then(res => {
             console.log('pre:', res);
             if (res.status === 200) {
               if (res.data.status === 200) {
@@ -189,50 +250,101 @@ export default {
       });
 
     },
-    cancelOrder(oid) {
-      console.log("取消订单：" + oid);
-      this.$axios
-        .post(`/baby/o/cancelOrder/` + oid)
-        .then(res => {
-          if (res.data.code === "0000") {
-            Toast("取消订单成功！");
-            this.getOrderList();
-          }
-        })
-        .catch(err => {
-          console.log("获取用户购物车列表失败！");
-        });
+    /**
+     * 
+     * @param {退换货} oid 
+     */
+    refundOrder(oid) {
+      Dialog.confirm({
+        title: '退款',
+        message: '平台现不支持自动退款！此按钮会发起退款申请，平台管理员会在1-3个工作日与您联系退货事宜，' +
+          '在门店确认收到退回的货物后，管理员会以微信红包的方式返还商品费用！感谢您的支持！！！'
+      }).then(() => {
+        console.log("退换货" + oid);
+        this.$axios
+          .post(`/baby/o/refundOrder/` + oid)
+          .then(res => {
+            if (res.data.code === "0000") {
 
-    },
-    getOrderList() {
-      this.allOrderList = [];
-      this.$axios
-        .post(`/baby/o/getUserOrders`)
-        .then(res => {
-          if (res.data.code === "0000") {
-            var shopList = res.data.attachment;
-            for (var i = 0; i < shopList.length; i++) {
-              var obj = {};
-              obj.id = shopList[i].id;
-              obj.title = shopList[i].title;
-              obj.status = shopList[i].status === '0' ? '未付款' :
-                shopList[i].status === '1' ? '已完成' :
-                  shopList[i].status === '3' ? '已付款' :
-                  shopList[i].status === '4' ? '未付款-付款失败' :
-                    shopList[i].status === '2' ? '已取消' : '未知';
-              obj.subOrders = [];
-              for (var j = 0; j < shopList[i].subOrderInfoList.length; j++) {
-                obj.subOrders.push(shopList[i].subOrderInfoList[j]);
-              }
-              this.allOrderList.push(obj);
+              const toast = Toast({
+                duration: 0, // 持续展示 toast
+                forbidClick: true,
+                message: "退款申请成功！管理员会在1-3个工作日与您联系！"
+              });
+              let second = 3;
+              const timer = setInterval(() => {
+                second--;
+                if (second) {
+                  toast.message = "退款申请成功！管理员会在1-3个工作日与您联系！";
+                } else {
+                  clearInterval(timer);
+                  // 手动清除 Toast
+                  Toast.clear();
+                }
+              }, 1000);
+              this.getOrderList();
             }
-            this.fillOrdersList();
-
-          }
-        })
-        .catch(err => {
-          console.log("获取用户购物车列表失败！");
-        });
+          })
+          .catch(err => {
+            console.log("获取用户购物车列表失败！");
+          });
+      }).catch(() => {
+        console.log("取消取消订单：" + oid);
+      });
+    },
+    /**
+     * 
+     * @param {确认收货} oid 
+     */
+    makeSureOrder(oid) {
+      Dialog.confirm({
+        title: '确认收货',
+        message: '确认收货后，此订单已完成！'
+      }).then(() => {
+        console.log("确认收货" + oid);
+        this.$axios
+          .post(`/baby/o/makeSureOrder/` + oid)
+          .then(res => {
+            if (res.data.code === "0000") {
+              Toast("确认收货成功！感谢您的支持！祝您生活愉快！");
+              this.getOrderList();
+            }
+          })
+          .catch(err => {
+            console.log("确认收货");
+          });
+      }).catch(() => {
+        console.log("确认收货:" + oid);
+      });
+    },
+    /**
+     * 
+     * @param {提醒卖家退款} oid 
+     */
+    remindStore(oid) {
+      console.log("提醒卖家退款" + oid);
+      Toast("提醒卖家退款成功！您可主动微信联系商户哦！");
+    },
+    cancelOrder(oid) {
+      Dialog.confirm({
+        title: '取消订单',
+        message: '订单取消后，您将无法找回此订单！确认取消？'
+      }).then(() => {
+        console.log("取消订单：" + oid);
+        this.$axios
+          .post(`/baby/o/cancelOrder/` + oid)
+          .then(res => {
+            if (res.data.code === "0000") {
+              Toast("取消订单成功！");
+              this.getOrderList();
+            }
+          })
+          .catch(err => {
+            console.log("获取用户购物车列表失败！");
+          });
+      }).catch(() => {
+        console.log("取消取消订单：" + oid);
+      });
     }
   },
   filters: {
@@ -253,6 +365,7 @@ export default {
     [Panel.name]: Panel,
     [Toast.name]: Toast,
     [Cell.name]: Cell,
+    [Sticky.name]: Sticky,
     [CellGroup.name]: CellGroup,
     [Collapse.name]: Collapse,
     [CollapseItem.name]: CollapseItem,

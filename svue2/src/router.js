@@ -37,6 +37,13 @@ const routes = [
     }
   },
   {
+    name: 'userCharts',
+    component: () => import('./view/user/charts/userCharts.vue'),
+    meta: {
+      title: '用户数据概览'
+    }
+  },
+  {
     name: 'orderList',
     component: () => import('./view/user/orderlist'),
     meta: {
@@ -81,7 +88,8 @@ const routes = [
     name: 'goods',
     component: () => import('./view/goods'),
     meta: {
-      title: '商品详情'
+      title: '商品详情',
+      // keepAlive: true // 需要被缓存
     }
   },
   {
@@ -118,6 +126,27 @@ const routes = [
     meta: {
       title: '商品分类'
     }
+  },
+  {
+    name: 'beagent',
+    component: () => import('./view/user/agentpage/beagent/beagent.vue'),
+    meta: {
+      title: '成为代理人'
+    }
+  },
+  {
+    name: 'agentVip',
+    component: () => import('./view/user/agentpage/agentVipexplain/agentVip.vue'),
+    meta: {
+      title: '代理人权益说明'
+    }
+  },
+  {
+    name: 'agentPage',
+    component: () => import('./view/user/agentpage/agentPage.vue'),
+    meta: {
+      title: '我的代理'
+    }
   }
 ];
 
@@ -126,7 +155,10 @@ routes.forEach(route => {
   route.path = route.path || '/' + (route.name || '');
 });
 
-const router = new Router({ routes });
+const router = new Router({
+  // mode: 'history',
+  routes
+});
 
 router.beforeEach((to, from, next) => {
   const title = to.meta && to.meta.title;
