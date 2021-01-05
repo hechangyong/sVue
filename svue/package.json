@@ -13,7 +13,7 @@
   "dependencies": {
     "amfe-flexible": "^2.2.1",
     "animejs": "^2.2.0",
-    "axios": "^0.19.0",
+    "axios": "^0.21.1",
     "babel-plugin-syntax-jsx": "^6.18.0",
     "babel-polyfill": "^6.26.0",
     "better-scroll": "^1.12.6",
